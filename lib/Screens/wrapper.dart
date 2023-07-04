@@ -10,19 +10,20 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
-    final _auth = AuthService();
+    final auth = AuthService();
     if(user == null) {
       return const SignUp();
     }
-    return Scaffold(body: Column(
-      children: [
-        TextButton(
-          onPressed: (){
-            _auth.handleSignOut();
-          },
-            child: const Text("SignOut")
-        )
-      ]
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: TextButton(
+              onPressed: (){
+                auth.handleSignOut();
+                },
+              child: const Text("SignOut")
+      ),
+        ),
     ),);
   }
 }
