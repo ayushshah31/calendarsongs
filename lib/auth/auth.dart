@@ -51,4 +51,15 @@ class AuthService {
     }
   }
 
+  Future signInEmailPassword(String email, String pass) async {
+    try {
+      User? user = (await _auth.signInWithEmailAndPassword(email: email, password: pass)).user;
+      return user;
+    } catch (e) {
+      print("err: $e");
+      return e;
+    }
+  }
+
 }
+
