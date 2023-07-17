@@ -9,8 +9,8 @@ class AuthService {
     return _auth.authStateChanges();
   }
 
-  void handleSignOut() async{
-    _auth.signOut();
+  Future<void> handleSignOut() async{
+    await _auth.signOut();
   }
 
   Future<User?> handleSignIn() async {
@@ -41,13 +41,13 @@ class AuthService {
     }
   }
 
-  Future<User?> signUpEmailPassword(String email, String pass) async {
+  Future signUpEmailPassword(String email, String pass) async {
     try {
       User? user = (await _auth.createUserWithEmailAndPassword(email: email, password: pass)).user;
       return user;
     } catch (e) {
       print(e.toString());
-      return null;
+      return e;
     }
   }
 

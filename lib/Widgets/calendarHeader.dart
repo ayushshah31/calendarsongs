@@ -29,10 +29,10 @@ class CalendarHeader extends StatelessWidget {
         children: [
           const SizedBox(width: 16.0),
           SizedBox(
-            width: 120.0,
+            width: 100.0,
             child: Text(
               headerText,
-              style: TextStyle(fontSize: 26.0),
+              style: TextStyle(fontSize: 20.0),
             ),
           ),
           IconButton(

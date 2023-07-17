@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:calendarsong/auth/auth.dart';
 
@@ -40,7 +41,7 @@ class _SignUpState extends State<SignUp> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   prefixIcon: Icon(
                       Icons.person_outline_rounded),
                   border: OutlineInputBorder(
@@ -62,7 +63,7 @@ class _SignUpState extends State<SignUp> {
                   filled: true,
                 ),
                 keyboardType: TextInputType.emailAddress,
-                validator: (val) => val!.isEmpty? 'Enter an Email' : null,
+                validator: (val) => val!.contains("@") && val.contains(".") ? null: "Enter a Valid email",
                 onChanged: (val){
                   setState(() {
                     email = val;
@@ -71,26 +72,26 @@ class _SignUpState extends State<SignUp> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock_outline),
+                  prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: GestureDetector(
+                    onTap: changeObscure,
                     child: Icon(_obscureText
                         ? Icons.remove_red_eye_outlined
                         : Icons
                         .visibility_off_outlined),
-                    onTap: changeObscure,
                   ),
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: Colors.white),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: Colors.white),
                   ),
@@ -112,33 +113,33 @@ class _SignUpState extends State<SignUp> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock_outline),
+                  prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: GestureDetector(
+                    onTap: changeObscure2,
                     child: Icon(_obscureText2
                         ? Icons.remove_red_eye_outlined
                         : Icons.visibility_off_outlined),
-                    onTap: changeObscure2,
                   ),
                   helperText: '',
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     vertical: 0.0,
                     horizontal: 10.0,
                   ),
-                  border: OutlineInputBorder(
+                  border: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(
                       Radius.circular(8),
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.all(
@@ -157,6 +158,16 @@ class _SignUpState extends State<SignUp> {
                     if(_formKey.currentState!.validate()) {
                       final result = await _auth.signUpEmailPassword(email, pass);
                       print(result);
+                      if(result.toString().contains("email-already-in-use")){
+                        const snackBar = SnackBar(
+                          content: Text('Email already in use'),
+                          duration: Duration(seconds: 3),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        print(FirebaseAuth.instance.currentUser);
+                        Navigator.pushNamed(context, wrapperRoute);
+                      }
                     }
                   },
                   child: const Text("Submit")
@@ -165,12 +176,13 @@ class _SignUpState extends State<SignUp> {
               const Text("Or Using Google: "),
               IconButton(onPressed: (){
                 final result = _auth.handleSignIn();
+                // Navigator.pushNamed(context, wrapperRoute);
                 print(result);
               }, icon: const Icon(Icons.g_mobiledata)),
               const SizedBox(height: 20),
               TextButton(
                 onPressed: ()=> Navigator.of(context).pushNamed(loginRoute),
-                child: Text("Login"),
+                child: const Text("Login"),
               )
             ],
           ),

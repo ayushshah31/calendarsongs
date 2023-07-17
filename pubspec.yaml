@@ -39,10 +39,24 @@ dependencies:
   google_sign_in: ^5.4.3
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
+  firebase_storage: ^11.2.4
+  firebase_database: ^10.2.3
+
   provider: ^6.0.5
   table_calendar: ^3.0.9
+
   just_audio: ^0.9.34
-  rxdart: ^0.27.7
+  just_audio_background: ^0.0.1-beta.10
+
+  audio_service: ^0.18.10
+
+  path_provider: ^2.0.15
+  dio: ^5.2.1+1
+  permission_handler: ^10.4.3
+
+  flutter_spinkit: ^5.2.0
+
+  share_plus: ^7.0.2
 
 dev_dependencies:
   flutter_test:
@@ -67,9 +81,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - lib/assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
