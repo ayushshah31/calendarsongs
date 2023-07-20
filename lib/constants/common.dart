@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:intl/intl.dart';
 
 Future<bool> checkPermission() async {
   TargetPlatform platform;
@@ -38,4 +39,16 @@ Future<bool> checkPermission() async {
   }
   // print("ret false");
   return false;
+}
+
+int getTithiDate(DateTime date, dynamic tithiData){
+  DateFormat formatter = DateFormat("yyyy-MM-dd");
+  String temp = formatter.format(date);
+  // print("Tithi data in func: $tithiData");
+  int tithiDate = tithiData[temp]["Tithi"];
+  // print("Tithi is: $tithiDate");
+  if (tithiDate>15 && tithiDate!=30){
+    return tithiDate-15;
+  }
+  return tithiDate;
 }
