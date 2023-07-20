@@ -80,12 +80,19 @@ class FirebaseFetch{
 
   Future<bool> saveFeedback(String body, String subject,User user) async{
     try {
-      await firebaseDatabase.child("feedbacks").child(user.uid)
-          .child("body")
-          .set(body);
-      await firebaseDatabase.child("feedbacks").child(user.uid)
-          .child("subject")
-          .set(subject);
+      final dataFound = (await firebaseDatabase.child("feedbacks").child(user.uid).once()).snapshot.value;
+      print(dataFound);
+      // if(dataFound == null){
+      //   print("No data");
+      //   await firebaseDatabase.child("feedbacks").child(user.uid)
+      //       .set();
+      // }
+      final newData = {
+        "email": user.email,
+        "subject": subject,
+        "body": body
+      };
+      firebaseDatabase.child("feedbacks").child(user.uid).push().set(newData);
       return true;
     } catch(e){
       print("feedback error: $e");

@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:calendarsong/auth/auth.dart';
 import 'package:flutter/services.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../constants/routes.dart';
 
@@ -19,7 +21,8 @@ class _SignUpState extends State<SignUp> {
   bool _obscureText2 = true;
   String email = "";
   String name = "";
-  int phoneNo = 0;
+  String phoneNo = "";
+  DatabaseReference _database = FirebaseDatabase.instance.ref();
 
   void changeObscure() {
     setState(() {
@@ -70,6 +73,7 @@ class _SignUpState extends State<SignUp> {
                         const SizedBox(height: 10),
                         TextFormField(
                           decoration: InputDecoration(
+                            labelText: "Email",
                             prefixIcon: const Icon(
                                 Icons.mail),
                             border: const OutlineInputBorder(
@@ -103,6 +107,7 @@ class _SignUpState extends State<SignUp> {
                         const SizedBox(height: 10),
                         TextFormField(
                           decoration: InputDecoration(
+                            labelText: "Name",
                             prefixIcon: const Icon(
                                 Icons.person),
                             border: const OutlineInputBorder(
@@ -131,7 +136,42 @@ class _SignUpState extends State<SignUp> {
                           }
                         ),
                         const SizedBox(height: 10),
-                        TextFormField(
+                        // TextFormField(
+                        //   decoration: InputDecoration(
+                        //     prefixIcon: const Icon(
+                        //         Icons.call),
+                        //     border: const OutlineInputBorder(
+                        //       borderSide:
+                        //       BorderSide(color: Colors.white),
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(20),
+                        //       ),
+                        //     ),
+                        //     focusedBorder: OutlineInputBorder(
+                        //       borderSide: const BorderSide(color: Colors.white),
+                        //         borderRadius: BorderRadius.circular(20)
+                        //     ),
+                        //     enabledBorder: OutlineInputBorder(
+                        //       borderSide: const BorderSide(color: Colors.white),
+                        //         borderRadius: BorderRadius.circular(20)
+                        //     ),
+                        //     hintText: 'Phone',
+                        //     filled: true,
+                        //   ),
+                        //   inputFormatters: [
+                        //     FilteringTextInputFormatter
+                        //         .digitsOnly,
+                        //     LengthLimitingTextInputFormatter(
+                        //         10)
+                        //   ],
+                        //   keyboardType: TextInputType.number,
+                        //   validator: (val)=>val!.length<10?"Enter a valid phone":null,
+                        //   onChanged: (val){
+                        //     phoneNo = int.parse(val.toString());
+                        //   },
+                        // ),
+                        // const SizedBox(height: 10),
+                        IntlPhoneField(
                           decoration: InputDecoration(
                             prefixIcon: const Icon(
                                 Icons.call),
@@ -143,112 +183,22 @@ class _SignUpState extends State<SignUp> {
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
+                                borderSide: const BorderSide(color: Colors.white),
                                 borderRadius: BorderRadius.circular(20)
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.white),
+                                borderSide: const BorderSide(color: Colors.white),
                                 borderRadius: BorderRadius.circular(20)
                             ),
                             hintText: 'Phone',
                             filled: true,
                           ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter
-                                .digitsOnly,
-                            LengthLimitingTextInputFormatter(
-                                10)
-                          ],
-                          keyboardType: TextInputType.number,
-                          validator: (val)=>val!.length<10?"Enter a valid phone":null,
-                          onChanged: (val){
-                            phoneNo = int.parse(val.toString());
+                          initialCountryCode: 'IN',
+                          onChanged: (phone) {
+                            print(phone.completeNumber);
+                            phoneNo = phone.completeNumber;
                           },
                         ),
-
-                    // TextFormField(
-                        //   decoration: InputDecoration(
-                        //     prefixIcon: const Icon(Icons.lock_outline),
-                        //     suffixIcon: GestureDetector(
-                        //       onTap: changeObscure,
-                        //       child: Icon(_obscureText
-                        //           ? Icons.remove_red_eye_outlined
-                        //           : Icons
-                        //           .visibility_off_outlined),
-                        //     ),
-                        //     border: const OutlineInputBorder(
-                        //       borderSide:
-                        //       BorderSide(color: Colors.white),
-                        //       borderRadius: BorderRadius.all(
-                        //         Radius.circular(8),
-                        //       ),
-                        //     ),
-                        //     focusedBorder: const OutlineInputBorder(
-                        //       borderSide:
-                        //       BorderSide(color: Colors.white),
-                        //     ),
-                        //     enabledBorder: const OutlineInputBorder(
-                        //       borderSide:
-                        //       BorderSide(color: Colors.white),
-                        //     ),
-                        //     hintText: 'Password',
-                        //     filled: true,
-                        //   ),
-                        //   obscureText: _obscureText,
-                        //   validator: (value) {
-                        //     if (value!.length < 8) {
-                        //       return 'Password must be at least 8 characters long';
-                        //     }
-                        //     return null;
-                        //   },
-                        //   onChanged: (val){
-                        //     setState(() {
-                        //       pass = val;
-                        //     });
-                        //   },
-                        // ),
-                        // TextFormField(
-                        //   decoration: InputDecoration(
-                        //     prefixIcon: const Icon(Icons.lock_outline),
-                        //     suffixIcon: GestureDetector(
-                        //       onTap: changeObscure2,
-                        //       child: Icon(_obscureText2
-                        //           ? Icons.remove_red_eye_outlined
-                        //           : Icons.visibility_off_outlined),
-                        //     ),
-                        //     helperText: '',
-                        //     contentPadding: const EdgeInsets.symmetric(
-                        //       vertical: 0.0,
-                        //       horizontal: 10.0,
-                        //     ),
-                        //     border: const OutlineInputBorder(
-                        //       borderSide:
-                        //       BorderSide(color: Colors.white),
-                        //       borderRadius: BorderRadius.all(
-                        //         Radius.circular(8),
-                        //       ),
-                        //     ),
-                        //     focusedBorder: const OutlineInputBorder(
-                        //       borderSide:
-                        //       BorderSide(color: Colors.white),
-                        //       borderRadius: BorderRadius.all(
-                        //         Radius.circular(8),
-                        //       ),
-                        //     ),
-                        //     enabledBorder: const OutlineInputBorder(
-                        //       borderSide:
-                        //       BorderSide(color: Colors.white),
-                        //       borderRadius: BorderRadius.all(
-                        //         Radius.circular(8),
-                        //       ),
-                        //     ),
-                        //     hintText: 'At least 8 characters long',
-                        //     filled: true,
-                        //   ),
-                        //   obscureText: _obscureText2,
-                        //   validator: (val) => val!=pass? 'Passwords don\'t match' : null,
-                        //   onChanged: (val){},
-                        // ),
                         OutlinedButton(
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
@@ -256,16 +206,27 @@ class _SignUpState extends State<SignUp> {
                             ),
                             onPressed: () async{
                               if(_formKey.currentState!.validate()) {
-                                final result = await _auth.signUpEmailPassword(email, "pass@1234");
-                                print(result);
-                                if(result.toString().contains("email-already-in-use")){
-                                  const snackBar = SnackBar(
-                                    content: Text('Email already in use'),
-                                    duration: Duration(seconds: 3),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                User? result = await _auth.signUpEmailPassword(email, "pass@1234");
+                                // print(result);
+                                if(result == null){
+                                  User? res2 = await _auth.signInEmailPassword(email, "pass@1234");
+                                  print(res2);
+                                  if(res2 != null){
+                                    var dataFound = (await _database
+                                        .child("users")
+                                        .child(res2.uid)
+                                        .once())
+                                        .snapshot
+                                        .value;
+                                    print("datafound: $dataFound");
+                                  } else{
+                                    print("Error occurred");
+                                  }
                                 } else {
                                   print(FirebaseAuth.instance.currentUser);
+                                  await _database.child("users").child(result.uid).child("email").set(email);
+                                  await _database.child("users").child(result.uid).child("name").set(name);
+                                  await _database.child("users").child(result.uid).child("phone").set(phoneNo);
                                   Navigator.pushNamed(context, wrapperRoute);
                                 }
                               }

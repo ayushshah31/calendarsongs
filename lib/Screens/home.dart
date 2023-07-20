@@ -137,7 +137,9 @@ class _HomePageState extends State<HomePage> {
         introPlaying = true;
         pageManager.pause();
         pageManager.seek(Duration.zero);
-        pageManager.repeat(introPlaying);
+        pageManager.repeatButtonNotifier.value = RepeatState.repeatSong;
+        pageManager.repeatCounterNotifier.value = 0;
+        pageManager.repeat();
       });
     }
     var res = getTithiDate(selectedDay, tithiData);
@@ -147,6 +149,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("HomePage"),
+          automaticallyImplyLeading: false,
           actions: [
             PopupMenuButton(
                 icon: Image.asset("lib/assets/images/more.png",color: Colors.white,),
@@ -461,15 +464,13 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   TableRow(
                                     children: [
-                                      Container(
-                                        // child: Text("Repeat: $mantraCounter"),
-                                      ),
-                                    // ValueListenableBuilder<String>(
-                                    //     valueListenable: pageManager.currentSongTitleNotifier,
+                                      Container(),
+                                    // ValueListenableBuilder<int>(
+                                    //     valueListenable: pageManager.repeatCounterNotifier,
                                     //     builder: (_, value, __) {
-                                    //       mantraCounter--;
-                                    //       print("playlist: $value");
-                                    //       return !(mantraCounter>110)?Text("Repeat: $mantraCounter"):const Text("Repeat: ∞");
+                                    //       // mantraCounter--;
+                                    //       print("value: $value");
+                                    //       return !(mantraCounter>110)?Text("Repeat: $value"):const Text("Repeat: ∞");
                                     //     }
                                     //   ),
                                       Row(
@@ -491,7 +492,7 @@ class _HomePageState extends State<HomePage> {
                                                 case RepeatState.repeatSong:
                                                   if(introPlaying){
                                                     print("Intro Playing");
-                                                    // pageManager.;
+                                                    print("counter val: ${pageManager.repeatCounterNotifier.value}");
                                                     icon = const Icon(Icons.repeat, color: Colors.grey);
                                                     break;
                                                   }
@@ -503,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                                               }
                                               return IconButton(
                                                 icon: icon,
-                                                onPressed: ()=>pageManager.repeat(introPlaying),
+                                                onPressed: ()=>pageManager.repeat(),
                                               );
                                             },
                                           ),
@@ -567,7 +568,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          // const SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           // const Text("Repeat Mantra: "),
                           // Row(
                           //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -588,15 +589,22 @@ class _HomePageState extends State<HomePage> {
                           //     OutlinedButton(
                           //         onPressed: () async{
                           //           // pageManager.removeAll();
-                          //           pageManager.clearQueue();
+                          //           // pageManager.clearQueue();
+                          //           pageManager.repeatCounterNotifier.value = 10;
+                          //           pageManager.seek(Duration.zero);
+                          //           pageManager.pause();
+                          //           // pageManager.repeatButtonNotifier.value = RepeatState.repeatSong;
+                          //           pageManager.onRepeatPlay();
+                          //           // pageManager.repeat();
                           //           setState((){
-                          //             mantraCounter = 27;
+                          //             mantraCounter = 10;
                           //             // pageManager.add(selectedDay, "mantra");
                           //             // pageManager.play();
                           //           });
-                          //           await pageManager.addCount(selectedDay, 5);
+                          //
+                          //           // await pageManager.addCount(selectedDay, 5);
                           //         },
-                          //         child: const Text("27")
+                          //         child: const Text("10")
                           //     ),
                           //     const Spacer(flex: 1),
                           //     OutlinedButton(
@@ -631,7 +639,7 @@ class _HomePageState extends State<HomePage> {
                           //           setState(() {
                           //             mantraCounter = 999;
                           //             // pageManager.repeatButtonNotifier = RepeatState.repeatSong;
-                          //             pageManager.repeat(RepeatState.repeatSong);
+                          //             pageManager.repeat();
                           //           });
                           //         },
                           //         child: const Text("Infinite")

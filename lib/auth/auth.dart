@@ -47,7 +47,7 @@ class AuthService {
       return user;
     } catch (e) {
       print(e.toString());
-      return e;
+      return null;
     }
   }
 
@@ -57,7 +57,7 @@ class AuthService {
       return user;
     } catch (e) {
       print("err: $e");
-      return e;
+      return null;
     }
   }
 

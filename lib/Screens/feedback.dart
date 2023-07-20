@@ -55,10 +55,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         ),
                         child: TextFormField(
                           decoration: InputDecoration(
+                            labelText: "Subject",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20)
                               ),
-                              hintText: "Please write ",
+                              hintText: "Write subject here",
                               disabledBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
@@ -78,7 +79,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text("Enter Body"),
+                      // const Text("Enter Body"),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
@@ -92,10 +93,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
                           // minLines: (height * 0.012).toInt(),
                           maxLines: 10,
                           decoration: InputDecoration(
+                            labelText: "Body",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20)
                               ),
-                              hintText: "Please write ",
+                              hintText: "Enter body here",
                               disabledBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,

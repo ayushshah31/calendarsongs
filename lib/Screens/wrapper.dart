@@ -130,7 +130,7 @@ class _WrapperState extends State<Wrapper> {
                   color: Colors.orange,
                 ),
                 const SizedBox(height: 20),
-                _downloading? Text("Downloading Data\nDownloaded $downloadCounter/32"):const Text("Gathering data")
+                Text("Gathering Data",style: TextStyle(fontSize: 20),)
               ],
             ):const Text("Allow download permissions from settings")),
       );

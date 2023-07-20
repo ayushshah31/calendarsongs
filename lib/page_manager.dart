@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 import 'notifiers/play_button_notifier.dart';
 import 'notifiers/progress_notifier.dart';
 import 'notifiers/repeat_button_notifier.dart';
@@ -17,12 +18,15 @@ class PageManager {
   final playButtonNotifier = PlayButtonNotifier();
   final isLastSongNotifier = ValueNotifier<bool>(true);
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
+  final repeatCounterNotifier = ValueNotifier<int>(0);
 
   bool isIntroPlaying = true;
 
   final _audioHandler = getIt<AudioHandler>();
 
   final DateTime _selectedDay = DateTime.now();
+
+  Duration? mantraDuration;
 
   // Events: Calls coming from the UI
   void init() async {
@@ -33,6 +37,7 @@ class PageManager {
     _listenToBufferedPosition();
     _listenToTotalDuration();
     _listenToChangesInSong();
+    repeatMantraCount();
   }
 
   Future<void> _loadPlaylist() async {
@@ -144,6 +149,50 @@ class PageManager {
     }
   }
 
+  void repeatMantraCount(){
+    // bool check1 = false,check2 = false;
+    // mantraDuration = _audioHandler.queue.value.last.duration;
+    // AudioService.position.listen((position) async {
+    //   print("here");
+    //   // print("${position.inMilliseconds}:${progressNotifier.value.total.inMilliseconds}");
+    //   if(repeatButtonNotifier.value==RepeatState.repeatSong){
+    //     if((position == Duration.zero) && repeatCounterNotifier.value>0 && !changed){
+    //       print("counter change");
+    //       repeatCounterNotifier.value -= 1;
+    //       await Future.delayed(const Duration(milliseconds: 1),(){
+    //         print("Delayed");
+    //         changed = true;
+    //       });
+    //       changed = false;
+    //     } else if(repeatCounterNotifier.value==0){
+    //       repeat();
+    //       changed = false;
+    //     }
+    //   }
+    // });
+    // print("mantra durr: $mantraDuration");
+    // _audioHandler.playbackState.listen((playbackState) {
+    //   // print("here");
+    //   // print("${position.inMilliseconds}:${progressNotifier.value.total.inMilliseconds}");
+    //   if(repeatButtonNotifier.value==RepeatState.repeatSong){
+    //     // print("here");
+    //     if(playbackState.position.inMilliseconds<100){
+    //       check1 = true;
+    //     }
+    //     print(playbackState.position);
+    //     if(playbackState.position.inMilliseconds>=mantraDuration!.inMilliseconds-100){
+    //       check2 = true;
+    //     }
+    //     print("check1: $check1, check2:$check2");
+    //     if( check1 && check2){
+    //       repeatCounterNotifier.value -= 1;
+    //       print("counter");
+    //       check1 = check2 = false;
+    //     }
+    //   }
+    // });
+  }
+
   void play() => _audioHandler.play();
   void pause() => _audioHandler.pause();
 
@@ -160,7 +209,48 @@ class PageManager {
     }
   }
 
-  void repeat(bool isIntroPlaying) {
+  Future<void> onRepeatPlay() async {
+    // while(repeatCounterNotifier.value>0) {
+    //   seek(Duration.zero);
+    //   play();
+    //   print("Audio shld play");
+      // repeat();
+      // print("Audio played");
+      // print("_repeatCount: ${repeatCounterNotifier.value}");
+      // repeatCounterNotifier.value -=1;
+      // repeat();
+      // seek(Duration.zero);
+    // }
+    _audioHandler.play();
+    _audioHandler.playbackState.listen((playbackState) {
+      final isPlaying = playbackState.playing;
+      final processingState = playbackState.processingState;
+      if (processingState == AudioProcessingState.loading ||
+          processingState == AudioProcessingState.buffering) {
+          print("Loading");
+          playButtonNotifier.value = ButtonState.loading;
+      } else if (!isPlaying) {
+          print("Paused");
+          playButtonNotifier.value = ButtonState.paused;
+      } else if(processingState == AudioProcessingState.completed){
+          print("Completed-new");
+          decrease();
+          playButtonNotifier.value = ButtonState.finished;
+          if(repeatCounterNotifier.value > 0) {
+            _audioHandler.seek(Duration.zero);
+            _audioHandler.pause();
+            _audioHandler.play();
+          }
+      } else if (isPlaying) {
+        print("Playing");
+        playButtonNotifier.value = ButtonState.playing;
+      }
+    });
+  }
+
+  void decrease() => repeatCounterNotifier.value -= 1;
+
+  void repeat() {
     repeatButtonNotifier.nextState();
     final repeatMode = repeatButtonNotifier.value;
     switch (repeatMode) {
@@ -168,9 +258,13 @@ class PageManager {
         _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
         break;
       case RepeatState.repeatSong:
-        isIntroPlaying?
-          _audioHandler.setRepeatMode(AudioServiceRepeatMode.none):
+        if(isIntroPlaying){
+          _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
+        } else {
+          // onRepeatPlay();
           _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
+          // repeatMantraCount();
+        }
         break;
       // case RepeatState.repeatPlaylist:
       //   _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
