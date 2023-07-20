@@ -29,6 +29,7 @@ class _WrapperState extends State<Wrapper> {
   late bool _permissionReady=true;
   bool _downloading = true;
   List<MantraModel> mantraData = [];
+  bool fileDownloaded = false;
 
   // @override
   // void initState(){
@@ -59,9 +60,15 @@ class _WrapperState extends State<Wrapper> {
       final filePath = File(check);
       // print("FilePath: $filePath");
       final fileExists = await filePath.exists();
-      if(fileExists){
+      String check2 = "$_localPath${Platform.pathSeparator}${mantraData[15].introSoundFile}";
+      final filePath2 = File(check2);
+      print("FilePathDownCheck: ${filePath2.exists()},$filePath2");
+      if(fileExists && await filePath2.exists()){
         // print("Mantras exists");
-        setState(()=> _downloading=false);
+        setState((){
+          _downloading=false;
+          fileDownloaded = true;
+        });
       } else {
         await download();
       }
@@ -79,43 +86,64 @@ class _WrapperState extends State<Wrapper> {
         setState(() {
           downloadCounter += 100/32;
         });
+        print(downloadCounter);
+        final cheker = await File("$_localPath${Platform.pathSeparator}${mantraData[i].introSoundFile}").exists();
+        print(cheker);
         await Dio().download(mantraData[i].mantraLink, "$_localPath${Platform.pathSeparator}${mantraData[i].mantraSoundFile}");
         setState(() {
           downloadCounter += 100/32;
         });
+        print(downloadCounter);
+        final cheker1 = await File("$_localPath${Platform.pathSeparator}${mantraData[i].mantraSoundFile}").exists();
+        print(cheker1);
       }
       // await Dio().download(mantra[0]['link'],
       //     "$_localPath/0.mp3");
       print("Download Completed.");
       String check = "$_localPath${Platform.pathSeparator}${mantraData[0].introSoundFile}";
-      final filePath = File(check);
-      print("FilePathDownCheck: ${filePath.exists()},$filePath");
+      final filePath1 = File(check);
+      // print("FilePathDownCheck: ${filePath1.exists()},$filePath1");
+      String check2 = "$_localPath${Platform.pathSeparator}${mantraData[15].introSoundFile}";
+      final filePath2 = File(check2);
+      // print("FilePathDownCheck: ${filePath2.exists()},$filePath2");
+      // if(await filePath2.exists() && await filePath1.exists()){
+      //   return;
+      // }
       setState(() {
         _downloading = false;
       });
-      // var res = getTithiDate(selectedDay, tithiData);
-      // if(res !=30){
-      //   setAudioPlayer(res-1);
-      // } else {
-      //   setAudioPlayer(15);
-      // }
+      if(await filePath1.exists() && await filePath2.exists()){
+        setState(() {
+          fileDownloaded = true;
+        });
+      }
     } catch (e) {
       print("Download Failed: $e");
       setState(() {
         _downloading = false;
+        // fileDownloaded = true;
       });
     }
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initDownload();
+  }
+  //
   void initDownload() async{
-    await _downloadMantra("mantra");
+    await Future.delayed(Duration(seconds: 15),() async{
+      print("Now start");
+      await _downloadMantra("mantra");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     mantraData = Provider.of<MantraViewModel>(context).mantraModel;
-    initDownload();
     if(user == null) {
       return const SignUp();
     }
@@ -130,11 +158,12 @@ class _WrapperState extends State<Wrapper> {
                   color: Colors.orange,
                 ),
                 const SizedBox(height: 20),
-                Text("Gathering Data",style: TextStyle(fontSize: 20),)
+                Text("Gathering Data $downloadCounter",style: TextStyle(fontSize: 20),)
               ],
             ):const Text("Allow download permissions from settings")),
       );
+    } else {
+      return const HomePage();
     }
-    return const HomePage();
   }
 }

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:calendarsong/model/mantraData.dart';
 import 'package:calendarsong/providers/mantraDataProvider.dart';
 import 'package:calendarsong/providers/tithiDataProvider.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,6 +48,8 @@ class _HomePageState extends State<HomePage> {
     // print("MantraData rec: $mantraData");
     // print("Tithi rec: $tithiData");
     // _downloadMantra("mantra");
+    shareMsg = (await _databaseRef.child("share").child("message").once()).snapshot.value.toString();
+    shareTxt = (await _databaseRef.child("share").child("text").once()).snapshot.value.toString();
     return DataRequiredForBuild(
         mantraData: mantraData,
         tithiData: tithiData
@@ -83,6 +86,8 @@ class _HomePageState extends State<HomePage> {
   bool _downloading = true;
 
   List<MantraModel> mantraData = [];
+  DatabaseReference _databaseRef = FirebaseDatabase.instance.ref();
+  String shareTxt="",shareMsg="";
 
 
   void setFocusedDay(DateTime focusedDayNew){
@@ -170,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                         break;
 
                       case 3:
-                        Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                        Share.share(shareTxt, subject: shareMsg);
                         break;
 
                       // case 4 :
@@ -315,10 +320,22 @@ class _HomePageState extends State<HomePage> {
                                         children: [
                                           OutlinedButton(
                                               onPressed: (){
-                                                DateTime newDay;
-                                                newDay = selectedDay.subtract(const Duration(days: 1));
-                                                print(newDay);
-                                                setSelectedDay(newDay);
+                                                // DateTime newDay;
+                                                // newDay = selectedDay.subtract(const Duration(days: 1));
+                                                // print(newDay);
+                                                // setSelectedDay(newDay);
+                                                // setFocusedDay(newDay);
+                                                DateTime? newDay = selectedDay;
+                                                var tithiNew = res2.tithi;
+                                                while(tithiNew == res2.tithi) {
+                                                  newDay = newDay!.subtract(const Duration(days: 1));
+                                                  print(newDay);
+                                                  // var tithiNew = res2.tithi;
+                                                  var resNew = getTithiDate(newDay, tithiData);
+                                                  MantraModel resNew2 = getTithiMantraData(resNew);
+                                                  tithiNew = resNew2.tithi;
+                                                }
+                                                setSelectedDay(newDay!);
                                                 setFocusedDay(newDay);
                                               },
                                               style: ButtonStyle(
@@ -332,10 +349,17 @@ class _HomePageState extends State<HomePage> {
                                                   foregroundColor: MaterialStateProperty.all(Colors.white)
                                               ),
                                               onPressed: (){
-                                                DateTime newDay;
-                                                newDay = selectedDay.add(const Duration(days: 1));
-                                                print(newDay);
-                                                setSelectedDay(newDay);
+                                                DateTime? newDay = selectedDay;
+                                                var tithiNew = res2.tithi;
+                                                while(tithiNew == res2.tithi) {
+                                                  newDay = newDay!.add(const Duration(days: 1));
+                                                  print(newDay);
+                                                  // var tithiNew = res2.tithi;
+                                                  var resNew = getTithiDate(newDay, tithiData);
+                                                  MantraModel resNew2 = getTithiMantraData(resNew);
+                                                  tithiNew = resNew2.tithi;
+                                                }
+                                                setSelectedDay(newDay!);
                                                 setFocusedDay(newDay);
                                               },
                                               child: const Text("Next Tithi >")

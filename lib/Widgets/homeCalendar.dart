@@ -71,10 +71,21 @@ class HomeCalendarState extends StatelessWidget {
             headerVisible: false,
             daysOfWeekHeight: 20,
             availableGestures: AvailableGestures.none,
-            calendarStyle: const CalendarStyle(
+            calendarStyle: CalendarStyle(
               canMarkersOverflow: false,
               isTodayHighlighted: true,
               cellAlignment: Alignment.center,
+              selectedDecoration: BoxDecoration(
+                color: Colors.deepOrangeAccent,
+                shape: BoxShape.circle
+                // borderRadius: BorderRadius.circular(20),
+                // shape: BoxShape.rectangle
+              ),
+              todayDecoration: BoxDecoration(
+                  color: const Color(0xFFf3ae85),
+                shape: BoxShape.circle
+                // borderRadius: BorderRadius.circular(20)
+              ),
               // cellPadding: EdgeInsets.all(10),
             ),
             onCalendarCreated: (controller){
