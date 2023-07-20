@@ -78,9 +78,19 @@ class FirebaseFetch{
   //   }
   // }
 
-  Future<void> saveFeedback(String body, String subject,User user) async{
-    await firebaseDatabase.child("feedbacks").child(user.uid).child("body").set(body);
-    await firebaseDatabase.child("feedbacks").child(user.uid).child("subject").set(subject);
+  Future<bool> saveFeedback(String body, String subject,User user) async{
+    try {
+      await firebaseDatabase.child("feedbacks").child(user.uid)
+          .child("body")
+          .set(body);
+      await firebaseDatabase.child("feedbacks").child(user.uid)
+          .child("subject")
+          .set(subject);
+      return true;
+    } catch(e){
+      print("feedback error: $e");
+      return false;
+    }
   }
 
 }

@@ -2,6 +2,8 @@ import 'package:calendarsong/data/FirebaseFetch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+
+import '../constants/routes.dart';
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class FeedbackPage extends StatefulWidget {
@@ -21,6 +23,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Feedback")),
+      backgroundColor: const Color(0xfff8dbc1),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(20),
@@ -113,13 +116,33 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       ),
                       const SizedBox(height: 20),
                       OutlinedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
+                              foregroundColor: MaterialStateProperty.all(Colors.white)
+                          ),
                           onPressed: () async{
                             if(_key.currentState!.validate()){
                               print("Val");
                               print(subj);
                               print(body);
                               final ff = FirebaseFetch();
-                              await ff.saveFeedback(body, subj, FirebaseAuth.instance.currentUser!);
+                              var res = await ff.saveFeedback(body, subj, FirebaseAuth.instance.currentUser!);
+                              if(res){
+                                const snackBar = SnackBar(
+                                  content: Text('Feedback Saved'),
+                                  duration: Duration(seconds: 2),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              } else {
+                                const snackBar = SnackBar(
+                                  content: Text('An error occured'),
+                                  duration: Duration(seconds: 2),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              }
+                              Future.delayed(const Duration(seconds: 2),(){
+                                Navigator.of(context).pushNamed(home);
+                              });
                               // final Email email = Email(
                               //   body: body,
                               //   subject: subj,
