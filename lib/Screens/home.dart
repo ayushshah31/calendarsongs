@@ -137,6 +137,7 @@ class _HomePageState extends State<HomePage> {
         introPlaying = true;
         pageManager.pause();
         pageManager.seek(Duration.zero);
+        pageManager.repeat(introPlaying);
       });
     }
     var res = getTithiDate(selectedDay, tithiData);
@@ -156,525 +157,531 @@ class _HomePageState extends State<HomePage> {
                     //   Navigator.pushNamed(context, playlists);
                     //   break;
 
-                    case 1:
-                      const snackBar = SnackBar(content: Text("Feature not available in your location"),duration: Duration(seconds: 3),);
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      break;
+                      case 1:
+                        const snackBar = SnackBar(content: Text("Feature not available in your location"),duration: Duration(seconds: 3),);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        break;
 
-                    case 2:
-                      Navigator.pushNamed(context, feedback);
-                      break;
+                      case 2:
+                        Navigator.pushNamed(context, feedback);
+                        break;
 
-                    case 3:
-                      Share.share('check out my website https://example.com', subject: 'Look what I made!');
-                      break;
+                      case 3:
+                        Share.share('check out my website https://example.com', subject: 'Look what I made!');
+                        break;
 
-                    // case 4 :
-                    //   signOutDialogBox();
-                    //   break;
-                  }
-                },
-                itemBuilder: (context)=>[
-                  // const PopupMenuItem(
-                  //   value: 0,
-                  //   padding: EdgeInsets.symmetric(horizontal: 10),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Text("Playlists"),
-                  //       SizedBox(width:10),
-                  //       Icon(Icons.playlist_add,color: Colors.black,)
-                  //     ],
-                  //   ),
-                  //   // onTap: ,
-                  // ),
-                  const PopupMenuItem(
-                    value: 1,
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Get Pro"),
-                        SizedBox(width:10),
-                        Icon(Icons.paid_rounded,color: Colors.black,)
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 2,
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Feedback"),
-                        SizedBox(width:10),
-                        Icon(Icons.mail,color: Colors.black,)
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                      value: 3,
+                      // case 4 :
+                      //   signOutDialogBox();
+                      //   break;
+                    }
+                  },
+                  itemBuilder: (context)=>[
+                    // const PopupMenuItem(
+                    //   value: 0,
+                    //   padding: EdgeInsets.symmetric(horizontal: 10),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Text("Playlists"),
+                    //       SizedBox(width:10),
+                    //       Icon(Icons.playlist_add,color: Colors.black,)
+                    //     ],
+                    //   ),
+                    //   // onTap: ,
+                    // ),
+                    const PopupMenuItem(
+                      value: 1,
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Share"),
-                          SizedBox(width: 10),
-                          Icon(Icons.ios_share_outlined,color: Colors.black,),
-                        ]
-                      )
-                  ),
-                  // const PopupMenuItem(
-                  //   value: 4,
-                  //   padding: EdgeInsets.symmetric(horizontal: 10),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Text("SignOut"),
-                  //       SizedBox(width:10),
-                  //       Icon(Icons.person,color: Colors.black,)
-                  //     ],
-                  //   ),
-                  // ),
-                ]
-            )
-          ],
-        ),
-        backgroundColor: const Color(0xfff8dbc1),
-        body: Container(
-          // padding: const EdgeInsets.all(10),
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HomeCalendarState(
-                  setPageController: setPageController,
-                  pageController: pageController,
-                  selectedDay: selectedDay,
-                  setSelectedDay: setSelectedDay,
-                  focusedDay: focusedDay,
-                  setFocusedDay: setFocusedDay,
-                  mantraCounter: mantraCounter,
-                  setMantraCounter: setMantraCount,
-                  // pageController: pageControllerCal,
-                  // getTithiDate: getTithiDate,
-                  // setAudioPlayer: setAudioPlayer
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                flex: 20,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
+                          Text("Get Pro"),
+                          SizedBox(width:10),
+                          Icon(Icons.paid_rounded,color: Colors.black,)
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 2,
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Feedback"),
+                          SizedBox(width:10),
+                          Icon(Icons.mail,color: Colors.black,)
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                        value: 3,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Table(
-                              columnWidths: const {
-                                0: IntrinsicColumnWidth(flex: 2),
-                                1: FlexColumnWidth(5)
-                              },
-                              children: [
-                                TableRow(
-                                    children: [
-                                      const Text(
-                                        "Tithi: ",
-                                        style: TextStyle(
-                                            fontSize: 20
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w900,
-                                              color: Color(0xFFA47500)
-                                          ),
-                                        ),
-                                      ),
-                                    ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      Container(height:5),
-                                      Container()
-                                    ]
-                                ),
-                                TableRow(
-                                  children: [
-                                    Container(),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Text("Share"),
+                            SizedBox(width: 10),
+                            Icon(Icons.ios_share_outlined,color: Colors.black,),
+                          ]
+                        )
+                    ),
+                    // const PopupMenuItem(
+                    //   value: 4,
+                    //   padding: EdgeInsets.symmetric(horizontal: 10),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     children: [
+                    //       Text("SignOut"),
+                    //       SizedBox(width:10),
+                    //       Icon(Icons.person,color: Colors.black,)
+                    //     ],
+                    //   ),
+                    // ),
+                  ]
+              )
+            ],
+          ),
+          backgroundColor: const Color(0xfff8dbc1),
+          body: SizedBox(
+            // padding: const EdgeInsets.all(10),
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HomeCalendarState(
+                    setPageController: setPageController,
+                    pageController: pageController,
+                    selectedDay: selectedDay,
+                    setSelectedDay: setSelectedDay,
+                    focusedDay: focusedDay,
+                    setFocusedDay: setFocusedDay,
+                    mantraCounter: mantraCounter,
+                    setMantraCounter: setMantraCount,
+                    // pageController: pageControllerCal,
+                    // getTithiDate: getTithiDate,
+                    // setAudioPlayer: setAudioPlayer
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  flex: 20,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            children: [
+                              Table(
+                                columnWidths: const {
+                                  0: IntrinsicColumnWidth(flex: 2),
+                                  1: FlexColumnWidth(5)
+                                },
+                                children: [
+                                  TableRow(
                                       children: [
-                                        OutlinedButton(
-                                            onPressed: (){
-                                              DateTime newDay;
-                                              newDay = selectedDay.subtract(const Duration(days: 1));
-                                              print(newDay);
-                                              setSelectedDay(newDay);
-                                              setFocusedDay(newDay);
-                                            },
-                                            style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
-                                              foregroundColor: MaterialStateProperty.all(Colors.white)
-                                            ),
-                                            child: const Text("< Prev Tithi")),
-                                        OutlinedButton(
-                                            style: ButtonStyle(
-                                                backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
-                                                foregroundColor: MaterialStateProperty.all(Colors.white)
-                                            ),
-                                            onPressed: (){
-                                              DateTime newDay;
-                                              newDay = selectedDay.add(const Duration(days: 1));
-                                              print(newDay);
-                                              setSelectedDay(newDay);
-                                              setFocusedDay(newDay);
-                                            },
-                                            child: const Text("Next Tithi >")
-                                        )
-                                      ],
-                                    )
-                                  ]
-                                ),
-                                TableRow(
-                                  children: [
-                                    Container(height: 10),
-                                    Container()
-                                  ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      const Text(
-                                          "Mantra: "
-                                      ),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            res2.mantraEnglish,
-                                            overflow: TextOverflow.visible,
+                                        const Text(
+                                          "Tithi: ",
+                                          style: TextStyle(
+                                              fontSize: 20
                                           ),
-                                          const SizedBox(height: 5),
-                                          Text(
-                                            res2.mantraHindi,
-                                            overflow: TextOverflow.visible,
+                                        ),
+                                        Center(
+                                          child: Text(
+                                            res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w900,
+                                                color: Color(0xFFA47500)
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                    ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      Container(height:15),
-                                      Container()
-                                    ]
-                                ),
-                                TableRow(
+                                        ),
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        Container(height:5),
+                                        Container()
+                                      ]
+                                  ),
+                                  TableRow(
                                     children: [
                                       Container(),
-                                      Text(res2.noOfRep)
-                                    ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      Container(height:15),
-                                      Container()
-                                    ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      const Text("Procedure: "),
-                                      Text(res2.procedure)
-                                    ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      Container(height:15),
-                                      Container()
-                                    ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      const Text("Benefit: "),
-                                      Text(res2.benefits)
-                                    ]
-                                ),
-                                TableRow(
-                                    children: [
-                                      Container(height:15),
-                                      Container()
-                                    ]
-                                ),
-                                TableRow(
-                                  children: [
-                                    const Text("Mantra"),
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(20, 0, 30, 0),
-                                      child: ValueListenableBuilder<ProgressBarState>(
-                                        valueListenable: pageManager.progressNotifier,
-                                        builder: (_, value, __) {
-                                          // print("value.curr: ${value.current}");
-                                          // print("tot val: ${value.total}");
-                                          current = value.current;
-                                          if(!introPlaying && mantraCounter>=0 && !maxSet){
-                                            sliderMax = value.total.inMilliseconds.toDouble();
-                                            print("SliderMax: $sliderMax");
-                                            maxSet = true;
-                                          }
-                                          // return ProgressBar(
-                                          //   progress: value.current,
-                                          //   buffered: value.buffered,
-                                          //   total: value.total,
-                                          //   onSeek: pageManager.seek,
-                                          //   thumbCanPaintOutsideBar: true,
-                                          //   barHeight: 5,
-                                          //   barCapShape: BarCapShape.round,
-                                          //   baseBarColor: Colors.white,
-                                          // ) ;
-                                          return Row(
-                                            children: [
-                                              Text("${value.current.inMinutes}:${value.current.inSeconds%60}"),
-                                              Expanded(
-                                                flex: 4,
-                                                child: Slider(
-                                                    value: min(value.current.inMilliseconds.toDouble(),max(value.total.inMilliseconds.toDouble(),sliderMax)),
-                                                    min: 0.0,
-                                                    divisions: max(sliderMax.toInt()+1,value.total.inMilliseconds+1),
-                                                    max: max(sliderMax.toInt()+10,value.total.inMilliseconds+10),
-                                                    onChanged: (val){
-                                                      pageManager.seek(Duration(milliseconds: val.toInt()));
-                                                    }
-                                                ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          OutlinedButton(
+                                              onPressed: (){
+                                                DateTime newDay;
+                                                newDay = selectedDay.subtract(const Duration(days: 1));
+                                                print(newDay);
+                                                setSelectedDay(newDay);
+                                                setFocusedDay(newDay);
+                                              },
+                                              style: ButtonStyle(
+                                                backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                                foregroundColor: MaterialStateProperty.all(Colors.white)
                                               ),
-                                              Text("${max(sliderMax~/60000,value.total.inMilliseconds~/60000)}:${max(sliderMax~/1000,value.total.inMilliseconds~/1000)}"),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ]
-                                ),
-                                TableRow(
-                                  children: [
-                                    Container(
-                                      // child: Text("Repeat: $mantraCounter"),
-                                    ),
-                                  // ValueListenableBuilder<String>(
-                                  //     valueListenable: pageManager.currentSongTitleNotifier,
-                                  //     builder: (_, value, __) {
-                                  //       mantraCounter--;
-                                  //       print("playlist: $value");
-                                  //       return !(mantraCounter>110)?Text("Repeat: $mantraCounter"):const Text("Repeat: ∞");
-                                  //     }
-                                  //   ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              child: const Text("< Prev Tithi")),
+                                          OutlinedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                                  foregroundColor: MaterialStateProperty.all(Colors.white)
+                                              ),
+                                              onPressed: (){
+                                                DateTime newDay;
+                                                newDay = selectedDay.add(const Duration(days: 1));
+                                                print(newDay);
+                                                setSelectedDay(newDay);
+                                                setFocusedDay(newDay);
+                                              },
+                                              child: const Text("Next Tithi >")
+                                          )
+                                        ],
+                                      )
+                                    ]
+                                  ),
+                                  TableRow(
+                                    children: [
+                                      Container(height: 10),
+                                      Container()
+                                    ]
+                                  ),
+                                  TableRow(
                                       children: [
-                                        IconButton(
-                                          onPressed: ()=>pageManager.prev5(current),
-                                          icon: const Icon(Icons.replay_5),
+                                        const Text(
+                                            "Mantra: "
                                         ),
-                                        // RepeatButton(),
-                                        ValueListenableBuilder<RepeatState>(
-                                          valueListenable: pageManager.repeatButtonNotifier,
-                                          builder: (context, value, child) {
-                                            Icon icon;
-                                            switch (value) {
-                                              case RepeatState.off:
-                                                icon = const Icon(Icons.repeat, color: Colors.grey);
-                                                break;
-                                              case RepeatState.repeatSong:
-                                                icon = const Icon(Icons.repeat_one);
-                                                break;
-                                              // case RepeatState.repeatPlaylist:
-                                              //   icon = const Icon(Icons.repeat);
-                                              //   break;
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              res2.mantraEnglish,
+                                              overflow: TextOverflow.visible,
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Text(
+                                              res2.mantraHindi,
+                                              overflow: TextOverflow.visible,
+                                            ),
+                                          ],
+                                        ),
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        Container(height:15),
+                                        Container()
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        Container(),
+                                        Text(res2.noOfRep)
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        Container(height:15),
+                                        Container()
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        const Text("Procedure: "),
+                                        Text(res2.procedure)
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        Container(height:15),
+                                        Container()
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        const Text("Benefit: "),
+                                        Text(res2.benefits)
+                                      ]
+                                  ),
+                                  TableRow(
+                                      children: [
+                                        Container(height:15),
+                                        Container()
+                                      ]
+                                  ),
+                                  TableRow(
+                                    children: [
+                                      const Text("Mantra"),
+                                      Container(
+                                        margin: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                                        child: ValueListenableBuilder<ProgressBarState>(
+                                          valueListenable: pageManager.progressNotifier,
+                                          builder: (_, value, __) {
+                                            // print("value.curr: ${value.current}");
+                                            // print("tot val: ${value.total}");
+                                            current = value.current;
+                                            if(!introPlaying && mantraCounter>=0 && !maxSet){
+                                              sliderMax = value.total.inMilliseconds.toDouble();
+                                              print("SliderMax: $sliderMax");
+                                              maxSet = true;
                                             }
-                                            return IconButton(
-                                              icon: icon,
-                                              onPressed: pageManager.repeat,
+                                            // return ProgressBar(
+                                            //   progress: value.current,
+                                            //   buffered: value.buffered,
+                                            //   total: value.total,
+                                            //   onSeek: pageManager.seek,
+                                            //   thumbCanPaintOutsideBar: true,
+                                            //   barHeight: 5,
+                                            //   barCapShape: BarCapShape.round,
+                                            //   baseBarColor: Colors.white,
+                                            // ) ;
+                                            return Row(
+                                              children: [
+                                                Text("${value.current.inMinutes}:${value.current.inSeconds%60}"),
+                                                Expanded(
+                                                  flex: 4,
+                                                  child: Slider(
+                                                      value: min(value.current.inMilliseconds.toDouble(),max(value.total.inMilliseconds.toDouble(),sliderMax)),
+                                                      min: 0.0,
+                                                      divisions: max(sliderMax.toInt()+1,value.total.inMilliseconds+1),
+                                                      max: max(sliderMax.toInt()+10,value.total.inMilliseconds+10),
+                                                      onChanged: (val){
+                                                        pageManager.seek(Duration(milliseconds: val.toInt()));
+                                                      }
+                                                  ),
+                                                ),
+                                                Text("${max(sliderMax~/60000,value.total.inMilliseconds~/60000)}:${max(sliderMax~/1000,value.total.inMilliseconds~/1000)}"),
+                                              ],
                                             );
                                           },
                                         ),
+                                      ),
+                                    ]
+                                  ),
+                                  TableRow(
+                                    children: [
+                                      Container(
+                                        // child: Text("Repeat: $mantraCounter"),
+                                      ),
+                                    // ValueListenableBuilder<String>(
+                                    //     valueListenable: pageManager.currentSongTitleNotifier,
+                                    //     builder: (_, value, __) {
+                                    //       mantraCounter--;
+                                    //       print("playlist: $value");
+                                    //       return !(mantraCounter>110)?Text("Repeat: $mantraCounter"):const Text("Repeat: ∞");
+                                    //     }
+                                    //   ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          IconButton(
+                                            onPressed: ()=>pageManager.prev5(current),
+                                            icon: const Icon(Icons.replay_5),
+                                          ),
+                                          // RepeatButton(),
+                                          ValueListenableBuilder<RepeatState>(
+                                            valueListenable: pageManager.repeatButtonNotifier,
+                                            builder: (context, value, child) {
+                                              Icon icon;
+                                              switch (value) {
+                                                case RepeatState.off:
+                                                  icon = const Icon(Icons.repeat, color: Colors.grey);
+                                                  break;
+                                                case RepeatState.repeatSong:
+                                                  if(introPlaying){
+                                                    print("Intro Playing");
+                                                    // pageManager.;
+                                                    icon = const Icon(Icons.repeat, color: Colors.grey);
+                                                    break;
+                                                  }
+                                                  icon = const Icon(Icons.repeat_one);
+                                                  break;
+                                                // case RepeatState.repeatPlaylist:
+                                                //   icon = const Icon(Icons.repeat);
+                                                //   break;
+                                              }
+                                              return IconButton(
+                                                icon: icon,
+                                                onPressed: ()=>pageManager.repeat(introPlaying),
+                                              );
+                                            },
+                                          ),
 
-                                        // PreviousSongButton(),
-                                        //No Previous button
+                                          // PreviousSongButton(),
+                                          //No Previous button
 
-                                        // PlayButton(),
-                                        ValueListenableBuilder<ButtonState>(
-                                          valueListenable: pageManager.playButtonNotifier,
-                                          builder: (_, value, __) {
-                                            switch (value) {
-                                              case ButtonState.loading:
-                                                return Container(
-                                                  margin: const EdgeInsets.all(8.0),
-                                                  width: 32.0,
-                                                  height: 32.0,
-                                                  child: const CircularProgressIndicator(),
-                                                );
-                                              case ButtonState.paused:
-                                                return IconButton(
-                                                  icon: const Icon(Icons.play_arrow),
-                                                  iconSize: 32.0,
-                                                  onPressed: pageManager.play,
-                                                );
-                                              case ButtonState.playing:
-                                                return IconButton(
-                                                  icon: const Icon(Icons.pause),
-                                                  iconSize: 32.0,
-                                                  onPressed: pageManager.pause,
-                                                );
-                                              case ButtonState.finished:
-                                                if(introPlaying){
-                                                  pageManager.remove();
-                                                  pageManager.add(selectedDay,"mantra");
-                                                  introPlaying = false;
-                                                  pageManager.pause;
-                                                }
-                                                return IconButton(
-                                                  icon: const Icon(Icons.play_arrow),
-                                                  iconSize: 32.0,
-                                                  onPressed: (){
-                                                    print("finis");
-                                                    pageManager.seek(Duration.zero);
-                                                  },
-                                                );
-                                            // TODO: Handle this case.
-                                            }
-                                          },
-                                        ),
-                                        IconButton(
-                                            onPressed: () => pageManager.next5(current),
-                                            icon: const Icon(Icons.forward_5))
-                                        // NextSongButton(),
-                                        // ShuffleButton(),
-                                      ],
-                                    ),
-                                  ]
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        // const SizedBox(height: 10),
-                        // const Text("Repeat Mantra: "),
-                        // Row(
-                        //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //   children: [
-                        //     OutlinedButton(
-                        //         onPressed: (){
-                        //           // pageManager.removeAll();
-                        //           pageManager.clearQueue();
-                        //           setState((){
-                        //             mantraCounter = 1;
-                        //             pageManager.add(selectedDay, "mantra");
-                        //             // pageManager.play();
-                        //           });
-                        //         },
-                        //         child: const Text("1")
-                        //     ),
-                        //     const Spacer(flex: 1),
-                        //     OutlinedButton(
-                        //         onPressed: () async{
-                        //           // pageManager.removeAll();
-                        //           pageManager.clearQueue();
-                        //           setState((){
-                        //             mantraCounter = 27;
-                        //             // pageManager.add(selectedDay, "mantra");
-                        //             // pageManager.play();
-                        //           });
-                        //           await pageManager.addCount(selectedDay, 5);
-                        //         },
-                        //         child: const Text("27")
-                        //     ),
-                        //     const Spacer(flex: 1),
-                        //     OutlinedButton(
-                        //         onPressed: ()async{
-                        //           // pageManager.removeAll();
-                        //           pageManager.clearQueue();
-                        //           setState((){
-                        //             mantraCounter = 54;
-                        //             // pageManager.play();
-                        //           });
-                        //           await pageManager.addCount(selectedDay, 54);
-                        //         },
-                        //         child: const Text("54")
-                        //     ),
-                        //     const Spacer(flex: 1),
-                        //     OutlinedButton(
-                        //         onPressed: () async{
-                        //           // pageManager.removeAll();
-                        //           pageManager.clearQueue();
-                        //           setState((){
-                        //             mantraCounter = 108;
-                        //             // pageManager.play();
-                        //           });
-                        //           await pageManager.addCount(selectedDay, 108);
-                        //         },
-                        //         child: const Text("108")
-                        //     ),
-                        //     const Spacer(flex: 1),
-                        //     OutlinedButton(
-                        //         onPressed: () {
-                        //           // pageManager.removeAll();
-                        //           setState(() {
-                        //             mantraCounter = 999;
-                        //             // pageManager.repeatButtonNotifier = RepeatState.repeatSong;
-                        //             pageManager.repeat(RepeatState.repeatSong);
-                        //           });
-                        //         },
-                        //         child: const Text("Infinite")
-                        //     ),
-                        //   ],
-                        // ),
-                        // OutlinedButton(
-                        //     onPressed: (){
-                        //       setState(() {
-                        //         mantraCounter=0;
-                        //       });
-                        //     }, child: const Text("Reset")
-                        // ),
-                      ],
+                                          // PlayButton(),
+                                          ValueListenableBuilder<ButtonState>(
+                                            valueListenable: pageManager.playButtonNotifier,
+                                            builder: (_, value, __) {
+                                              switch (value) {
+                                                case ButtonState.loading:
+                                                  return Container(
+                                                    margin: const EdgeInsets.all(8.0),
+                                                    width: 32.0,
+                                                    height: 32.0,
+                                                    child: const CircularProgressIndicator(),
+                                                  );
+                                                case ButtonState.paused:
+                                                  return IconButton(
+                                                    icon: const Icon(Icons.play_arrow),
+                                                    iconSize: 32.0,
+                                                    onPressed: pageManager.play,
+                                                  );
+                                                case ButtonState.playing:
+                                                  return IconButton(
+                                                    icon: const Icon(Icons.pause),
+                                                    iconSize: 32.0,
+                                                    onPressed: pageManager.pause,
+                                                  );
+                                                case ButtonState.finished:
+                                                  if(introPlaying){
+                                                    pageManager.remove();
+                                                    pageManager.add(selectedDay,"mantra");
+                                                    introPlaying = false;
+                                                    pageManager.pause;
+                                                  }
+                                                  return IconButton(
+                                                    icon: const Icon(Icons.play_arrow),
+                                                    iconSize: 32.0,
+                                                    onPressed: (){
+                                                      print("finis");
+                                                      pageManager.seek(Duration.zero);
+                                                    },
+                                                  );
+                                              // TODO: Handle this case.
+                                              }
+                                            },
+                                          ),
+                                          IconButton(
+                                              onPressed: () => pageManager.next5(current),
+                                              icon: const Icon(Icons.forward_5))
+                                          // NextSongButton(),
+                                          // ShuffleButton(),
+                                        ],
+                                      ),
+                                    ]
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          // const SizedBox(height: 10),
+                          // const Text("Repeat Mantra: "),
+                          // Row(
+                          //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //   children: [
+                          //     OutlinedButton(
+                          //         onPressed: (){
+                          //           // pageManager.removeAll();
+                          //           pageManager.clearQueue();
+                          //           setState((){
+                          //             mantraCounter = 1;
+                          //             pageManager.add(selectedDay, "mantra");
+                          //             // pageManager.play();
+                          //           });
+                          //         },
+                          //         child: const Text("1")
+                          //     ),
+                          //     const Spacer(flex: 1),
+                          //     OutlinedButton(
+                          //         onPressed: () async{
+                          //           // pageManager.removeAll();
+                          //           pageManager.clearQueue();
+                          //           setState((){
+                          //             mantraCounter = 27;
+                          //             // pageManager.add(selectedDay, "mantra");
+                          //             // pageManager.play();
+                          //           });
+                          //           await pageManager.addCount(selectedDay, 5);
+                          //         },
+                          //         child: const Text("27")
+                          //     ),
+                          //     const Spacer(flex: 1),
+                          //     OutlinedButton(
+                          //         onPressed: ()async{
+                          //           // pageManager.removeAll();
+                          //           pageManager.clearQueue();
+                          //           setState((){
+                          //             mantraCounter = 54;
+                          //             // pageManager.play();
+                          //           });
+                          //           await pageManager.addCount(selectedDay, 54);
+                          //         },
+                          //         child: const Text("54")
+                          //     ),
+                          //     const Spacer(flex: 1),
+                          //     OutlinedButton(
+                          //         onPressed: () async{
+                          //           // pageManager.removeAll();
+                          //           pageManager.clearQueue();
+                          //           setState((){
+                          //             mantraCounter = 108;
+                          //             // pageManager.play();
+                          //           });
+                          //           await pageManager.addCount(selectedDay, 108);
+                          //         },
+                          //         child: const Text("108")
+                          //     ),
+                          //     const Spacer(flex: 1),
+                          //     OutlinedButton(
+                          //         onPressed: () {
+                          //           // pageManager.removeAll();
+                          //           setState(() {
+                          //             mantraCounter = 999;
+                          //             // pageManager.repeatButtonNotifier = RepeatState.repeatSong;
+                          //             pageManager.repeat(RepeatState.repeatSong);
+                          //           });
+                          //         },
+                          //         child: const Text("Infinite")
+                          //     ),
+                          //   ],
+                          // ),
+                          // OutlinedButton(
+                          //     onPressed: (){
+                          //       setState(() {
+                          //         mantraCounter=0;
+                          //       });
+                          //     }, child: const Text("Reset")
+                          // ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              // const SizedBox(height: 20),
-              // SizedBox(
-              //   height: 100,
-              //   child: ValueListenableBuilder<List<String>>(
-              //     valueListenable: pageManager.playlistNotifier,
-              //     builder: (context, playlistTitles, _) {
-              //       return ListView.builder(
-              //         itemCount: playlistTitles.length,
-              //         itemBuilder: (context, index) {
-              //           return ListTile(
-              //             title: Text(playlistTitles[index]),
-              //           );
-              //         },
-              //       );
-              //     },
-              //   ),
-              // ),
-              // ValueListenableBuilder<String>(
-              //   valueListenable: pageManager.currentSongTitleNotifier,
-              //   builder: (_, title, __) {
-              //     return Padding(
-              //       padding: const EdgeInsets.only(top: 8.0),
-              //       child: Text(title, style: const TextStyle(fontSize: 20)),
-              //     );
-              //   },
-              // ),
-              // const SizedBox(height: 20),
+                // const SizedBox(height: 20),
+                // SizedBox(
+                //   height: 100,
+                //   child: ValueListenableBuilder<List<String>>(
+                //     valueListenable: pageManager.playlistNotifier,
+                //     builder: (context, playlistTitles, _) {
+                //       return ListView.builder(
+                //         itemCount: playlistTitles.length,
+                //         itemBuilder: (context, index) {
+                //           return ListTile(
+                //             title: Text(playlistTitles[index]),
+                //           );
+                //         },
+                //       );
+                //     },
+                //   ),
+                // ),
+                // ValueListenableBuilder<String>(
+                //   valueListenable: pageManager.currentSongTitleNotifier,
+                //   builder: (_, title, __) {
+                //     return Padding(
+                //       padding: const EdgeInsets.only(top: 8.0),
+                //       child: Text(title, style: const TextStyle(fontSize: 20)),
+                //     );
+                //   },
+                // ),
+                // const SizedBox(height: 20),
 
-            ]
+              ]
+            ),
           ),
         ),
-      ),
     );
   }
 }

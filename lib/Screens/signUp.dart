@@ -153,6 +153,12 @@ class _SignUpState extends State<SignUp> {
                             hintText: 'Phone',
                             filled: true,
                           ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter
+                                .digitsOnly,
+                            LengthLimitingTextInputFormatter(
+                                10)
+                          ],
                           keyboardType: TextInputType.number,
                           validator: (val)=>val!.length<10?"Enter a valid phone":null,
                           onChanged: (val){
@@ -245,7 +251,7 @@ class _SignUpState extends State<SignUp> {
                         // ),
                         OutlinedButton(
                             style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
                                 foregroundColor: MaterialStateProperty.all(Colors.white)
                             ),
                             onPressed: () async{

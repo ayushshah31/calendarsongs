@@ -160,7 +160,7 @@ class PageManager {
     }
   }
 
-  void repeat() {
+  void repeat(bool isIntroPlaying) {
     repeatButtonNotifier.nextState();
     final repeatMode = repeatButtonNotifier.value;
     switch (repeatMode) {
@@ -168,7 +168,9 @@ class PageManager {
         _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
         break;
       case RepeatState.repeatSong:
-        _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
+        isIntroPlaying?
+          _audioHandler.setRepeatMode(AudioServiceRepeatMode.none):
+          _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
         break;
       // case RepeatState.repeatPlaylist:
       //   _audioHandler.setRepeatMode(AudioServiceRepeatMode.all);

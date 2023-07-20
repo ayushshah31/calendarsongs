@@ -23,6 +23,8 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
 
+  double downloadCounter = 0.0;
+
   String _localPath = "";
   late bool _permissionReady=true;
   bool _downloading = true;
@@ -45,7 +47,7 @@ class _WrapperState extends State<Wrapper> {
     final savedDir = Directory(_localPath);
     bool hasExisted = await savedDir.exists();
     if (!hasExisted) {
-      // print("Directory created");
+      print("Directory created");
       savedDir.create();
       _permissionReady = await checkPermission();
       if (_permissionReady) {
@@ -53,11 +55,12 @@ class _WrapperState extends State<Wrapper> {
       }
     } else {
       String check = "$_localPath${Platform.pathSeparator}${mantraData[0].introSoundFile}";
-      // print("Mantra there");
+      // print("Mantra path exists");
       final filePath = File(check);
       // print("FilePath: $filePath");
       final fileExists = await filePath.exists();
       if(fileExists){
+        // print("Mantras exists");
         setState(()=> _downloading=false);
       } else {
         await download();
@@ -73,14 +76,20 @@ class _WrapperState extends State<Wrapper> {
     try {
       for(int i=0; i<mantraData.length; i++){
         await Dio().download(mantraData[i].introLink, "$_localPath${Platform.pathSeparator}${mantraData[i].introSoundFile}");
+        setState(() {
+          downloadCounter += 100/32;
+        });
         await Dio().download(mantraData[i].mantraLink, "$_localPath${Platform.pathSeparator}${mantraData[i].mantraSoundFile}");
+        setState(() {
+          downloadCounter += 100/32;
+        });
       }
       // await Dio().download(mantra[0]['link'],
       //     "$_localPath/0.mp3");
       print("Download Completed.");
       String check = "$_localPath${Platform.pathSeparator}${mantraData[0].introSoundFile}";
       final filePath = File(check);
-      print("FilePathDownCheck: $filePath");
+      print("FilePathDownCheck: ${filePath.exists()},$filePath");
       setState(() {
         _downloading = false;
       });
@@ -98,11 +107,15 @@ class _WrapperState extends State<Wrapper> {
     }
   }
 
+  void initDownload() async{
+    await _downloadMantra("mantra");
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     mantraData = Provider.of<MantraViewModel>(context).mantraModel;
-    _downloadMantra("mantra");
+    initDownload();
     if(user == null) {
       return const SignUp();
     }
@@ -117,7 +130,7 @@ class _WrapperState extends State<Wrapper> {
                   color: Colors.orange,
                 ),
                 const SizedBox(height: 20),
-                _downloading?const Text("Downloading Data"):const Text("Gathering data")
+                _downloading? Text("Downloading Data\nDownloaded $downloadCounter/32"):const Text("Gathering data")
               ],
             ):const Text("Allow download permissions from settings")),
       );
