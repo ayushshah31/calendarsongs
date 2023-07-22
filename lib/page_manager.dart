@@ -42,7 +42,7 @@ class PageManager {
 
   Future<void> _loadPlaylist() async {
     final songRepository = getIt<PlaylistRepository>();
-    final playlist = await songRepository.fetchIntroPlaylist(_selectedDay);
+    final playlist = await songRepository.fetchIntroPlaylist(-1);
     print("Initial: $playlist");
     final mediaItems = MediaItem(
       id: playlist['id'] ?? '',
@@ -282,15 +282,15 @@ class PageManager {
     }
   }
 
-  Future<void> add(DateTime date, String type) async {
+  Future<void> add(int tithiNo, String type) async {
     final songRepository = getIt<PlaylistRepository>();
     final song;
     if(type == "mantra") {
       isIntroPlaying = false;
-      song = await songRepository.fetchMantraSong(date);
+      song = await songRepository.fetchMantraSong(tithiNo);
     } else {
       isIntroPlaying = true;
-      song = await songRepository.fetchIntroPlaylist(date);
+      song = await songRepository.fetchIntroPlaylist(tithiNo);
     }
     final mediaItem = MediaItem(
       id: song['id'] ?? '',
@@ -301,11 +301,11 @@ class PageManager {
     _audioHandler.addQueueItem(mediaItem);
   }
 
-  Future<void> addCount(DateTime date,int count) async{
+  Future<void> addCount(int res,int count) async{
     // removeAll();
     await clearQueue();
     final songRepository = getIt<PlaylistRepository>();
-    final song = await songRepository.fetchMantraSong(date);
+    final song = await songRepository.fetchMantraSong(res);
     final mediaItem = MediaItem(
       id: song['id'] ?? '',
       album: song['album'] ?? '',

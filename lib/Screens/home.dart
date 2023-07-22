@@ -65,6 +65,12 @@ class _HomePageState extends State<HomePage> {
     // _downloadMantra("mantra");
   }
 
+  Future<void> setData() async{
+    res = getTithiDate(DateTime.now(), tithiData);
+    res2 = getTithiMantraData(res);
+    currTithi = res2.tithi;
+  }
+
   @override
   void dispose() {
     getIt<PageManager>().dispose();
@@ -88,6 +94,10 @@ class _HomePageState extends State<HomePage> {
   List<MantraModel> mantraData = [];
   DatabaseReference _databaseRef = FirebaseDatabase.instance.ref();
   String shareTxt="",shareMsg="";
+
+  int res = -1;
+  MantraModel res2 = MantraModel();
+  late int currTithi;
 
 
   void setFocusedDay(DateTime focusedDayNew){
@@ -126,7 +136,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List months = [
-    "Jan","Feb","March","April","May","June","July","Sept","Oct","Nov","Dec"
+    "Jan","Feb","March","April","May","June","July","Aug","Sept","Oct","Nov","Dec"
   ];
   String selsup(int dateNow){
     String th = "\u1d57\u02b0";
@@ -150,7 +160,7 @@ class _HomePageState extends State<HomePage> {
     int month = DateTime.now().month;
     int year = DateTime.now().year;
     String supText = selsup(day);
-    return "${day}${supText} ${months[month]} $year";
+    return "${day}${supText} ${months[month-1]} $year";
   }
 
   @override
@@ -161,15 +171,14 @@ class _HomePageState extends State<HomePage> {
     tithiData = Provider.of<TithiViewModel>(context).tithiModel;
     double sliderMax = 1;
     bool maxSet = false;
-
-    void setSelectedDay(DateTime selectedDayNew) async{
-      // await pageManager.clearQueue();
+    if(res == -1) {
+      setData();
+    }
+    void changeMantra(){
       setState(() {
-        selectedDay = selectedDayNew;
-        // pageManager.removeAll();
         pageManager.remove();
         pageManager.remove();
-        pageManager.add(selectedDayNew, "Intro");
+        pageManager.add(res, "Intro");
         print("Should Change");
         introPlaying = true;
         pageManager.pause();
@@ -177,10 +186,17 @@ class _HomePageState extends State<HomePage> {
         pageManager.repeatButtonNotifier.value = RepeatState.repeatSong;
         pageManager.repeatCounterNotifier.value = 0;
         pageManager.repeat();
+        mantraCounter = 0;
       });
     }
-    var res = getTithiDate(selectedDay, tithiData);
-    MantraModel res2 = getTithiMantraData(res);
+
+    void setSelectedDay(DateTime selectedDayNew) async{
+      // await pageManager.clearQueue();
+      setState(() {
+        selectedDay = selectedDayNew;
+        // pageManager.removeAll();
+      });
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -282,8 +298,8 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           backgroundColor: const Color(0xfff8dbc1),
-          body: SizedBox(
-            // padding: const EdgeInsets.all(10),
+          body: Container(
+            padding: const EdgeInsets.all(10),
             height: MediaQuery.of(context).size.height,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,113 +317,468 @@ class _HomePageState extends State<HomePage> {
                 //     // getTithiDate: getTithiDate,
                 //     // setAudioPlayer: setAudioPlayer
                 // ),
-                Padding(
-                    padding: EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              color: Colors.black,
-                            ),
-                            right: BorderSide(color: Colors.black),
-                            top: BorderSide(color: Colors.black),
-                            bottom: BorderSide(color: Colors.black)
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        // border: Border(
+                        //   left: BorderSide(
+                        //     color: Colors.black,
+                        //   ),
+                        //   right: BorderSide(color: Colors.black),
+                        //   top: BorderSide(color: Colors.black),
+                        //   bottom: BorderSide(color: Colors.black)
+                        // ),
+                        border: Border.all(color: Colors.black),
+                        color: Color(0xFFf3ae85)
+                      ),
+                      child: Column(
+                        children: [
+                          Text(weekday[DateTime.now().weekday-1],style: TextStyle(fontSize: 20),),
+                          SizedBox(height: 10,),
+                          Text(getTodayDate(),style: TextStyle(fontSize: 20),)
+                        ]
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Tithi ",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              Text(
+                                res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.redAccent
+                                ),
+                              )
+                            ],
                           ),
-                          color: Color(0xFFf3ae85)
-                        ),
-                        child: Column(
-                          children: [
-                            Text(weekday[DateTime.now().weekday-1],style: TextStyle(fontSize: 20),),
-                            SizedBox(height: 10,),
-                            Text(getTodayDate(),style: TextStyle(fontSize: 20),)
-                          ]
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              OutlinedButton(
+                                  onPressed: (){
+                                    // DateTime? newDay = selectedDay;
+                                    // var tithiNew = res2.tithi;
+                                    // while(tithiNew == res2.tithi) {
+                                    //   newDay = newDay!.subtract(const Duration(days: 1));
+                                    //   print(newDay);
+                                    //   // var tithiNew = res2.tithi;
+                                    //   var resNew = getTithiDate(newDay, tithiData);
+                                    //   MantraModel resNew2 = getTithiMantraData(resNew);
+                                    //   tithiNew = resNew2.tithi;
+                                    // }
+                                    // setSelectedDay(newDay!);
+                                    // setFocusedDay(newDay);
+                                    print("Tapped");
+                                    print("curr $currTithi");
+                                    currTithi = currTithi - 1;
+                                    print("Tapped");
+                                    print("curr $currTithi");
+                                    int newTithi;
+                                    if(currTithi<=15 && currTithi>=1){
+                                      setState(() {
+                                        res = currTithi;
+                                        res2 = getTithiMantraData(currTithi);
+                                      });
+                                    } else if(currTithi >15 && currTithi<30){
+                                      setState(() {
+                                        res = currTithi - 15;
+                                        res2 = getTithiMantraData(currTithi-15);
+                                      });
+                                    } else if( currTithi<=0){
+                                      setState(() {
+                                        res2 = getTithiMantraData(30);
+                                        currTithi = 30;
+                                        res = 30;
+                                      });
+                                    }
+                                    changeMantra();
+                                  },
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                      foregroundColor: MaterialStateProperty.all(Colors.white)
+                                  ),
+                                  child: const Text("< Prev Tithi")),
+                              OutlinedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                      foregroundColor: MaterialStateProperty.all(Colors.white)
+                                  ),
+                                  onPressed: (){
+                                    // DateTime? newDay = selectedDay;
+                                    // var tithiNew = res2.tithi;
+                                    // while(tithiNew == res2.tithi) {
+                                    //   newDay = newDay!.add(const Duration(days: 1));
+                                    //   print(newDay);
+                                    //   // var tithiNew = res2.tithi;
+                                    //   var resNew = getTithiDate(newDay, tithiData);
+                                    //   MantraModel resNew2 = getTithiMantraData(resNew);
+                                    //   tithiNew = resNew2.tithi;
+                                    // }
+                                    // setSelectedDay(newDay!);
+                                    // setFocusedDay(newDay);
+                                    print("Tapped +");
+                                    print("curr $currTithi");
+                                    currTithi += 1;
+                                    print("Tapped +");
+                                    print("curr $currTithi");
+                                    if(currTithi<=15 && currTithi>=1){
+                                      setState(() {
+                                        res = currTithi;
+                                        res2 = getTithiMantraData(currTithi);
+                                      });
+                                    } else if(currTithi >15 && currTithi<30){
+                                      setState(() {
+                                        res = currTithi - 15;
+                                        res2 = getTithiMantraData(currTithi-15);
+                                      });
+                                    } else if(currTithi==30){
+                                      setState(() {
+                                        res = 30;
+                                        res2 = getTithiMantraData(30);
+                                      });
+                                    } else if(currTithi>30){
+                                      setState(() {
+                                        currTithi = 1;
+                                        res = currTithi;
+                                        res2 = getTithiMantraData(currTithi);
+                                      });
+                                    }
+                                    changeMantra();
+                                  },
+                                  child: const Text("Next Tithi >")
+                              )
+                            ],
+                          )
+                        ]
+                      )
+                    )
+                  ],
+                ),
+                SizedBox(height: 10),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                      margin: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                      child: ValueListenableBuilder<ProgressBarState>(
+                        valueListenable: pageManager.progressNotifier,
+                        builder: (_, value, __) {
+                          // print("value.curr: ${value.current}");
+                          // print("tot val: ${value.total}");
+                          current = value.current;
+                          if(!introPlaying && mantraCounter>=0 && !maxSet){
+                            sliderMax = value.total.inMilliseconds.toDouble();
+                            print("SliderMax: $sliderMax");
+                            maxSet = true;
+                          }
+                          return Row(
+                            children: [
+                              Text("${value.current.inMinutes}:${value.current.inSeconds%60}"),
+                              Expanded(
+                                flex: 4,
+                                child: Slider(
+                                    value: min(value.current.inMilliseconds.toDouble(),max(value.total.inMilliseconds.toDouble(),sliderMax)),
+                                    min: 0.0,
+                                    divisions: max(sliderMax.toInt()+1,value.total.inMilliseconds+1),
+                                    max: max(sliderMax.toInt()+10,value.total.inMilliseconds+10),
+                                    onChanged: (val){
+                                      pageManager.seek(Duration(milliseconds: val.toInt()));
+                                    }
+                                ),
+                              ),
+                              Text("${max(sliderMax~/60000,value.total.inMilliseconds~/60000)}:${max(sliderMax~/1000,value.total.inMilliseconds~/1000)}"),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 0,horizontal: 10),
+                        child: ValueListenableBuilder<ButtonState>(
+                            valueListenable: pageManager.playButtonNotifier,
+                            builder: (_, value, __) {
+                              // mantraCounter--;
+                              // print("value: $value");
+                              return !(mantraCounter>110)?Text("Repeat: $mantraCounter",style: TextStyle(fontSize:18),):const Text("Repeat: ∞",style: TextStyle(fontSize:18),);
+                            }
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Tithi ",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.redAccent
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                OutlinedButton(
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                            onPressed: ()=>pageManager.prev5(current),
+                            icon: const Icon(Icons.replay_5),
+                          ),
+                          // RepeatButton(),
+                          ValueListenableBuilder<RepeatState>(
+                            valueListenable: pageManager.repeatButtonNotifier,
+                            builder: (context, value, child) {
+                              Icon icon;
+                              switch (value) {
+                                case RepeatState.off:
+                                  icon = const Icon(Icons.repeat, color: Colors.grey);
+                                  break;
+                                case RepeatState.repeatSong:
+                                  if(introPlaying){
+                                    print("Intro Playing");
+                                    print("counter val: ${pageManager.repeatCounterNotifier.value}");
+                                    icon = const Icon(Icons.repeat, color: Colors.grey);
+                                    break;
+                                  }
+                                  icon = const Icon(Icons.repeat_one);
+                                  break;
+                              }
+                              return IconButton(
+                                icon: icon,
+                                onPressed: ()=>pageManager.repeat(),
+                              );
+                            },
+                          ),
+
+                          // PreviousSongButton(),
+                          //No Previous button
+
+                          // PlayButton(),
+                          ValueListenableBuilder<ButtonState>(
+                            valueListenable: pageManager.playButtonNotifier,
+                            builder: (_, value, __) {
+                              switch (value) {
+                                case ButtonState.loading:
+                                  return Container(
+                                    margin: const EdgeInsets.all(8.0),
+                                    width: 32.0,
+                                    height: 32.0,
+                                    child: const CircularProgressIndicator(),
+                                  );
+                                case ButtonState.paused:
+                                  return IconButton(
+                                    icon: const Icon(Icons.play_arrow),
+                                    iconSize: 32.0,
+                                    onPressed: pageManager.play,
+                                  );
+                                case ButtonState.playing:
+                                  return IconButton(
+                                    icon: const Icon(Icons.pause),
+                                    iconSize: 32.0,
+                                    onPressed: pageManager.pause,
+                                  );
+                                case ButtonState.finished:
+                                  if(introPlaying){
+                                    pageManager.remove();
+                                    pageManager.add(res,"mantra");
+                                    introPlaying = false;
+                                    pageManager.pause;
+                                  }
+                                  if(mantraCounter>0){
+                                    print("MantraCounter $mantraCounter");
+                                    pageManager.remove();
+                                    pageManager.add(res,"mantra");
+                                    introPlaying = false;
+                                    mantraCounter-=1;
+                                    print("MantraCounter $mantraCounter");
+                                    // pageManager.pause;
+                                  }
+                                  return IconButton(
+                                    icon: const Icon(Icons.play_arrow),
+                                    iconSize: 32.0,
                                     onPressed: (){
-                                      // DateTime newDay;
-                                      // newDay = selectedDay.subtract(const Duration(days: 1));
-                                      // print(newDay);
-                                      // setSelectedDay(newDay);
-                                      // setFocusedDay(newDay);
-                                      DateTime? newDay = selectedDay;
-                                      var tithiNew = res2.tithi;
-                                      while(tithiNew == res2.tithi) {
-                                        newDay = newDay!.subtract(const Duration(days: 1));
-                                        print(newDay);
-                                        // var tithiNew = res2.tithi;
-                                        var resNew = getTithiDate(newDay, tithiData);
-                                        MantraModel resNew2 = getTithiMantraData(resNew);
-                                        tithiNew = resNew2.tithi;
-                                      }
-                                      setSelectedDay(newDay!);
-                                      setFocusedDay(newDay);
+                                      print("finis");
+                                      pageManager.seek(Duration.zero);
                                     },
-                                    style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
-                                        foregroundColor: MaterialStateProperty.all(Colors.white)
-                                    ),
-                                    child: const Text("< Prev Tithi")),
-                                OutlinedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
-                                        foregroundColor: MaterialStateProperty.all(Colors.white)
-                                    ),
-                                    onPressed: (){
-                                      DateTime? newDay = selectedDay;
-                                      var tithiNew = res2.tithi;
-                                      while(tithiNew == res2.tithi) {
-                                        newDay = newDay!.add(const Duration(days: 1));
-                                        print(newDay);
-                                        // var tithiNew = res2.tithi;
-                                        var resNew = getTithiDate(newDay, tithiData);
-                                        MantraModel resNew2 = getTithiMantraData(resNew);
-                                        tithiNew = resNew2.tithi;
-                                      }
-                                      setSelectedDay(newDay!);
-                                      setFocusedDay(newDay);
-                                    },
-                                    child: const Text("Next Tithi >")
-                                )
-                              ],
-                            )
-                          ]
-                        )
-                      )
-                    ],
-                  ),
+                                  );
+                              // TODO: Handle this case.
+                              }
+                            },
+                          ),
+                          IconButton(
+                              onPressed: () => pageManager.next5(current),
+                              icon: const Icon(Icons.forward_5))
+                          // NextSongButton(),
+                          // ShuffleButton(),
+                        ],
+                      ),
+                    ),
+                  ]
                 ),
                 const SizedBox(height: 10),
                 Expanded(
-                  flex: 18,
+                  flex: 3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex:10,
+                          child: Text("Repeat Mantra:",style: TextStyle(fontSize:18),)
+                      ),
+                      // OutlinedButton(
+                      //   style: ButtonStyle(
+                      //   ),
+                      //     onPressed: (){
+                      //       setState((){
+                      //         mantraCounter = 1;
+                      //       });
+                      //     },
+                      //     child: const Text("1")
+                      // ),
+                      const Spacer(flex: 1),
+                      Expanded(
+                        flex: 3,
+                        child: GestureDetector(
+                          onTap: (){
+                            setState((){
+                              mantraCounter = 1;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color:Color(0xff80571d) ),
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Text("1",textAlign: TextAlign.center,),
+                          ),
+                        ),
+                      ),
+                      const Spacer(flex: 1),
+                      Expanded(
+                        flex: 3,
+                        child: GestureDetector(
+                          onTap: (){
+                            setState((){
+                              mantraCounter = 27;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(color:Color(0xff80571d) ),
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Text("27",textAlign: TextAlign.center,),
+                          ),
+                        ),
+                      ),
+                      const Spacer(flex: 1),
+                      Expanded(
+                        flex: 3,
+                        child: GestureDetector(
+                          onTap: (){
+                            setState((){
+                              mantraCounter = 54;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(4, 10, 0, 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(color:Color(0xff80571d) ),
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Text("54",textAlign: TextAlign.center,),
+                          ),
+                        ),
+                      ),
+                      const Spacer(flex: 1),
+                      Expanded(
+                        flex: 3,
+                        child: GestureDetector(
+                          onTap: (){
+                            setState((){
+                              mantraCounter = 108;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(3, 10, 0, 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(color:Color(0xff80571d) ),
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Text("108",textAlign: TextAlign.center,),
+                          ),
+                        ),
+                      ),
+                      const Spacer(flex: 1),
+                      Expanded(
+                        flex: 5,
+                        child: GestureDetector(
+                          onTap: (){
+                            setState((){
+                              mantraCounter = 1;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+                            decoration: BoxDecoration(
+                                border: Border.all(color:Color(0xff80571d) ),
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            child: Text("Infinite",textAlign: TextAlign.center,),
+                          ),
+                        ),
+                      ),
+                      // const Spacer(flex: 1),
+                      // OutlinedButton(
+                      //     onPressed: () async{
+                      //       setState((){
+                      //         mantraCounter = 27;
+                      //       });
+                      //     },
+                      //     child: const Text("27")
+                      // ),
+                      // // const Spacer(flex: 1),
+                      // OutlinedButton(
+                      //     onPressed: ()async{
+                      //       setState((){
+                      //         mantraCounter = 54;
+                      //       });
+                      //     },
+                      //     child: const Text("54")
+                      // ),
+                      // // const Spacer(flex: 1),
+                      // OutlinedButton(
+                      //     onPressed: () async{
+                      //       setState((){
+                      //         mantraCounter = 108;
+                      //       });
+                      //     },
+                      //     child: const Text("108")
+                      // ),
+                      // // const Spacer(flex: 1),
+                      // OutlinedButton(
+                      //     onPressed: () {
+                      //       setState(() {
+                      //         mantraCounter = 999;
+                      //       });
+                      //     },
+                      //     child: const Text("Infinite")
+                      // ),
+                    ],
+                  )
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  flex: 15,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: SingleChildScrollView(
@@ -422,23 +793,17 @@ class _HomePageState extends State<HomePage> {
                                   1: FlexColumnWidth(5)
                                 },
                                 children: [
-                                  TableRow(
-                                      children: [
-                                        Container(height:5),
-                                        Container()
-                                      ]
-                                  ),
-                                  TableRow(
-                                    children: [
-                                      Container(),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-
-                                        ],
-                                      )
-                                    ]
-                                  ),
+                                  // TableRow(
+                                  //     children: [
+                                  //
+                                  //     ]
+                                  // ),
+                                  // TableRow(
+                                  //     children: [
+                                  //       // Container(),
+                                  //
+                                  //     ]
+                                  // ),
                                   TableRow(
                                     children: [
                                       Container(height: 10),
@@ -452,7 +817,15 @@ class _HomePageState extends State<HomePage> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "${res2.mantraEnglish}  ${res2.mantraHindi}",
+                                              "${res2.mantraEnglish}",
+                                              overflow: TextOverflow.visible,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              "${res2.mantraHindi}",
                                               overflow: TextOverflow.visible,
                                               style: TextStyle(
                                                 fontSize: 18,
@@ -504,174 +877,20 @@ class _HomePageState extends State<HomePage> {
                                         Container()
                                       ]
                                   ),
-                                  TableRow(
-                                    children: [
-                                      const Text("Mantra",style: TextStyle(fontSize: 18,),),
-                                      Container(
-                                        margin: const EdgeInsets.fromLTRB(20, 0, 30, 0),
-                                        child: ValueListenableBuilder<ProgressBarState>(
-                                          valueListenable: pageManager.progressNotifier,
-                                          builder: (_, value, __) {
-                                            // print("value.curr: ${value.current}");
-                                            // print("tot val: ${value.total}");
-                                            current = value.current;
-                                            if(!introPlaying && mantraCounter>=0 && !maxSet){
-                                              sliderMax = value.total.inMilliseconds.toDouble();
-                                              print("SliderMax: $sliderMax");
-                                              maxSet = true;
-                                            }
-                                            // return ProgressBar(
-                                            //   progress: value.current,
-                                            //   buffered: value.buffered,
-                                            //   total: value.total,
-                                            //   onSeek: pageManager.seek,
-                                            //   thumbCanPaintOutsideBar: true,
-                                            //   barHeight: 5,
-                                            //   barCapShape: BarCapShape.round,
-                                            //   baseBarColor: Colors.white,
-                                            // ) ;
-                                            return Row(
-                                              children: [
-                                                Text("${value.current.inMinutes}:${value.current.inSeconds%60}"),
-                                                Expanded(
-                                                  flex: 4,
-                                                  child: Slider(
-                                                      value: min(value.current.inMilliseconds.toDouble(),max(value.total.inMilliseconds.toDouble(),sliderMax)),
-                                                      min: 0.0,
-                                                      divisions: max(sliderMax.toInt()+1,value.total.inMilliseconds+1),
-                                                      max: max(sliderMax.toInt()+10,value.total.inMilliseconds+10),
-                                                      onChanged: (val){
-                                                        pageManager.seek(Duration(milliseconds: val.toInt()));
-                                                      }
-                                                  ),
-                                                ),
-                                                Text("${max(sliderMax~/60000,value.total.inMilliseconds~/60000)}:${max(sliderMax~/1000,value.total.inMilliseconds~/1000)}"),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ]
-                                  ),
-                                  TableRow(
-                                    children: [
-                                      Container(),
-                                    // ValueListenableBuilder<int>(
-                                    //     valueListenable: pageManager.repeatCounterNotifier,
-                                    //     builder: (_, value, __) {
-                                    //       // mantraCounter--;
-                                    //       print("value: $value");
-                                    //       return !(mantraCounter>110)?Text("Repeat: $value"):const Text("Repeat: ∞");
-                                    //     }
-                                    //   ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: [
-                                          IconButton(
-                                            onPressed: ()=>pageManager.prev5(current),
-                                            icon: const Icon(Icons.replay_5),
-                                          ),
-                                          // RepeatButton(),
-                                          ValueListenableBuilder<RepeatState>(
-                                            valueListenable: pageManager.repeatButtonNotifier,
-                                            builder: (context, value, child) {
-                                              Icon icon;
-                                              switch (value) {
-                                                case RepeatState.off:
-                                                  icon = const Icon(Icons.repeat, color: Colors.grey);
-                                                  break;
-                                                case RepeatState.repeatSong:
-                                                  if(introPlaying){
-                                                    print("Intro Playing");
-                                                    print("counter val: ${pageManager.repeatCounterNotifier.value}");
-                                                    icon = const Icon(Icons.repeat, color: Colors.grey);
-                                                    break;
-                                                  }
-                                                  icon = const Icon(Icons.repeat_one);
-                                                  break;
-                                                // case RepeatState.repeatPlaylist:
-                                                //   icon = const Icon(Icons.repeat);
-                                                //   break;
-                                              }
-                                              return IconButton(
-                                                icon: icon,
-                                                onPressed: ()=>pageManager.repeat(),
-                                              );
-                                            },
-                                          ),
 
-                                          // PreviousSongButton(),
-                                          //No Previous button
-
-                                          // PlayButton(),
-                                          ValueListenableBuilder<ButtonState>(
-                                            valueListenable: pageManager.playButtonNotifier,
-                                            builder: (_, value, __) {
-                                              switch (value) {
-                                                case ButtonState.loading:
-                                                  return Container(
-                                                    margin: const EdgeInsets.all(8.0),
-                                                    width: 32.0,
-                                                    height: 32.0,
-                                                    child: const CircularProgressIndicator(),
-                                                  );
-                                                case ButtonState.paused:
-                                                  return IconButton(
-                                                    icon: const Icon(Icons.play_arrow),
-                                                    iconSize: 32.0,
-                                                    onPressed: pageManager.play,
-                                                  );
-                                                case ButtonState.playing:
-                                                  return IconButton(
-                                                    icon: const Icon(Icons.pause),
-                                                    iconSize: 32.0,
-                                                    onPressed: pageManager.pause,
-                                                  );
-                                                case ButtonState.finished:
-                                                  if(introPlaying){
-                                                    pageManager.remove();
-                                                    pageManager.add(selectedDay,"mantra");
-                                                    introPlaying = false;
-                                                    pageManager.pause;
-                                                  }
-                                                  return IconButton(
-                                                    icon: const Icon(Icons.play_arrow),
-                                                    iconSize: 32.0,
-                                                    onPressed: (){
-                                                      print("finis");
-                                                      pageManager.seek(Duration.zero);
-                                                    },
-                                                  );
-                                              // TODO: Handle this case.
-                                              }
-                                            },
-                                          ),
-                                          IconButton(
-                                              onPressed: () => pageManager.next5(current),
-                                              icon: const Icon(Icons.forward_5))
-                                          // NextSongButton(),
-                                          // ShuffleButton(),
-                                        ],
-                                      ),
-                                    ]
-                                  )
                                 ],
                               ),
                             ],
                           ),
                           const SizedBox(height: 10),
-                          // const Text("Repeat Mantra: "),
+                          // const Text("Repeat Mantra: ",style: TextStyle(fontSize: 18,),),
                           // Row(
                           //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           //   children: [
                           //     OutlinedButton(
                           //         onPressed: (){
-                          //           // pageManager.removeAll();
-                          //           pageManager.clearQueue();
                           //           setState((){
                           //             mantraCounter = 1;
-                          //             pageManager.add(selectedDay, "mantra");
-                          //             // pageManager.play();
                           //           });
                           //         },
                           //         child: const Text("1")
@@ -679,58 +898,35 @@ class _HomePageState extends State<HomePage> {
                           //     const Spacer(flex: 1),
                           //     OutlinedButton(
                           //         onPressed: () async{
-                          //           // pageManager.removeAll();
-                          //           // pageManager.clearQueue();
-                          //           pageManager.repeatCounterNotifier.value = 10;
-                          //           pageManager.seek(Duration.zero);
-                          //           pageManager.pause();
-                          //           // pageManager.repeatButtonNotifier.value = RepeatState.repeatSong;
-                          //           pageManager.onRepeatPlay();
-                          //           // pageManager.repeat();
                           //           setState((){
-                          //             mantraCounter = 10;
-                          //             // pageManager.add(selectedDay, "mantra");
-                          //             // pageManager.play();
+                          //             mantraCounter = 27;
                           //           });
-                          //
-                          //           // await pageManager.addCount(selectedDay, 5);
                           //         },
-                          //         child: const Text("10")
+                          //         child: const Text("27")
                           //     ),
                           //     const Spacer(flex: 1),
                           //     OutlinedButton(
                           //         onPressed: ()async{
-                          //           // pageManager.removeAll();
-                          //           pageManager.clearQueue();
                           //           setState((){
                           //             mantraCounter = 54;
-                          //             // pageManager.play();
                           //           });
-                          //           await pageManager.addCount(selectedDay, 54);
                           //         },
                           //         child: const Text("54")
                           //     ),
                           //     const Spacer(flex: 1),
                           //     OutlinedButton(
                           //         onPressed: () async{
-                          //           // pageManager.removeAll();
-                          //           pageManager.clearQueue();
                           //           setState((){
                           //             mantraCounter = 108;
-                          //             // pageManager.play();
                           //           });
-                          //           await pageManager.addCount(selectedDay, 108);
                           //         },
                           //         child: const Text("108")
                           //     ),
                           //     const Spacer(flex: 1),
                           //     OutlinedButton(
                           //         onPressed: () {
-                          //           // pageManager.removeAll();
                           //           setState(() {
                           //             mantraCounter = 999;
-                          //             // pageManager.repeatButtonNotifier = RepeatState.repeatSong;
-                          //             pageManager.repeat();
                           //           });
                           //         },
                           //         child: const Text("Infinite")
@@ -749,34 +945,19 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                // const SizedBox(height: 20),
-                // SizedBox(
-                //   height: 100,
-                //   child: ValueListenableBuilder<List<String>>(
-                //     valueListenable: pageManager.playlistNotifier,
-                //     builder: (context, playlistTitles, _) {
-                //       return ListView.builder(
-                //         itemCount: playlistTitles.length,
-                //         itemBuilder: (context, index) {
-                //           return ListTile(
-                //             title: Text(playlistTitles[index]),
-                //           );
-                //         },
-                //       );
-                //     },
-                //   ),
-                // ),
-                // ValueListenableBuilder<String>(
-                //   valueListenable: pageManager.currentSongTitleNotifier,
-                //   builder: (_, title, __) {
-                //     return Padding(
-                //       padding: const EdgeInsets.only(top: 8.0),
-                //       child: Text(title, style: const TextStyle(fontSize: 20)),
-                //     );
-                //   },
-                // ),
-                // const SizedBox(height: 20),
-
+                  // OutlinedButton(
+                  //     onPressed: () {
+                  //       // pageManager.removeAll();
+                  //       setState(() {
+                  //         mantraCounter = 5;
+                  //         // for(int i=0;i<5;i++){
+                  //         //   pageManager.add(res, "mantra");
+                  //         // }
+                  //         // pageManager.repeat();
+                  //       });
+                  //     },
+                  //     child: const Text("5")
+                  // ),
               ]
             ),
           ),
