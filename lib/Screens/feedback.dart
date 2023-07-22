@@ -21,11 +21,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Feedback")),
-      backgroundColor: const Color(0xfff8dbc1),
-      body: SafeArea(
-        child: Container(
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: const Text("Feedback")),
+        backgroundColor: const Color(0xfff8dbc1),
+        body: Container(
           padding: const EdgeInsets.all(20),
           child: SingleChildScrollView(
             child: Column(
@@ -36,7 +36,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 //   style: const TextStyle(fontSize: 18),
                 // ),
                 const SizedBox(height: 20),
-                const Text("Enter your feedback below: ",style: TextStyle(fontSize: 16),),
+                const Text("Enter your feedback below: ",style: TextStyle(fontSize: 20),),
                 const SizedBox(height: 20),
                 Form(
                   key: _key,
@@ -106,7 +106,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                               hintStyle: const TextStyle(fontSize: 16)
                           ),
                           keyboardType: TextInputType.multiline,
-                          textInputAction: TextInputAction.done,
+                          // textInputAction: TextInputAction.done,
                           style: const TextStyle(fontSize: 16),
                           autocorrect: true,
                           onChanged: (value) {
