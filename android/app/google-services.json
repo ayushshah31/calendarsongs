@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "653223496525",
+    "firebase_url": "https://calendarsongs-76917-default-rtdb.firebaseio.com",
     "project_id": "calendarsongs-76917",
     "storage_bucket": "calendarsongs-76917.appspot.com"
   },
@@ -22,7 +23,7 @@
           }
         },
         {
-          "client_id": "653223496525-m6eq1q1g67q07s5tsbb0jjug74joi6er.apps.googleusercontent.com",
+          "client_id": "653223496525-kl0l3v08cljpcn7e3ud47cbc13n6cn4m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,7 +36,36 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "653223496525-m6eq1q1g67q07s5tsbb0jjug74joi6er.apps.googleusercontent.com",
+              "client_id": "653223496525-kl0l3v08cljpcn7e3ud47cbc13n6cn4m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653223496525:android:40ee1cd5e4a864875a4504",
+        "android_client_info": {
+          "package_name": "com.orcim.mantratherapy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653223496525-kl0l3v08cljpcn7e3ud47cbc13n6cn4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaXS8BirEoU2FcaGdfxBfXyK6pXOIGGEc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "653223496525-kl0l3v08cljpcn7e3ud47cbc13n6cn4m.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

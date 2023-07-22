@@ -121,6 +121,38 @@ class _HomePageState extends State<HomePage> {
     return ans;
   }
 
+  List weekday = [
+    "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+  ];
+
+  List months = [
+    "Jan","Feb","March","April","May","June","July","Sept","Oct","Nov","Dec"
+  ];
+  String selsup(int dateNow){
+    String th = "\u1d57\u02b0";
+    String rd = "\u02b3\u1d48";
+    String nd = "\u207f\u1d48";
+    String st = "\u02e2\u1d57";
+    var res = dateNow.toString().split("");
+    if(res.last == "1"){
+      return st;
+    } else if( res.last =="2"){
+      return nd;
+    } else if(res.last == "3"){
+      return rd;
+    } else{
+      return th;
+    }
+  }
+
+  String getTodayDate(){
+    int day = DateTime.now().day;
+    int month = DateTime.now().month;
+    int year = DateTime.now().year;
+    String supText = selsup(day);
+    return "${day}${supText} ${months[month]} $year";
+  }
+
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
@@ -153,7 +185,7 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("HomePage"),
+          title: const Text("Mantra Therapy"),
           automaticallyImplyLeading: false,
           actions: [
             PopupMenuButton(
@@ -256,22 +288,126 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HomeCalendarState(
-                    setPageController: setPageController,
-                    pageController: pageController,
-                    selectedDay: selectedDay,
-                    setSelectedDay: setSelectedDay,
-                    focusedDay: focusedDay,
-                    setFocusedDay: setFocusedDay,
-                    mantraCounter: mantraCounter,
-                    setMantraCounter: setMantraCount,
-                    // pageController: pageControllerCal,
-                    // getTithiDate: getTithiDate,
-                    // setAudioPlayer: setAudioPlayer
+                // HomeCalendarState(
+                //     setPageController: setPageController,
+                //     pageController: pageController,
+                //     selectedDay: selectedDay,
+                //     setSelectedDay: setSelectedDay,
+                //     focusedDay: focusedDay,
+                //     setFocusedDay: setFocusedDay,
+                //     mantraCounter: mantraCounter,
+                //     setMantraCounter: setMantraCount,
+                //     // pageController: pageControllerCal,
+                //     // getTithiDate: getTithiDate,
+                //     // setAudioPlayer: setAudioPlayer
+                // ),
+                Padding(
+                    padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(
+                              color: Colors.black,
+                            ),
+                            right: BorderSide(color: Colors.black),
+                            top: BorderSide(color: Colors.black),
+                            bottom: BorderSide(color: Colors.black)
+                          ),
+                          color: Color(0xFFf3ae85)
+                        ),
+                        child: Column(
+                          children: [
+                            Text(weekday[DateTime.now().weekday-1],style: TextStyle(fontSize: 20),),
+                            SizedBox(height: 10,),
+                            Text(getTodayDate(),style: TextStyle(fontSize: 20),)
+                          ]
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Tithi ",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.redAccent
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                OutlinedButton(
+                                    onPressed: (){
+                                      // DateTime newDay;
+                                      // newDay = selectedDay.subtract(const Duration(days: 1));
+                                      // print(newDay);
+                                      // setSelectedDay(newDay);
+                                      // setFocusedDay(newDay);
+                                      DateTime? newDay = selectedDay;
+                                      var tithiNew = res2.tithi;
+                                      while(tithiNew == res2.tithi) {
+                                        newDay = newDay!.subtract(const Duration(days: 1));
+                                        print(newDay);
+                                        // var tithiNew = res2.tithi;
+                                        var resNew = getTithiDate(newDay, tithiData);
+                                        MantraModel resNew2 = getTithiMantraData(resNew);
+                                        tithiNew = resNew2.tithi;
+                                      }
+                                      setSelectedDay(newDay!);
+                                      setFocusedDay(newDay);
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                        foregroundColor: MaterialStateProperty.all(Colors.white)
+                                    ),
+                                    child: const Text("< Prev Tithi")),
+                                OutlinedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                                        foregroundColor: MaterialStateProperty.all(Colors.white)
+                                    ),
+                                    onPressed: (){
+                                      DateTime? newDay = selectedDay;
+                                      var tithiNew = res2.tithi;
+                                      while(tithiNew == res2.tithi) {
+                                        newDay = newDay!.add(const Duration(days: 1));
+                                        print(newDay);
+                                        // var tithiNew = res2.tithi;
+                                        var resNew = getTithiDate(newDay, tithiData);
+                                        MantraModel resNew2 = getTithiMantraData(resNew);
+                                        tithiNew = resNew2.tithi;
+                                      }
+                                      setSelectedDay(newDay!);
+                                      setFocusedDay(newDay);
+                                    },
+                                    child: const Text("Next Tithi >")
+                                )
+                              ],
+                            )
+                          ]
+                        )
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
-                  flex: 20,
+                  flex: 18,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: SingleChildScrollView(
@@ -288,26 +424,6 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   TableRow(
                                       children: [
-                                        const Text(
-                                          "Tithi: ",
-                                          style: TextStyle(
-                                              fontSize: 20
-                                          ),
-                                        ),
-                                        Center(
-                                          child: Text(
-                                            res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w900,
-                                                color: Color(0xFFA47500)
-                                            ),
-                                          ),
-                                        ),
-                                      ]
-                                  ),
-                                  TableRow(
-                                      children: [
                                         Container(height:5),
                                         Container()
                                       ]
@@ -318,52 +434,7 @@ class _HomePageState extends State<HomePage> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          OutlinedButton(
-                                              onPressed: (){
-                                                // DateTime newDay;
-                                                // newDay = selectedDay.subtract(const Duration(days: 1));
-                                                // print(newDay);
-                                                // setSelectedDay(newDay);
-                                                // setFocusedDay(newDay);
-                                                DateTime? newDay = selectedDay;
-                                                var tithiNew = res2.tithi;
-                                                while(tithiNew == res2.tithi) {
-                                                  newDay = newDay!.subtract(const Duration(days: 1));
-                                                  print(newDay);
-                                                  // var tithiNew = res2.tithi;
-                                                  var resNew = getTithiDate(newDay, tithiData);
-                                                  MantraModel resNew2 = getTithiMantraData(resNew);
-                                                  tithiNew = resNew2.tithi;
-                                                }
-                                                setSelectedDay(newDay!);
-                                                setFocusedDay(newDay);
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
-                                                foregroundColor: MaterialStateProperty.all(Colors.white)
-                                              ),
-                                              child: const Text("< Prev Tithi")),
-                                          OutlinedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
-                                                  foregroundColor: MaterialStateProperty.all(Colors.white)
-                                              ),
-                                              onPressed: (){
-                                                DateTime? newDay = selectedDay;
-                                                var tithiNew = res2.tithi;
-                                                while(tithiNew == res2.tithi) {
-                                                  newDay = newDay!.add(const Duration(days: 1));
-                                                  print(newDay);
-                                                  // var tithiNew = res2.tithi;
-                                                  var resNew = getTithiDate(newDay, tithiData);
-                                                  MantraModel resNew2 = getTithiMantraData(resNew);
-                                                  tithiNew = resNew2.tithi;
-                                                }
-                                                setSelectedDay(newDay!);
-                                                setFocusedDay(newDay);
-                                              },
-                                              child: const Text("Next Tithi >")
-                                          )
+
                                         ],
                                       )
                                     ]
@@ -376,20 +447,16 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   TableRow(
                                       children: [
-                                        const Text(
-                                            "Mantra: "
-                                        ),
+                                        const Text("Mantra:",style: TextStyle(fontSize: 18,),),
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              res2.mantraEnglish,
+                                              "${res2.mantraEnglish}  ${res2.mantraHindi}",
                                               overflow: TextOverflow.visible,
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Text(
-                                              res2.mantraHindi,
-                                              overflow: TextOverflow.visible,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -404,7 +471,7 @@ class _HomePageState extends State<HomePage> {
                                   TableRow(
                                       children: [
                                         Container(),
-                                        Text(res2.noOfRep)
+                                        Text(res2.noOfRep,style: TextStyle(fontSize: 18,),)
                                       ]
                                   ),
                                   TableRow(
@@ -415,8 +482,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   TableRow(
                                       children: [
-                                        const Text("Procedure: "),
-                                        Text(res2.procedure)
+                                        const Text("Procedure: ",style: TextStyle(fontSize: 18,),),
+                                        Text(res2.procedure,style: TextStyle(fontSize: 18,),)
                                       ]
                                   ),
                                   TableRow(
@@ -427,8 +494,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   TableRow(
                                       children: [
-                                        const Text("Benefit: "),
-                                        Text(res2.benefits)
+                                        const Text("Benefit: ",style: TextStyle(fontSize: 18,),),
+                                        Text(res2.benefits,style: TextStyle(fontSize: 18,),)
                                       ]
                                   ),
                                   TableRow(
@@ -439,7 +506,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   TableRow(
                                     children: [
-                                      const Text("Mantra"),
+                                      const Text("Mantra",style: TextStyle(fontSize: 18,),),
                                       Container(
                                         margin: const EdgeInsets.fromLTRB(20, 0, 30, 0),
                                         child: ValueListenableBuilder<ProgressBarState>(

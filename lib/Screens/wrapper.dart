@@ -68,6 +68,7 @@ class _WrapperState extends State<Wrapper> {
         setState((){
           _downloading=false;
           fileDownloaded = true;
+          downloadCounter = 100;
         });
       } else {
         await download();

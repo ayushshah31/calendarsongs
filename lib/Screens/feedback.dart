@@ -31,10 +31,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    "User: ${FirebaseAuth.instance.currentUser!.email}",
-                  style: const TextStyle(fontSize: 18),
-                ),
+                // Text(
+                //     "User: ${FirebaseAuth.instance.currentUser!.email}",
+                //   style: const TextStyle(fontSize: 18),
+                // ),
                 const SizedBox(height: 20),
                 const Text("Enter your feedback below: ",style: TextStyle(fontSize: 16),),
                 const SizedBox(height: 20),

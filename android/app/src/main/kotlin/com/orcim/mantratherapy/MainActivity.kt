@@ -1,4 +1,4 @@
-package com.example.calendarsong
+package com.orcim.mantratherapy
 
 import io.flutter.embedding.android.FlutterActivity
 
