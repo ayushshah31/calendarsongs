@@ -176,9 +176,13 @@ class _HomePageState extends State<HomePage> {
     }
     void changeMantra(){
       setState(() {
-        pageManager.remove();
-        pageManager.remove();
-        pageManager.add(res, "Intro");
+        if(pageManager.repeatCounterNotifier.value>0){
+          pageManager.clearQueue(res);
+        } else {
+          pageManager.remove();
+          pageManager.remove();
+          pageManager.add(res, "Intro");
+        }
         print("Should Change");
         introPlaying = true;
         pageManager.pause();
@@ -351,20 +355,20 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 "Tithi ",
-                                style: TextStyle(fontSize: 20),
+                                style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,),
                               ),
                               Text(
                                 res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
-                                style: const TextStyle(
-                                    fontSize: 20,
+                                style: TextStyle(
+                                    fontSize: MediaQuery.of(context).size.width*0.05,
                                     fontWeight: FontWeight.w900,
                                     color: Colors.redAccent
                                 ),
                               )
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Wrap(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               OutlinedButton(
                                   onPressed: (){
@@ -505,11 +509,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                 ),
                 const SizedBox(height: 10),
+                ValueListenableBuilder<int>(
+                  valueListenable: pageManager.repeatCounterNotifier,
+                  builder: (context, value, _) {
+                   return Text(value.toString());
+                  },
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 0,horizontal: 10),
                         child: ValueListenableBuilder<ButtonState>(
@@ -517,13 +527,14 @@ class _HomePageState extends State<HomePage> {
                             builder: (_, value, __) {
                               // mantraCounter--;
                               // print("value: $value");
-                              return !(mantraCounter>110)?Text("Repeat: $mantraCounter",style: TextStyle(fontSize:18),):const Text("Repeat: ∞",style: TextStyle(fontSize:18),);
+                              return !(mantraCounter>110)?Text("Repeat: $mantraCounter",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),)
+                                  :Text("Repeat: ∞",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,),);
                             }
                         ),
                       ),
                     ),
                     Expanded(
-                      flex: 3,
+                      flex: 5,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -549,6 +560,21 @@ class _HomePageState extends State<HomePage> {
                                   }
                                   icon = const Icon(Icons.repeat_one);
                                   break;
+
+                                // case RepeatState.repeatCount:
+                                //   // if(mantraCounter>0){
+                                //   //   // print("MantraCounter $mantraCounter");
+                                //   //   // pageManager.remove();
+                                //   //   // pageManager.add(res,"mantra");
+                                //   //   // introPlaying = false;
+                                //   //   // mantraCounter-=1;
+                                //   //   // print("MantraCounter $mantraCounter");
+                                //   //   // pageManager.play;
+                                //   //   // pageManager.repeat();
+                                //   //   // pageManager.
+                                //   // }
+                                //   icon = const Icon(Icons.add_a_photo);
+                                //   break;
                               }
                               return IconButton(
                                 icon: icon,
@@ -591,14 +617,16 @@ class _HomePageState extends State<HomePage> {
                                     introPlaying = false;
                                     pageManager.pause;
                                   }
-                                  if(mantraCounter>0){
+                                  if(mantraCounter>0 && mantraCounter<110){
                                     print("MantraCounter $mantraCounter");
-                                    pageManager.remove();
-                                    pageManager.add(res,"mantra");
-                                    introPlaying = false;
+                                    // pageManager.remove();
+                                    // pageManager.add(res,"mantra");
+                                    // introPlaying = false;
                                     mantraCounter-=1;
-                                    print("MantraCounter $mantraCounter");
-                                    // pageManager.pause;
+                                    // print("MantraCounter $mantraCounter");
+                                    // // pageManager.stop();
+                                    // pageManager.play();
+                                    // // pageManager.pause();
                                   }
                                   return IconButton(
                                     icon: const Icon(Icons.play_arrow),
@@ -649,6 +677,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 1;
+                              pageManager.repeatMantraCount(1, res);
                             });
                           },
                           child: Container(
@@ -668,6 +697,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 27;
+                              pageManager.repeatMantraCount(27, res);
                             });
                           },
                           child: Container(
@@ -687,6 +717,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 54;
+                              pageManager.repeatMantraCount(54, res);
                             });
                           },
                           child: Container(
@@ -706,6 +737,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 108;
+                              pageManager.repeatMantraCount(108, res);
                             });
                           },
                           child: Container(
@@ -724,7 +756,8 @@ class _HomePageState extends State<HomePage> {
                         child: GestureDetector(
                           onTap: (){
                             setState((){
-                              mantraCounter = 1;
+                              mantraCounter = 99999999;
+                              pageManager.repeat();
                             });
                           },
                           child: Container(
@@ -737,6 +770,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+
                       // const Spacer(flex: 1),
                       // OutlinedButton(
                       //     onPressed: () async{
@@ -775,6 +809,18 @@ class _HomePageState extends State<HomePage> {
                       // ),
                     ],
                   )
+                ),
+                TextButton(
+                  onPressed: (){
+                    pageManager.repeatMantraCount(10, res);
+                  },
+                  child: Text("Press"),
+                ),
+                TextButton(
+                  onPressed: (){
+                    pageManager.clearQueue(res);
+                  },
+                  child: Text("clean"),
                 ),
                 const SizedBox(height: 10),
                 Expanded(

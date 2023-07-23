@@ -37,7 +37,6 @@ class PageManager {
     _listenToBufferedPosition();
     _listenToTotalDuration();
     _listenToChangesInSong();
-    repeatMantraCount();
   }
 
   Future<void> _loadPlaylist() async {
@@ -83,7 +82,6 @@ class PageManager {
         print("Completed");
         playButtonNotifier.value = ButtonState.finished;
         if(isIntroPlaying){
-
         }
         // _audioHandler.seek(Duration.zero);
         // _audioHandler.pause();
@@ -133,7 +131,10 @@ class PageManager {
   void _listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
       currentSongTitleNotifier.value = mediaItem?.title ?? '';
-      _updateSkipButtons();
+      if(repeatCounterNotifier.value>0) {
+        repeatCounterNotifier.value -= 1;
+      }
+      // _updateSkipButtons();
     });
   }
 
@@ -149,48 +150,35 @@ class PageManager {
     }
   }
 
-  void repeatMantraCount(){
-    // bool check1 = false,check2 = false;
-    // mantraDuration = _audioHandler.queue.value.last.duration;
-    // AudioService.position.listen((position) async {
-    //   print("here");
-    //   // print("${position.inMilliseconds}:${progressNotifier.value.total.inMilliseconds}");
-    //   if(repeatButtonNotifier.value==RepeatState.repeatSong){
-    //     if((position == Duration.zero) && repeatCounterNotifier.value>0 && !changed){
-    //       print("counter change");
-    //       repeatCounterNotifier.value -= 1;
-    //       await Future.delayed(const Duration(milliseconds: 1),(){
-    //         print("Delayed");
-    //         changed = true;
-    //       });
-    //       changed = false;
-    //     } else if(repeatCounterNotifier.value==0){
-    //       repeat();
-    //       changed = false;
-    //     }
-    //   }
-    // });
-    // print("mantra durr: $mantraDuration");
-    // _audioHandler.playbackState.listen((playbackState) {
-    //   // print("here");
-    //   // print("${position.inMilliseconds}:${progressNotifier.value.total.inMilliseconds}");
-    //   if(repeatButtonNotifier.value==RepeatState.repeatSong){
-    //     // print("here");
-    //     if(playbackState.position.inMilliseconds<100){
-    //       check1 = true;
-    //     }
-    //     print(playbackState.position);
-    //     if(playbackState.position.inMilliseconds>=mantraDuration!.inMilliseconds-100){
-    //       check2 = true;
-    //     }
-    //     print("check1: $check1, check2:$check2");
-    //     if( check1 && check2){
-    //       repeatCounterNotifier.value -= 1;
-    //       print("counter");
-    //       check1 = check2 = false;
-    //     }
-    //   }
-    // });
+  void repeatMantraCount(int count,int tithiNo) async{
+    final songRepository = getIt<PlaylistRepository>();
+    final song;
+    final String type = "mantra";
+    if(type == "mantra") {
+      isIntroPlaying = false;
+      song = await songRepository.fetchMantraSong(tithiNo);
+    } else {
+      isIntroPlaying = true;
+      song = await songRepository.fetchIntroPlaylist(tithiNo);
+    }
+    final mediaItem = MediaItem(
+      id: song['id'] ?? '',
+      album: song['album'] ?? '',
+      title: song['title'] ?? '',
+      extras: {'url': song['url']},
+    );
+    List<MediaItem> genList = [];
+    for(int i=0; i<count; i++){
+      genList.add(mediaItem);
+    }
+    for (int i = 0; i < 108; i++) {
+      remove();
+    }
+    print("queue value length1: ${_audioHandler.queue.value.length}");
+    print("Queue length: ${_audioHandler.queue.length}");
+    await _audioHandler.addQueueItems(genList);
+    print("queue value length: ${_audioHandler.queue.value.length}");
+    repeatCounterNotifier.value = count;
   }
 
   void play() => _audioHandler.play();
@@ -263,7 +251,6 @@ class PageManager {
         } else {
           // onRepeatPlay();
           _audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
-          // repeatMantraCount();
         }
         break;
       // case RepeatState.repeatPlaylist:
@@ -303,7 +290,7 @@ class PageManager {
 
   Future<void> addCount(int res,int count) async{
     // removeAll();
-    await clearQueue();
+    // await clearQueue();
     final songRepository = getIt<PlaylistRepository>();
     final song = await songRepository.fetchMantraSong(res);
     final mediaItem = MediaItem(
@@ -316,24 +303,40 @@ class PageManager {
     //   // _audioHandler.addQueueItem(mediaItem);
     //   _audioHandler.addQueueItem(mediaItem);
     // }
+
     _audioHandler.addQueueItems(List.generate(count, (index) => mediaItem));
   }
 
-  Future<void> clearQueue() async{
-    print("val: ${_audioHandler.queue.value}");
-    // _audioHandler.queue.forEach((element) {
-    //   _audioHandler.removeQueueItem(element);
-    // });
-    for (var element in _audioHandler.queue.value) {
-      print("ele: $element");
-      _audioHandler.queue.value.remove(element);
+  Future<void> clearQueue(int res) async{
+    stop();
+    seek(Duration.zero);
+    // final songRepository = getIt<PlaylistRepository>();
+    // final song = await songRepository.fetchMantraSong(res);
+    // final mediaItem = MediaItem(
+    //   id: song['id'] ?? '',
+    //   album: song['album'] ?? '',
+    //   title: song['title'] ?? '',
+    //   extras: {'url': song['url']},
+    // );
+    // // _audioHandler.queue.forEach((element) {
+    // //   print("element $element");
+    // //   // _audioHandler.queue.value.removeLast();
+    // //   _audioHandler.queue.value.remove(element);
+    // // });
+    // // _audioHandler.removeQueueItem(mediaItem);
+    // _audioHandler.fastForward();
+    for (int i = 0; i < 108; i++) {
+      remove();
     }
-    // var len = await _audioHandler.queue.length;
-    // print("len: $len");
-    // for (int i = 0; i < _audioHandler.queue.value.length; i++) {
-    //   remove();
+    repeatCounterNotifier.value = 0;
+    add(res,"mantra");
+    // try {
+    //   for (int i = 0; i < 108; i++) {
+    //     _audioHandler.removeQueueItemAt(i);
+    //   }
+    // } catch(e){
+    //   // print(e);
     // }
-    print("val now: ${_audioHandler.queue.value}");
   }
 
   void remove() {
