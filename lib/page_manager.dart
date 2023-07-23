@@ -178,7 +178,7 @@ class PageManager {
     print("Queue length: ${_audioHandler.queue.length}");
     await _audioHandler.addQueueItems(genList);
     print("queue value length: ${_audioHandler.queue.value.length}");
-    repeatCounterNotifier.value = count;
+    repeatCounterNotifier.value = count+1;
   }
 
   void play() => _audioHandler.play();
@@ -329,7 +329,7 @@ class PageManager {
       remove();
     }
     repeatCounterNotifier.value = 0;
-    add(res,"mantra");
+    add(res,"intro");
     // try {
     //   for (int i = 0; i < 108; i++) {
     //     _audioHandler.removeQueueItemAt(i);
