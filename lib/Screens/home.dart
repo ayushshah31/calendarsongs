@@ -176,13 +176,9 @@ class _HomePageState extends State<HomePage> {
     }
     void changeMantra(){
       setState(() {
-        if(pageManager.repeatCounterNotifier.value>0){
-          pageManager.clearQueue(res);
-        } else {
-          pageManager.remove();
-          pageManager.remove();
-          pageManager.add(res, "Intro");
-        }
+        pageManager.remove();
+        pageManager.remove();
+        pageManager.add(res, "Intro");
         print("Should Change");
         introPlaying = true;
         pageManager.pause();
@@ -191,6 +187,8 @@ class _HomePageState extends State<HomePage> {
         pageManager.repeatCounterNotifier.value = 0;
         pageManager.repeat();
         mantraCounter = 0;
+        pageManager.repeatSet.value = false;
+        maxSet = false;
       });
     }
 
@@ -339,9 +337,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: Column(
                         children: [
-                          Text(weekday[DateTime.now().weekday-1],style: TextStyle(fontSize: 20),),
+                          Text(weekday[DateTime.now().weekday-1],style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.05,),),
                           SizedBox(height: 10,),
-                          Text(getTodayDate(),style: TextStyle(fontSize: 20),)
+                          Text(getTodayDate(),style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),)
                         ]
                       ),
                     ),
@@ -357,12 +355,14 @@ class _HomePageState extends State<HomePage> {
                                 "Tithi ",
                                 style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,),
                               ),
-                              Text(
-                                res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
-                                style: TextStyle(
-                                    fontSize: MediaQuery.of(context).size.width*0.05,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.redAccent
+                              Flexible(
+                                child: Text(
+                                  res==15||res==30?res2.introSoundFile.toString().split(" ")[0]:res2.introSoundFile.toString().split(" ")[1],
+                                  style: TextStyle(
+                                      fontSize: MediaQuery.of(context).size.width*0.049,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.redAccent
+                                  ),
                                 ),
                               )
                             ],
@@ -384,6 +384,7 @@ class _HomePageState extends State<HomePage> {
                                     // }
                                     // setSelectedDay(newDay!);
                                     // setFocusedDay(newDay);
+                                    // pageManager.clearQueue(res,false);
                                     print("Tapped");
                                     print("curr $currTithi");
                                     currTithi = currTithi - 1;
@@ -432,6 +433,7 @@ class _HomePageState extends State<HomePage> {
                                     // }
                                     // setSelectedDay(newDay!);
                                     // setFocusedDay(newDay);
+                                    // pageManager.clearQueue(res,false);
                                     print("Tapped +");
                                     print("curr $currTithi");
                                     currTithi += 1;
@@ -488,20 +490,23 @@ class _HomePageState extends State<HomePage> {
                           }
                           return Row(
                             children: [
-                              Text("${value.current.inMinutes}:${value.current.inSeconds%60}"),
+                              Text("0${value.current.inMinutes}:${value.current.inSeconds%60}"),
                               Expanded(
                                 flex: 4,
                                 child: Slider(
                                     value: min(value.current.inMilliseconds.toDouble(),max(value.total.inMilliseconds.toDouble(),sliderMax)),
                                     min: 0.0,
                                     divisions: max(sliderMax.toInt()+1,value.total.inMilliseconds+1),
-                                    max: max(sliderMax.toInt()+10,value.total.inMilliseconds+10),
+                                    max: pageManager.repeatSet.value?pageManager.repeatCounterDuration.value.inMilliseconds.toDouble():max(sliderMax.toInt()+10,value.total.inMilliseconds+10) ,
                                     onChanged: (val){
                                       pageManager.seek(Duration(milliseconds: val.toInt()));
                                     }
                                 ),
                               ),
-                              Text("${max(sliderMax~/60000,value.total.inMilliseconds~/60000)}:${max(sliderMax~/1000,value.total.inMilliseconds~/1000)}"),
+                              Text("00:${max(sliderMax~/1000,value.total.inMilliseconds~/1000)}"),
+                              // pageManager.repeatSet.value?
+                              //   Text("${pageManager.repeatCounterDuration.value.inSeconds~/60}:${pageManager.repeatCounterDuration.value.inMilliseconds~/1000}")
+                              //   :Text("${max(sliderMax~/60000,value.total.inMilliseconds~/60000)}:${max(sliderMax~/1000,value.total.inMilliseconds~/1000)}"),
                             ],
                           );
                         },
@@ -509,12 +514,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                 ),
                 const SizedBox(height: 10),
-                ValueListenableBuilder<int>(
-                  valueListenable: pageManager.repeatCounterNotifier,
-                  builder: (context, value, _) {
-                   return Text(value.toString());
-                  },
-                ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -522,15 +522,22 @@ class _HomePageState extends State<HomePage> {
                       flex: 2,
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 0,horizontal: 10),
-                        child: ValueListenableBuilder<ButtonState>(
-                            valueListenable: pageManager.playButtonNotifier,
-                            builder: (_, value, __) {
-                              // mantraCounter--;
-                              // print("value: $value");
-                              return !(mantraCounter>110)?Text("Repeat: $mantraCounter",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),)
-                                  :Text("Repeat: ∞",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,),);
-                            }
+                        child: ValueListenableBuilder<int>(
+                          valueListenable: pageManager.repeatCounterNotifier,
+                          builder: (context, value, _) {
+                            return !(mantraCounter>110)?Text("Repeat: $value",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),)
+                                      :Text("Repeat: ∞",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,),);
+                          },
                         ),
+                        // child: ValueListenableBuilder<ButtonState>(
+                        //     valueListenable: pageManager.playButtonNotifier,
+                        //     builder: (_, value, __) {
+                        //       // mantraCounter--;
+                        //       // print("value: $value");
+                        //       return !(mantraCounter>110)?Text("Repeat: $mantraCounter",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),)
+                        //           :Text("Repeat: ∞",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,),);
+                        //     }
+                        // ),
                       ),
                     ),
                     Expanded(
@@ -583,9 +590,6 @@ class _HomePageState extends State<HomePage> {
                             },
                           ),
 
-                          // PreviousSongButton(),
-                          //No Previous button
-
                           // PlayButton(),
                           ValueListenableBuilder<ButtonState>(
                             valueListenable: pageManager.playButtonNotifier,
@@ -616,6 +620,8 @@ class _HomePageState extends State<HomePage> {
                                     pageManager.add(res,"mantra");
                                     introPlaying = false;
                                     pageManager.pause;
+                                    // sliderMax = repeatCounterDuration.value = _audioHandler.queue.value.first.duration!;
+                                    sliderMax = pageManager.progressNotifier.value.total.inMilliseconds.toDouble();
                                   }
                                   if(mantraCounter>0 && mantraCounter<110){
                                     print("MantraCounter $mantraCounter");
@@ -660,16 +666,6 @@ class _HomePageState extends State<HomePage> {
                         flex:10,
                           child: Text("Repeat Mantra:",style: TextStyle(fontSize:18),)
                       ),
-                      // OutlinedButton(
-                      //   style: ButtonStyle(
-                      //   ),
-                      //     onPressed: (){
-                      //       setState((){
-                      //         mantraCounter = 1;
-                      //       });
-                      //     },
-                      //     child: const Text("1")
-                      // ),
                       const Spacer(flex: 1),
                       Expanded(
                         flex: 3,
@@ -677,7 +673,9 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 1;
-                              pageManager.repeatMantraCount(1, res);
+                              pageManager.clearQueue(res);
+                              // pageManager.repeatMantraCount(0, res);
+                              // pageManager.repeatSet.value = true;
                             });
                           },
                           child: Container(
@@ -697,7 +695,11 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 27;
-                              pageManager.repeatMantraCount(27, res);
+                              pageManager.clearQueue(res);
+                              pageManager.repeatMantraCount(26, res);
+                              pageManager.repeatCounterNotifier.value = 27;
+                              pageManager.repeatSet.value = true;
+                              pageManager.play();
                             });
                           },
                           child: Container(
@@ -717,7 +719,11 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 54;
-                              pageManager.repeatMantraCount(54, res);
+                              pageManager.clearQueue(res);
+                              pageManager.repeatMantraCount(53, res);
+                              pageManager.repeatCounterNotifier.value = 54;
+                              pageManager.repeatSet.value = true;
+                              pageManager.play();
                             });
                           },
                           child: Container(
@@ -737,7 +743,11 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             setState((){
                               mantraCounter = 108;
-                              pageManager.repeatMantraCount(108, res);
+                              pageManager.clearQueue(res);
+                              pageManager.repeatMantraCount(107, res);
+                              pageManager.repeatCounterNotifier.value = 108;
+                              pageManager.repeatSet.value = true;
+                              pageManager.play();
                             });
                           },
                           child: Container(
@@ -810,18 +820,18 @@ class _HomePageState extends State<HomePage> {
                     ],
                   )
                 ),
-                TextButton(
-                  onPressed: (){
-                    pageManager.repeatMantraCount(10, res);
-                  },
-                  child: Text("Press"),
-                ),
-                TextButton(
-                  onPressed: (){
-                    pageManager.clearQueue(res);
-                  },
-                  child: Text("clean"),
-                ),
+                // TextButton(
+                //   onPressed: (){
+                //     pageManager.repeatMantraCount(10, res);
+                //   },
+                //   child: Text("Press"),
+                // ),
+                // TextButton(
+                //   onPressed: (){
+                //     pageManager.clearQueue(res);
+                //   },
+                //   child: Text("clean"),
+                // ),
                 const SizedBox(height: 10),
                 Expanded(
                   flex: 15,

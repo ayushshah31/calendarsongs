@@ -128,7 +128,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                               print(subj);
                               print(body);
                               final ff = FirebaseFetch();
-                              var res = await ff.saveFeedback(body, subj, FirebaseAuth.instance.currentUser!);
+                              var res = await ff.saveFeedback(body.trim(), subj, FirebaseAuth.instance.currentUser!);
                               if(res){
                                 const snackBar = SnackBar(
                                   content: Text('Feedback Saved'),
@@ -142,9 +142,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               }
-                              Future.delayed(const Duration(seconds: 2),(){
-                                Navigator.of(context).pushNamed(home);
-                              });
+                              _key.currentState!.reset();
+                              // Future.delayed(const Duration(seconds: 2),(){
+                              //   Navigator.of(context).pushNamed(home);
+                              // });
                               // final Email email = Email(
                               //   body: body,
                               //   subject: subj,

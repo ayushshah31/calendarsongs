@@ -19,6 +19,8 @@ class PageManager {
   final isLastSongNotifier = ValueNotifier<bool>(true);
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
   final repeatCounterNotifier = ValueNotifier<int>(0);
+  final repeatCounterDuration = ValueNotifier<Duration>(Duration.zero);
+  final repeatSet = ValueNotifier<bool>(false);
 
   bool isIntroPlaying = true;
 
@@ -131,8 +133,11 @@ class PageManager {
   void _listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
       currentSongTitleNotifier.value = mediaItem?.title ?? '';
-      if(repeatCounterNotifier.value>0) {
+      if(repeatSet.value) {
         repeatCounterNotifier.value -= 1;
+        if(repeatCounterNotifier.value == 0){
+          repeatSet.value = false;
+        }
       }
       // _updateSkipButtons();
     });
@@ -151,6 +156,7 @@ class PageManager {
   }
 
   void repeatMantraCount(int count,int tithiNo) async{
+    seek(Duration.zero);
     final songRepository = getIt<PlaylistRepository>();
     final song;
     final String type = "mantra";
@@ -171,14 +177,17 @@ class PageManager {
     for(int i=0; i<count; i++){
       genList.add(mediaItem);
     }
-    for (int i = 0; i < 108; i++) {
-      remove();
-    }
+    // repeatCounterDuration.value = _audioHandler.queue.value.first.duration!;
+    // for (int i = 0; i < 108; i++) {
+    //   remove();
+    // }
     print("queue value length1: ${_audioHandler.queue.value.length}");
     print("Queue length: ${_audioHandler.queue.length}");
     await _audioHandler.addQueueItems(genList);
     print("queue value length: ${_audioHandler.queue.value.length}");
-    repeatCounterNotifier.value = count;
+    // repeatCounterNotifier.value = count+1;
+    // repeatSet.value = true;
+    // print("hello: ${repeatCounterDuration.value}");
   }
 
   void play() => _audioHandler.play();
@@ -310,6 +319,7 @@ class PageManager {
   Future<void> clearQueue(int res) async{
     stop();
     seek(Duration.zero);
+    repeatCounterDuration.value = _audioHandler.queue.value.first.duration!;
     // final songRepository = getIt<PlaylistRepository>();
     // final song = await songRepository.fetchMantraSong(res);
     // final mediaItem = MediaItem(
@@ -329,7 +339,9 @@ class PageManager {
       remove();
     }
     repeatCounterNotifier.value = 0;
-    add(res,"mantra");
+    // if(addMantra) {
+    //   add(res, "mantra");
+    // }
     // try {
     //   for (int i = 0; i < 108; i++) {
     //     _audioHandler.removeQueueItemAt(i);
