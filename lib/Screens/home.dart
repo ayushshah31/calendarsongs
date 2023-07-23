@@ -654,12 +654,14 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
                 Expanded(
                   flex: 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    // direction: Axis.vertical,
+                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Expanded(
-                        flex:10,
-                          child: Text("Repeat Mantra:",style: TextStyle(fontSize:18),)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Repeat Mantra:",style: TextStyle(fontSize:18),),
                       ),
                       // OutlinedButton(
                       //   style: ButtonStyle(
@@ -671,104 +673,94 @@ class _HomePageState extends State<HomePage> {
                       //     },
                       //     child: const Text("1")
                       // ),
-                      const Spacer(flex: 1),
-                      Expanded(
-                        flex: 3,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState((){
-                              mantraCounter = 1;
-                              pageManager.repeatMantraCount(1, res);
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
-                            decoration: BoxDecoration(
+                      // const Spacer(flex: 1),
+                      GestureDetector(
+                        onTap: (){
+                          setState((){
+                            mantraCounter = 1;
+                            pageManager.repeatMantraCount(1, res);
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+                          margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color:Color(0xff80571d) ),
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          child: Text("1",textAlign: TextAlign.center,),
+                        ),
+                      ),
+                      // const Spacer(flex: 1),
+                      GestureDetector(
+                        onTap: (){
+                          setState((){
+                            mantraCounter = 27;
+                            pageManager.repeatMantraCount(27, res);
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
+                          margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+                          decoration: BoxDecoration(
                               border: Border.all(color:Color(0xff80571d) ),
                               borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Text("1",textAlign: TextAlign.center,),
                           ),
+                          child: Text("27",textAlign: TextAlign.center,),
                         ),
                       ),
-                      const Spacer(flex: 1),
-                      Expanded(
-                        flex: 3,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState((){
-                              mantraCounter = 27;
-                              pageManager.repeatMantraCount(27, res);
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color:Color(0xff80571d) ),
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Text("27",textAlign: TextAlign.center,),
+                      // const Spacer(flex: 1),
+                      GestureDetector(
+                        onTap: (){
+                          setState((){
+                            mantraCounter = 54;
+                            pageManager.repeatMantraCount(54, res);
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
+                          margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color:Color(0xff80571d) ),
+                              borderRadius: BorderRadius.circular(10)
                           ),
+                          child: Text("54",textAlign: TextAlign.center,),
                         ),
                       ),
-                      const Spacer(flex: 1),
-                      Expanded(
-                        flex: 3,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState((){
-                              mantraCounter = 54;
-                              pageManager.repeatMantraCount(54, res);
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(4, 10, 0, 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color:Color(0xff80571d) ),
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Text("54",textAlign: TextAlign.center,),
+                      // const Spacer(flex: 1),
+                      GestureDetector(
+                        onTap: (){
+                          setState((){
+                            mantraCounter = 108;
+                            pageManager.repeatMantraCount(108, res);
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+                          margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color:Color(0xff80571d) ),
+                              borderRadius: BorderRadius.circular(10)
                           ),
+                          child: Text("108",textAlign: TextAlign.center,),
                         ),
                       ),
-                      const Spacer(flex: 1),
-                      Expanded(
-                        flex: 3,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState((){
-                              mantraCounter = 108;
-                              pageManager.repeatMantraCount(108, res);
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(3, 10, 0, 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color:Color(0xff80571d) ),
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Text("108",textAlign: TextAlign.center,),
+                      // const Spacer(flex: 1),
+                      GestureDetector(
+                        onTap: (){
+                          setState((){
+                            mantraCounter = 99999999;
+                            pageManager.repeat();
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+                          margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color:Color(0xff80571d) ),
+                              borderRadius: BorderRadius.circular(10)
                           ),
-                        ),
-                      ),
-                      const Spacer(flex: 1),
-                      Expanded(
-                        flex: 5,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState((){
-                              mantraCounter = 99999999;
-                              pageManager.repeat();
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color:Color(0xff80571d) ),
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Text("Infinite",textAlign: TextAlign.center,),
-                          ),
+                          child: Text("Infinite",textAlign: TextAlign.center,),
                         ),
                       ),
 
