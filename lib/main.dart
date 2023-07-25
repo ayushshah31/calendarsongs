@@ -1,4 +1,5 @@
-import 'package:calendarsong/Screens/customCalendar.dart';
+// ignore_for_file: unused_local_variable
+
 import 'package:calendarsong/Screens/feedback.dart';
 import 'package:calendarsong/Screens/playlists.dart';
 import 'package:calendarsong/Screens/login.dart';
@@ -7,8 +8,6 @@ import 'package:calendarsong/Screens/wrapper.dart';
 import 'package:calendarsong/auth/auth.dart';
 import 'package:calendarsong/constants/common.dart';
 import 'package:calendarsong/model/mantraData.dart';
-import 'package:calendarsong/services/audio_handler.dart';
-import 'package:calendarsong/services/playlist_repository.dart';
 import 'package:calendarsong/services/service_locator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,7 +18,7 @@ import 'constants/routes.dart';
 import 'providers/mantraDataProvider.dart';
 import 'providers/tithiDataProvider.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await checkPermission();
@@ -53,8 +52,8 @@ class MyApp extends StatelessWidget {
       // },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xffF4B651),
-            // background: Color(0xfff8dbc1)
+          seedColor: const Color(0xffF4B651),
+          // background: Color(0xfff8dbc1)
         ),
         appBarTheme: AppBarTheme(color: const Color(0xFFf3ae85)),
         splashColor: Color(0xffFFC680),
@@ -74,7 +73,7 @@ class MyApp extends StatelessWidget {
         // customCalendar: (context) => CustomCalendar(),
         loginRoute: (contect) => const LoginPage(),
         feedback: (context) => const FeedbackPage(),
-        home: (context)=> const HomePage(),
+        home: (context) => const HomePage(),
       },
     );
   }
