@@ -51,6 +51,9 @@ class _HomePageState extends State<HomePage> {
 
   String _platformVersion = 'Unknown';
 
+  bool loadSliderMax = false;
+  double sliderMax = 1;
+
   Color button1Text = Color(0xff80571d);
   Color button2Text = Color(0xff80571d);
   Color button3Text = Color(0xff80571d);
@@ -210,7 +213,7 @@ class _HomePageState extends State<HomePage> {
     Duration current = const Duration();
     mantraData = Provider.of<MantraViewModel>(context).mantraModel;
     tithiData = Provider.of<TithiViewModel>(context).tithiModel;
-    double sliderMax = 1;
+    // double sliderMax = 1;
     bool maxSet = false;
     if (res == -1) {
       setData();
@@ -237,6 +240,8 @@ class _HomePageState extends State<HomePage> {
         mantraCounter = 0;
         button1Pressed = button2Pressed = button3Pressed = button4Pressed = button5Pressed = false;
         maxSet = false;
+        loadSliderMax = false;
+        sliderMax = 1;
       });
     }
 
@@ -572,9 +577,10 @@ class _HomePageState extends State<HomePage> {
                     //   print("SliderMax: $sliderMax");
                     //   maxSet = true;
                     // }
+                    // print("SliderMaxxxx: $sliderMax");
                     return Row(
                       children: [
-                        Text("${value.current.inMinutes}:${value.current.inSeconds % 60}"),
+                        Text("00:${value.current.inSeconds % 60}"),
                         Expanded(
                           flex: 4,
                           child: Slider(
@@ -588,7 +594,7 @@ class _HomePageState extends State<HomePage> {
                               }),
                         ),
                         Text(
-                            "${max(sliderMax ~/ 60000, value.total.inMilliseconds ~/ 60000)}:${max(sliderMax ~/ 1000, value.total.inMilliseconds ~/ 1000)}"),
+                            "00:${max(sliderMax~/1000, value.total.inMilliseconds~/1000)}"),
                       ],
                     );
                   },
@@ -700,9 +706,11 @@ class _HomePageState extends State<HomePage> {
                               onPressed: pageManager.play,
                             );
                           case ButtonState.playing:
-                            if(!introPlaying && !maxSet){
+                            if(loadSliderMax){
                               sliderMax = pageManager.progressNotifier.value.total.inMilliseconds.toDouble();
+                              print("SliderMax: $sliderMax");
                               maxSet = true;
+                              loadSliderMax = false;
                             }
                             return IconButton(
                               icon: const Icon(Icons.pause),
@@ -715,20 +723,21 @@ class _HomePageState extends State<HomePage> {
                               pageManager.add(res, "mantra");
                               introPlaying = false;
                               pageManager.pause;
+                              loadSliderMax = true;
                               // pageManager.duration();
                             }
-                            if (mantraCounter > 0 && mantraCounter < 110) {
-                              print("MantraCounter $mantraCounter");
-                              sliderMax = pageManager.progressNotifier.value.total.inMilliseconds.toDouble();
-                              // pageManager.remove();
-                              // pageManager.add(res,"mantra");
-                              // introPlaying = false;
-                              mantraCounter -= 1;
-                              // print("MantraCounter $mantraCounter");
-                              // // pageManager.stop();
-                              // pageManager.play();
-                              // // pageManager.pause();
-                            }
+                            // if (mantraCounter > 0 && mantraCounter < 110) {
+                            //   print("MantraCounter $mantraCounter");
+                            //   sliderMax = pageManager.progressNotifier.value.total.inMilliseconds.toDouble();
+                            //   // pageManager.remove();
+                            //   // pageManager.add(res,"mantra");
+                            //   // introPlaying = false;
+                            //   mantraCounter -= 1;
+                            //   // print("MantraCounter $mantraCounter");
+                            //   // // pageManager.stop();
+                            //   // pageManager.play();
+                            //   // // pageManager.pause();
+                            // }
                             return IconButton(
                               icon: const Icon(Icons.play_arrow),
                               iconSize: 32.0,
@@ -816,7 +825,7 @@ class _HomePageState extends State<HomePage> {
                           button5Pressed = false;
                           mantraCounter = 27;
                           pageManager.repeatMantraCount(27, res);
-                          pageManager.add(res, "mantra");
+                          // pageManager.add(res, "mantra");
                         });
                       },
                       child: Container(
@@ -847,7 +856,7 @@ class _HomePageState extends State<HomePage> {
                           button5Pressed = false;
                           mantraCounter = 54;
                           pageManager.repeatMantraCount(54, res);
-                          pageManager.add(res, "mantra");
+                          // pageManager.add(res, "mantra");
                         });
                       },
                       child: Container(
@@ -878,7 +887,7 @@ class _HomePageState extends State<HomePage> {
                           button5Pressed = false;
                           mantraCounter = 108;
                           pageManager.repeatMantraCount(108, res);
-                          pageManager.add(res, "mantra");
+                          // pageManager.add(res, "mantra");
                         });
                       },
                       child: Container(
