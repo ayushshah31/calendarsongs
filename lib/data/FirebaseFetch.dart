@@ -78,21 +78,21 @@ class FirebaseFetch{
   //   }
   // }
 
-  Future<bool> saveFeedback(String body, String subject,User user) async{
+  Future<bool> saveFeedback(String body) async{
     try {
-      final dataFound = (await firebaseDatabase.child("feedbacks").child(user.uid).once()).snapshot.value;
-      print(dataFound);
+      // final dataFound = (await firebaseDatabase.child("feedbacks").once()).snapshot.value;
+      // print(dataFound);
       // if(dataFound == null){
       //   print("No data");
       //   await firebaseDatabase.child("feedbacks").child(user.uid)
       //       .set();
       // }
       final newData = {
-        "email": user.email,
-        "subject": subject,
+        // "email": user.email,
+        // "subject": subject,
         "body": body
       };
-      firebaseDatabase.child("feedbacks").child(user.uid).push().set(newData);
+      firebaseDatabase.child("userFeedbacks").push().set(newData);
       return true;
     } catch(e){
       print("feedback error: $e");

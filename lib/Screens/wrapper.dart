@@ -135,7 +135,7 @@ class _WrapperState extends State<Wrapper> {
   }
   //
   void initDownload() async{
-    await Future.delayed(Duration(seconds: 15),() async{
+    await Future.delayed(Duration(seconds: 5),() async{
       print("Now start");
       await _downloadMantra("mantra");
     });
@@ -143,11 +143,11 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User?>(context);
+    // final user = Provider.of<User?>(context);
     mantraData = Provider.of<MantraViewModel>(context).mantraModel;
-    if(user == null) {
-      return const SignUp();
-    }
+    // if(user == null) {
+    //   return const SignUp();
+    // }
     if(_downloading){
       return Scaffold(
         backgroundColor: const Color(0xfff8dbc1),

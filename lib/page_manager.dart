@@ -18,7 +18,7 @@ class PageManager {
   final playButtonNotifier = PlayButtonNotifier();
   final isLastSongNotifier = ValueNotifier<bool>(true);
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
-  final repeatCounterNotifier = ValueNotifier<int>(0);
+  final repeatCounterNotifier = ValueNotifier<int>(-1);
 
   bool isIntroPlaying = true;
 
@@ -26,7 +26,7 @@ class PageManager {
 
   final DateTime _selectedDay = DateTime.now();
 
-  Duration? mantraDuration;
+  Duration? mantraDuration = Duration.zero;
 
   // Events: Calls coming from the UI
   void init() async {
@@ -161,6 +161,7 @@ class PageManager {
       isIntroPlaying = true;
       song = await songRepository.fetchIntroPlaylist(tithiNo);
     }
+    mantraDuration = _audioHandler.queue.value.first.duration;
     final mediaItem = MediaItem(
       id: song['id'] ?? '',
       album: song['album'] ?? '',
@@ -185,6 +186,10 @@ class PageManager {
   void pause() => _audioHandler.pause();
 
   void seek(Duration position) => _audioHandler.seek(position);
+
+  void duration() {
+    mantraDuration = _audioHandler.queue.value.first.duration;
+  }
 
   void previous() => _audioHandler.skipToPrevious();
   void next() => _audioHandler.skipToNext();
@@ -286,6 +291,9 @@ class PageManager {
       extras: {'url': song['url']},
     );
     _audioHandler.addQueueItem(mediaItem);
+    duration();
+    // mantraDuration = _audioHandler.queue.value.first.duration;
+    // print("Mantra durr add: ${mantraDuration!.inMilliseconds}");
   }
 
   Future<void> addCount(int res,int count) async{
