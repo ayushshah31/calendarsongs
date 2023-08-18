@@ -28,16 +28,26 @@ Future<bool> checkPermission() async {
         return true;
       } else if (result == PermissionStatus.permanentlyDenied){
         // print("Req again");
-        var result1 = await Permission.unknown.request();
+        var result1 = await Permission.audio.request();
         // print(result1);
       }
     } else {
       // print("ret true 2");
       return true;
     }
-  } else {
+  } else if (platform == TargetPlatform.iOS)  {
+      final status = await Permission.storage.status;
+      if(status != PermissionStatus.granted){
+        final result = await Permission.audio.request();
+        // final res =  Permission.accessMediaLocation.request();
+        if(result == PermissionStatus.granted){
+
+          return true;
+        }
+      } else {
+        return true;
+      }
     // print("ret true 3");
-    return true;
   }
   // print("ret false");
   return false;
