@@ -127,19 +127,20 @@ class _WrapperState extends State<Wrapper> {
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initDownload();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   initDownload();
+  // }
   //
   void initDownload() async{
-    await Future.delayed(Duration(seconds: 5),() async{
+    // await Future.delayed(Duration(seconds: 5),() async{
       print("Now start");
       await _downloadMantra("mantra");
-    });
+    // });
   }
+  bool request = false;
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +149,12 @@ class _WrapperState extends State<Wrapper> {
     // if(user == null) {
     //   return const SignUp();
     // }
+    if(mantraData.isNotEmpty && !request){
+      print("start");
+      request = true;
+      initDownload();
+    }
+
     if(_downloading){
       return Scaffold(
         backgroundColor: const Color(0xfff8dbc1),

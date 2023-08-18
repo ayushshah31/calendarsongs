@@ -18,11 +18,11 @@ Future<bool> checkPermission() async {
     final status = await Permission.storage.status;
     if (status != PermissionStatus.granted) {
       // print("Raised");
-      final result = await Permission.unknown.request();
-      final result2 = await Permission.storage.request();
-      final result3 = await Permission.audio.request();
-      final result4 = await Permission.accessMediaLocation.request();
-      final result5 = await Permission.mediaLibrary.request();
+      // final result = await Permission.unknown.request();
+      // final result2 = await Permission.storage.request();
+      final result = await Permission.audio.request();
+      // final result = await Permission.accessMediaLocation.request();
+      // final result4 = await Permission.mediaLibrary.request();
       if (result == PermissionStatus.granted) {
         // print("ret true 1");
         return true;

@@ -436,14 +436,15 @@ class _HomePageState extends State<HomePage> {
                         Wrap(
                           spacing: 5,
                           crossAxisAlignment: WrapCrossAlignment.end,
-                          // mainAxisAlignment: MainAxisAlignment.center,
                           alignment: WrapAlignment.center,
+                          // alignment: WrapAlignment.center,
                           children: [
                             Text(
                               "Tithi",
                               // textAlign: TextAlign.end,
                               style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width * 0.05,
+                                fontSize: MediaQuery.of(context).size.width * 0.057,
+                                fontWeight: FontWeight.w500
                               ),
                             ),
                             // SizedBox(width: 5),
@@ -760,7 +761,7 @@ class _HomePageState extends State<HomePage> {
             ]),
             const SizedBox(height: 10),
             Expanded(
-                flex: 3,
+                flex: 2,
                 child: Wrap(
                   alignment: WrapAlignment.spaceBetween,
                   // direction: Axis.vertical,
@@ -988,171 +989,258 @@ class _HomePageState extends State<HomePage> {
             //   },
             //   child: Text("clean"),
             // ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 10),
             Expanded(
-              flex: 15,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Table(
-                            columnWidths: const {
-                              0: IntrinsicColumnWidth(flex: 2),
-                              1: FlexColumnWidth(5)
-                            },
-                            children: [
-                              // TableRow(
-                              //     children: [
-                              //
-                              //     ]
-                              // ),
-                              // TableRow(
-                              //     children: [
-                              //       // Container(),
-                              //
-                              //     ]
-                              // ),
-                              TableRow(children: [Container(height: 10), Container()]),
-                              TableRow(children: [
-                                const Text(
-                                  "Mantra:",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${res2.mantraEnglish}",
-                                      overflow: TextOverflow.visible,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      "${res2.mantraHindi}",
-                                      overflow: TextOverflow.visible,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ]),
-                              TableRow(children: [Container(height: 15), Container()]),
-                              TableRow(children: [
-                                Container(),
-                                Text(
-                                  res2.noOfRep,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                )
-                              ]),
-                              TableRow(children: [Container(height: 15), Container()]),
-                              TableRow(children: [
-                                const Text(
-                                  "Procedure: ",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  res2.procedure,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                )
-                              ]),
-                              TableRow(children: [Container(height: 15), Container()]),
-                              TableRow(children: [
-                                const Text(
-                                  "Benefit: ",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  res2.benefits,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                )
-                              ]),
-                              TableRow(children: [Container(height: 15), Container()]),
-                            ],
+              flex: 20,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                height: MediaQuery.of(context).size.height/2 + 100,
+                child: Scrollbar(
+                  // interactive: false,
+                  // thickness: 1.5,
+                  // thumbVisibility: true,
+                  // trackVisibility: true,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Mantra:",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      // const Text("Repeat Mantra: ",style: TextStyle(fontSize: 18,),),
-                      // Row(
-                      //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //   children: [
-                      //     OutlinedButton(
-                      //         onPressed: (){
-                      //           setState((){
-                      //             mantraCounter = 1;
-                      //           });
-                      //         },
-                      //         child: const Text("1")
-                      //     ),
-                      //     const Spacer(flex: 1),
-                      //     OutlinedButton(
-                      //         onPressed: () async{
-                      //           setState((){
-                      //             mantraCounter = 27;
-                      //           });
-                      //         },
-                      //         child: const Text("27")
-                      //     ),
-                      //     const Spacer(flex: 1),
-                      //     OutlinedButton(
-                      //         onPressed: ()async{
-                      //           setState((){
-                      //             mantraCounter = 54;
-                      //           });
-                      //         },
-                      //         child: const Text("54")
-                      //     ),
-                      //     const Spacer(flex: 1),
-                      //     OutlinedButton(
-                      //         onPressed: () async{
-                      //           setState((){
-                      //             mantraCounter = 108;
-                      //           });
-                      //         },
-                      //         child: const Text("108")
-                      //     ),
-                      //     const Spacer(flex: 1),
-                      //     OutlinedButton(
-                      //         onPressed: () {
-                      //           setState(() {
-                      //             mantraCounter = 999;
-                      //           });
-                      //         },
-                      //         child: const Text("Infinite")
-                      //     ),
-                      //   ],
-                      // ),
-                      // OutlinedButton(
-                      //     onPressed: (){
-                      //       setState(() {
-                      //         mantraCounter=0;
-                      //       });
-                      //     }, child: const Text("Reset")
-                      // ),
-                    ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${res2.mantraEnglish}",
+                                overflow: TextOverflow.visible,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                "${res2.mantraHindi}",
+                                overflow: TextOverflow.visible,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ]
+                          )
+                        ),
+                        // Spacer(),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Procedure: ",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            res2.procedure,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Benefit: ",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            res2.benefits,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        // const SizedBox(height: 100),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
+            // Expanded(
+            //   flex: 15,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(10.0),
+            //     child: SingleChildScrollView(
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           Column(
+            //             children: [
+            //               Table(
+            //                 columnWidths: const {
+            //                   0: IntrinsicColumnWidth(flex: 2),
+            //                   1: FlexColumnWidth(5)
+            //                 },
+            //                 children: [
+            //                   // TableRow(
+            //                   //     children: [
+            //                   //
+            //                   //     ]
+            //                   // ),
+            //                   // TableRow(
+            //                   //     children: [
+            //                   //       // Container(),
+            //                   //
+            //                   //     ]
+            //                   // ),
+            //                   TableRow(children: [Container(height: 10), Container()]),
+            //                   TableRow(children: [
+            //                     const Text(
+            //                       "Mantra:",
+            //                       style: TextStyle(
+            //                         fontSize: 18,
+            //                       ),
+            //                     ),
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: [
+            //                         Text(
+            //                           "${res2.mantraEnglish}",
+            //                           overflow: TextOverflow.visible,
+            //                           style: TextStyle(
+            //                             fontSize: 18,
+            //                           ),
+            //                         ),
+            //                         SizedBox(height: 10),
+            //                         Text(
+            //                           "${res2.mantraHindi}",
+            //                           overflow: TextOverflow.visible,
+            //                           style: TextStyle(
+            //                             fontSize: 18,
+            //                           ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ]),
+            //                   TableRow(children: [Container(height: 15), Container()]),
+            //                   TableRow(children: [
+            //                     Container(),
+            //                     Text(
+            //                       res2.noOfRep,
+            //                       style: TextStyle(
+            //                         fontSize: 18,
+            //                       ),
+            //                     )
+            //                   ]),
+            //                   TableRow(children: [Container(height: 15), Container()]),
+            //                   TableRow(children: [
+            //                     const Text(
+            //                       "Procedure: ",
+            //                       style: TextStyle(
+            //                         fontSize: 18,
+            //                       ),
+            //                     ),
+            //                     Text(
+            //                       res2.procedure,
+            //                       style: TextStyle(
+            //                         fontSize: 18,
+            //                       ),
+            //                     )
+            //                   ]),
+            //                   TableRow(children: [Container(height: 15), Container()]),
+            //                   TableRow(children: [
+            //                     const Text(
+            //                       "Benefit: ",
+            //                       style: TextStyle(
+            //                         fontSize: 18,
+            //                       ),
+            //                     ),
+            //                     Text(
+            //                       res2.benefits,
+            //                       style: TextStyle(
+            //                         fontSize: 18,
+            //                       ),
+            //                     )
+            //                   ]),
+            //                   TableRow(children: [Container(height: 15), Container()]),
+            //                 ],
+            //               ),
+            //             ],
+            //           ),
+            //           const SizedBox(height: 10),
+            //           // const Text("Repeat Mantra: ",style: TextStyle(fontSize: 18,),),
+            //           // Row(
+            //           //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //           //   children: [
+            //           //     OutlinedButton(
+            //           //         onPressed: (){
+            //           //           setState((){
+            //           //             mantraCounter = 1;
+            //           //           });
+            //           //         },
+            //           //         child: const Text("1")
+            //           //     ),
+            //           //     const Spacer(flex: 1),
+            //           //     OutlinedButton(
+            //           //         onPressed: () async{
+            //           //           setState((){
+            //           //             mantraCounter = 27;
+            //           //           });
+            //           //         },
+            //           //         child: const Text("27")
+            //           //     ),
+            //           //     const Spacer(flex: 1),
+            //           //     OutlinedButton(
+            //           //         onPressed: ()async{
+            //           //           setState((){
+            //           //             mantraCounter = 54;
+            //           //           });
+            //           //         },
+            //           //         child: const Text("54")
+            //           //     ),
+            //           //     const Spacer(flex: 1),
+            //           //     OutlinedButton(
+            //           //         onPressed: () async{
+            //           //           setState((){
+            //           //             mantraCounter = 108;
+            //           //           });
+            //           //         },
+            //           //         child: const Text("108")
+            //           //     ),
+            //           //     const Spacer(flex: 1),
+            //           //     OutlinedButton(
+            //           //         onPressed: () {
+            //           //           setState(() {
+            //           //             mantraCounter = 999;
+            //           //           });
+            //           //         },
+            //           //         child: const Text("Infinite")
+            //           //     ),
+            //           //   ],
+            //           // ),
+            //           // OutlinedButton(
+            //           //     onPressed: (){
+            //           //       setState(() {
+            //           //         mantraCounter=0;
+            //           //       });
+            //           //     }, child: const Text("Reset")
+            //           // ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             // OutlinedButton(
             //     onPressed: () {
             //       // pageManager.removeAll();

@@ -17,6 +17,7 @@ import 'Screens/home.dart';
 import 'constants/routes.dart';
 import 'providers/mantraDataProvider.dart';
 import 'providers/tithiDataProvider.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,10 @@ Future<void> main() async {
   await checkPermission();
   // await initAudioService();
   await setupServiceLocator();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(StreamProvider<User?>.value(
     value: AuthService().user,
     initialData: FirebaseAuth.instance.currentUser,
@@ -64,6 +69,12 @@ class MyApp extends StatelessWidget {
           shadowColor: Colors.black12,
         ),
       ),
+      builder: (context, child){
+        return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+            child: child!
+        );
+      },
       debugShowCheckedModeBanner: false,
       initialRoute: wrapperRoute,
       routes: {

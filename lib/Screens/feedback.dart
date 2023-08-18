@@ -95,7 +95,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                           // minLines: (height * 0.012).toInt(),
                           maxLines: 10,
                           decoration: InputDecoration(
-                            labelText: "Feedback",
+                            labelText: "Your Feedback",
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20)
                               ),
