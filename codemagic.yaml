@@ -1,0 +1,5 @@
+workflows:
+  sample-workflow:
+    name: MantraTherapy
+    environment:
+      flutter: stable
