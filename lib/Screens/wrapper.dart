@@ -5,6 +5,7 @@ import 'package:calendarsong/Screens/customCalendar.dart';
 import 'package:calendarsong/Screens/home.dart';
 import 'package:calendarsong/Screens/signUp.dart';
 import 'package:calendarsong/providers/mantraDataProvider.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _WrapperState extends State<Wrapper> {
   double downloadCounter = 0.0;
 
   String _localPath = "";
-  late bool _permissionReady = false;
+  bool _permissionReady = false;
   bool _downloading = true;
   List<MantraModel> mantraData = [];
   bool fileDownloaded = false;
@@ -144,6 +145,7 @@ class _WrapperState extends State<Wrapper> {
     // TODO: implement initState
     super.initState();
     internetChecker();
+    versionChecker();
   }
 
   void initDownload() async {
@@ -156,8 +158,32 @@ class _WrapperState extends State<Wrapper> {
   bool request = false;
   bool internet = false;
   var listener;
+  int versionNumber = 0;
 
-  internetChecker() {
+  void versionChecker() async {
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      var release = androidInfo.version.release;
+      var sdkInt = androidInfo.version.sdkInt;
+      var manufacturer = androidInfo.manufacturer;
+      var model = androidInfo.model;
+      print('Android $release (SDK $sdkInt), $manufacturer $model');
+      versionNumber = sdkInt;
+      // Android 9 (SDK 28), Xiaomi Redmi Note 7
+    }
+
+    if (Platform.isIOS) {
+      var iosInfo = await DeviceInfoPlugin().iosInfo;
+      var systemName = iosInfo.systemName;
+      var version = iosInfo.systemVersion;
+      var name = iosInfo.name;
+      var model = iosInfo.model;
+      print('$systemName $version, $name $model');
+      // iOS 13.1, iPhone 11 Pro Max iPhone
+    }
+  }
+
+  internetChecker() async {
     listener = InternetConnectionChecker().onStatusChange.listen((status) {
       switch (status) {
         case InternetConnectionStatus.connected:
@@ -257,11 +283,22 @@ class _WrapperState extends State<Wrapper> {
                 Expanded(
                   flex: 5,
                   child: Center(
-                    child: Text(
-                      "We Download Mantra Data from the server so you will have to give download permission to this app.",
-                      style: TextStyle(fontSize: 22),
-                      textAlign: TextAlign.center,
-                    ),
+                    child: versionNumber < 29
+                        ? Text(
+                            "The Mantra Therapy app downloads Hindu calendar and mantra files from the server. "
+                            "In order for you to use this app, please provide STORAGE permissions to this App"
+                            "\n1. Click on 'Open Settings' button below"
+                            "\n2. Scroll and click on PERMISSIONS "
+                            "\n3. Click on STORAGE and select ALLOW"
+                            "\n4. And then come back to this Application (by hitting BACK button couple of times)",
+                            style: TextStyle(fontSize: 22),
+                            textAlign: TextAlign.start,
+                          )
+                        : Text(
+                            "We Download Mantra Data from the server so you will have to give download permission to this app.",
+                            style: TextStyle(fontSize: 22),
+                            textAlign: TextAlign.center,
+                          ),
                   ),
                 ),
                 // const SizedBox(height: 20),

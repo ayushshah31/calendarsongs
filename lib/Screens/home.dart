@@ -8,9 +8,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:intl/intl.dart';
 import '../constants/common.dart';
-import '../constants/routes.dart';
+
 import '../notifiers/play_button_notifier.dart';
 import '../notifiers/progress_notifier.dart';
 import '../notifiers/repeat_button_notifier.dart';
@@ -114,7 +114,10 @@ class _HomePageState extends State<HomePage> {
     print("SET DATA BUILT");
     res = getTithiDate(DateTime.now(), tithiData);
     res2 = getTithiMantraData(res);
-    currTithi = res2.tithi;
+    DateFormat formatter = DateFormat("yyyy-MM-dd");
+    String temp = formatter.format(DateTime.now());
+    // print("Tithi data in func: $tithiData");
+    currTithi = tithiData[temp]["Tithi"];
   }
 
   // @override
@@ -162,10 +165,10 @@ class _HomePageState extends State<HomePage> {
     // });
   }
 
-  MantraModel getTithiMantraData(int currTithi) {
+  MantraModel getTithiMantraData(int currTithi1) {
     MantraModel ans = MantraModel();
     for (int i = 0; i < mantraData.length; i++) {
-      if (mantraData[i].tithi == currTithi) {
+      if (mantraData[i].tithi == currTithi1) {
         // print(mantraData[i]);
         ans = mantraData[i];
         break;
