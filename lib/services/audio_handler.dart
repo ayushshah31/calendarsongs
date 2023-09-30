@@ -79,7 +79,15 @@ class MyAudioHandler extends BaseAudioHandler {
       if (_player.shuffleModeEnabled) {
         index = _player.shuffleIndices!.indexOf(index);
       }
-      final oldMediaItem = newQueue[index];
+      // final oldMediaItem = newQueue[index];
+      var oldMediaItem;
+      if (newQueue.length > 1) {
+        oldMediaItem = newQueue[index];
+      } else {
+        oldMediaItem = newQueue[0];
+        index = 0;
+        print("Errorrrrr");
+      }
       final newMediaItem = oldMediaItem.copyWith(duration: duration);
       newQueue[index] = newMediaItem;
       queue.add(newQueue);

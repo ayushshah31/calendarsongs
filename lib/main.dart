@@ -29,17 +29,15 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(StreamProvider<User?>.value(
-    value: AuthService().user,
-    initialData: FirebaseAuth.instance.currentUser,
-    child: MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => MantraViewModel()),
         ChangeNotifierProvider(create: (_) => TithiViewModel()),
       ],
       child: const MyApp(),
     ),
-  ));
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -61,6 +59,9 @@ class MyApp extends StatelessWidget {
           // background: Color(0xfff8dbc1)
         ),
         appBarTheme: AppBarTheme(color: const Color(0xFFf3ae85)),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: const Color(0xFFf3ae85),
+        ),
         splashColor: Color(0xffFFC680),
         buttonTheme: ButtonThemeData(buttonColor: Color(0xffd1542e)),
         dialogTheme: DialogTheme(
@@ -69,20 +70,18 @@ class MyApp extends StatelessWidget {
           shadowColor: Colors.black12,
         ),
       ),
-      builder: (context, child){
+      builder: (context, child) {
         return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: child!
-        );
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1)), child: child!);
       },
       debugShowCheckedModeBanner: false,
       initialRoute: wrapperRoute,
       routes: {
         wrapperRoute: (context) => Wrapper(),
-        signupRoute: (context) => const SignUp(),
+        // signupRoute: (context) => const SignUp(),
         playlists: (context) => const Playlists(),
         // customCalendar: (context) => CustomCalendar(),
-        loginRoute: (contect) => const LoginPage(),
+        // loginRoute: (contect) => const LoginPage(),
         feedback: (context) => const FeedbackPage(),
         home: (context) => const HomePage(),
       },

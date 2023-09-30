@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:calendarsong/model/mantraData.dart';
@@ -45,7 +46,13 @@ class _HomePageState extends State<HomePage> {
     // _downloadMantra("mantra");
     shareMsg =
         (await _databaseRef.child("share").child("message").once()).snapshot.value.toString();
-    shareTxt = (await _databaseRef.child("share").child("text").once()).snapshot.value.toString();
+    if (Platform.isAndroid) {
+      shareTxt = (await _databaseRef.child("share").child("text").once()).snapshot.value.toString();
+    } else if (Platform.isIOS) {
+      shareTxt =
+          (await _databaseRef.child("share").child("textIOS").once()).snapshot.value.toString();
+    }
+    // shareTxt = (await _databaseRef.child("share").child("text").once()).snapshot.value.toString();
     return DataRequiredForBuild(mantraData: mantraData, tithiData: tithiData);
   }
 
@@ -66,9 +73,9 @@ class _HomePageState extends State<HomePage> {
   bool button4Pressed = false;
   bool button5Pressed = false;
 
-
   @override
   void initState() {
+    print("In INIT");
     super.initState();
     _dataRequiredForBuild = _fetchData();
     getIt<PageManager>().init();
@@ -104,16 +111,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> setData() async {
+    print("SET DATA BUILT");
     res = getTithiDate(DateTime.now(), tithiData);
     res2 = getTithiMantraData(res);
     currTithi = res2.tithi;
   }
 
-  @override
-  void dispose() {
-    getIt<PageManager>().dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   getIt<PageManager>().dispose();
+  //   super.dispose();
+  // }
 
   // Future<void> setAudioPlayer() async{
   //   await setupServiceLocator();
@@ -228,8 +236,8 @@ class _HomePageState extends State<HomePage> {
           pageManager.remove();
           pageManager.remove();
           pageManager.remove();
-          pageManager.add(res, "Intro");
         }
+        pageManager.add(res, "Intro");
         print("Should Change");
         introPlaying = true;
         pageManager.pause();
@@ -255,113 +263,109 @@ class _HomePageState extends State<HomePage> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Mantra Therapy"),
-          automaticallyImplyLeading: false,
-          actions: [
-            PopupMenuButton(
-                icon: Image.asset(
-                  "lib/assets/images/more.png",
-                  color: Colors.white,
-                ),
-                position: PopupMenuPosition.under,
-                onSelected: (value) {
-                  switch (value) {
-                    // case 0:
-                    //   Navigator.pushNamed(context, playlists);
-                    //   break;
-
-                    // case 1:
-                    //   const snackBar = SnackBar(
-                    //     content: Text("Feature not available in your location"),
-                    //     duration: Duration(seconds: 3),
-                    //   );
-                    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    //   break;
-
-                    case 2:
-                      Navigator.pushNamed(context, feedback);
-                      break;
-
-                    case 3:
-                      Share.share(shareTxt, subject: shareMsg);
-                      break;
-
-                    // case 4 :
-                    //   signOutDialogBox();
-                    //   break;
-                  }
-                },
-                itemBuilder: (context) => [
-                      // const PopupMenuItem(
-                      //   value: 0,
-                      //   padding: EdgeInsets.symmetric(horizontal: 10),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text("Playlists"),
-                      //       SizedBox(width:10),
-                      //       Icon(Icons.playlist_add,color: Colors.black,)
-                      //     ],
-                      //   ),
-                      //   // onTap: ,
-                      // ),
-                      // const PopupMenuItem(
-                      //   value: 1,
-                      //   padding: EdgeInsets.symmetric(horizontal: 10),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text("Get Pro"),
-                      //       SizedBox(width: 10),
-                      //       Icon(
-                      //         Icons.paid_rounded,
-                      //         color: Colors.black,
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
-                      const PopupMenuItem(
-                        value: 2,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Feedback"),
-                            SizedBox(width: 10),
-                            Icon(
-                              Icons.mail,
-                              color: Colors.black,
-                            )
-                          ],
-                        ),
-                      ),
-                      const PopupMenuItem(
-                          value: 3,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            Text("Share"),
-                            SizedBox(width: 10),
-                            Icon(
-                              Icons.ios_share_outlined,
-                              color: Colors.black,
-                            ),
-                          ])),
-                      // const PopupMenuItem(
-                      //   value: 4,
-                      //   padding: EdgeInsets.symmetric(horizontal: 10),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text("SignOut"),
-                      //       SizedBox(width:10),
-                      //       Icon(Icons.person,color: Colors.black,)
-                      //     ],
-                      //   ),
-                      // ),
-                    ])
-          ],
-        ),
+        // appBar: AppBar(
+        // title: const Text("Mantra Therapy"),
+        // automaticallyImplyLeading: false,
+        // actions: [
+        // PopupMenuButton(
+        // icon: Image.asset(
+        //   "lib/assets/images/more.png",
+        //   color: Colors.white,
+        // ),
+        // position: PopupMenuPosition.under,
+        // onSelected: (value) {
+        //   switch (value) {
+        // case 0:
+        //   Navigator.pushNamed(context, playlists);
+        //   break;
+        // case 1:
+        //   const snackBar = SnackBar(
+        //     content: Text("Feature not available in your location"),
+        //     duration: Duration(seconds: 3),
+        //   );
+        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        //   break;
+        // case 2:
+        //   Navigator.pushNamed(context, feedback);
+        //   break;
+        // case 3:
+        //   Share.share(shareTxt, subject: shareMsg);
+        //   break;
+        // case 4 :
+        //   signOutDialogBox();
+        //   break;
+        // }
+        // },
+        // itemBuilder: (context) => [
+        // const PopupMenuItem(
+        //   value: 0,
+        //   padding: EdgeInsets.symmetric(horizontal: 10),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Text("Playlists"),
+        //       SizedBox(width:10),
+        //       Icon(Icons.playlist_add,color: Colors.black,)
+        //     ],
+        //   ),
+        //   // onTap: ,
+        // ),
+        // const PopupMenuItem(
+        //   value: 1,
+        //   padding: EdgeInsets.symmetric(horizontal: 10),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Text("Get Pro"),
+        //       SizedBox(width: 10),
+        //       Icon(
+        //         Icons.paid_rounded,
+        //         color: Colors.black,
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // const PopupMenuItem(
+        //   value: 2,
+        //   padding: EdgeInsets.symmetric(horizontal: 10),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Text("Feedback"),
+        //       SizedBox(width: 10),
+        //       Icon(
+        //         Icons.mail,
+        //         color: Colors.black,
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // const PopupMenuItem(
+        //     value: 3,
+        //     padding: EdgeInsets.symmetric(horizontal: 10),
+        //     child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        //       Text("Share"),
+        //       SizedBox(width: 10),
+        //       Icon(
+        //         Icons.ios_share_outlined,
+        //         color: Colors.black,
+        //       ),
+        //     ])),
+        // const PopupMenuItem(
+        //   value: 4,
+        //   padding: EdgeInsets.symmetric(horizontal: 10),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Text("SignOut"),
+        //       SizedBox(width:10),
+        //       Icon(Icons.person,color: Colors.black,)
+        //     ],
+        //   ),
+        // ),
+        //             ])
+        //   ],
+        // ),
         backgroundColor: const Color(0xfff8dbc1),
         body: Container(
           padding: const EdgeInsets.all(10),
@@ -384,7 +388,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () async{
+                  onTap: () async {
                     await setData();
                     changeMantra();
                     setState(() {});
@@ -392,35 +396,33 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        // border: Border(
-                        //   left: BorderSide(
-                        //     color: Colors.black,
-                        //   ),
-                        //   right: BorderSide(color: Colors.black),
-                        //   top: BorderSide(color: Colors.black),
-                        //   bottom: BorderSide(color: Colors.black)
-                        // ),
-                        border: Border.all(color: Color(0xff80571d),width: 2),
-                        // color: Color(0xFFf3ae85)
+                      // border: Border(
+                      //   left: BorderSide(
+                      //     color: Colors.black,
+                      //   ),
+                      //   right: BorderSide(color: Colors.black),
+                      //   top: BorderSide(color: Colors.black),
+                      //   bottom: BorderSide(color: Colors.black)
+                      // ),
+                      border: Border.all(color: Color(0xff80571d), width: 2),
+                      // color: Color(0xFFf3ae85)
                     ),
                     child: Column(children: [
                       Text(
                         weekday[DateTime.now().weekday - 1],
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.04,
-                          color: Color(0xff80571d),
-                            fontWeight: FontWeight.w500
-                        ),
+                            color: Color(0xff80571d),
+                            fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Text(getTodayDate(),
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.035,
-                            color: Color(0xff80571d),
-                            fontWeight: FontWeight.w500
-                          ))
+                              fontSize: MediaQuery.of(context).size.width * 0.035,
+                              color: Color(0xff80571d),
+                              fontWeight: FontWeight.w500))
                     ]),
                   ),
                 ),
@@ -429,9 +431,7 @@ class _HomePageState extends State<HomePage> {
                     flex: 3,
                     child: Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        color: Color(0xFFf3ae85)
-                      ),
+                          border: Border.all(color: Colors.black), color: Color(0xFFf3ae85)),
                       child: Column(children: [
                         Wrap(
                           spacing: 5,
@@ -443,9 +443,8 @@ class _HomePageState extends State<HomePage> {
                               "Tithi",
                               // textAlign: TextAlign.end,
                               style: TextStyle(
-                                fontSize: MediaQuery.of(context).size.width * 0.057,
-                                fontWeight: FontWeight.w500
-                              ),
+                                  fontSize: MediaQuery.of(context).size.width * 0.057,
+                                  fontWeight: FontWeight.w500),
                             ),
                             // SizedBox(width: 5),
                             Text(
@@ -479,11 +478,11 @@ class _HomePageState extends State<HomePage> {
                                   // }
                                   // setSelectedDay(newDay!);
                                   // setFocusedDay(newDay);
-                                  print("Tapped");
-                                  print("curr $currTithi");
+                                  // print("Tapped");
+                                  // print("curr $currTithi");
                                   currTithi = currTithi - 1;
-                                  print("Tapped");
-                                  print("curr $currTithi");
+                                  // print("Tapped");
+                                  // print("curr $currTithi");
                                   if (currTithi <= 15 && currTithi >= 1) {
                                     setState(() {
                                       res = currTithi;
@@ -524,11 +523,11 @@ class _HomePageState extends State<HomePage> {
                                   // }
                                   // setSelectedDay(newDay!);
                                   // setFocusedDay(newDay);
-                                  print("Tapped +");
-                                  print("curr $currTithi");
+                                  // print("Tapped +");
+                                  // print("curr $currTithi");
                                   currTithi += 1;
-                                  print("Tapped +");
-                                  print("curr $currTithi");
+                                  // print("Tapped +");
+                                  // print("curr $currTithi");
                                   if (currTithi <= 15 && currTithi >= 1) {
                                     setState(() {
                                       res = currTithi;
@@ -594,8 +593,7 @@ class _HomePageState extends State<HomePage> {
                                 pageManager.seek(Duration(milliseconds: val.toInt()));
                               }),
                         ),
-                        Text(
-                            "00:${max(sliderMax~/1000, value.total.inMilliseconds~/1000)}"),
+                        Text("00:${max(sliderMax ~/ 1000, value.total.inMilliseconds ~/ 1000)}"),
                       ],
                     );
                   },
@@ -707,8 +705,12 @@ class _HomePageState extends State<HomePage> {
                               onPressed: pageManager.play,
                             );
                           case ButtonState.playing:
-                            if(loadSliderMax){
-                              sliderMax = pageManager.progressNotifier.value.total.inMilliseconds.toDouble();
+                            var total = pageManager.progressNotifier.value.total.inMilliseconds;
+                            if (loadSliderMax || sliderMax < total) {
+                              print(
+                                  "Total: ${pageManager.progressNotifier.value.total.inMilliseconds}");
+                              sliderMax = pageManager.progressNotifier.value.total.inMilliseconds
+                                  .toDouble();
                               print("SliderMax: $sliderMax");
                               maxSet = true;
                               loadSliderMax = false;
@@ -720,10 +722,15 @@ class _HomePageState extends State<HomePage> {
                             );
                           case ButtonState.finished:
                             if (introPlaying) {
+                              print("Intro finish");
                               pageManager.remove();
                               pageManager.add(res, "mantra");
+                              print("Load mantra");
+                              print(
+                                  "Total load: ${pageManager.progressNotifier.value.total.inMilliseconds}");
                               introPlaying = false;
-                              pageManager.pause;
+                              pageManager.pause();
+                              pageManager.play();
                               loadSliderMax = true;
                               // pageManager.duration();
                             }
@@ -798,20 +805,18 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       child: Container(
-
                         padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
                         margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xff80571d)),
-                            borderRadius: BorderRadius.circular(10),
-                            color: button1Pressed? Color(0xff80571d): Colors.transparent,
+                          border: Border.all(color: Color(0xff80571d)),
+                          borderRadius: BorderRadius.circular(10),
+                          color: button1Pressed ? Color(0xff80571d) : Colors.transparent,
                         ),
                         child: Text(
                           "1",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: !button1Pressed? Color(0xff80571d): Color(0xfff8dbc1)
-                          ),
+                              color: !button1Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
                         ),
                       ),
                     ),
@@ -826,6 +831,8 @@ class _HomePageState extends State<HomePage> {
                           button5Pressed = false;
                           mantraCounter = 27;
                           pageManager.repeatMantraCount(27, res);
+                          pageManager.pause();
+                          pageManager.play();
                           // pageManager.add(res, "mantra");
                         });
                       },
@@ -833,16 +840,15 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
                         margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xff80571d)),
-                            borderRadius: BorderRadius.circular(10),
-                            color: button2Pressed? Color(0xff80571d): Colors.transparent,
-                      ),
+                          border: Border.all(color: Color(0xff80571d)),
+                          borderRadius: BorderRadius.circular(10),
+                          color: button2Pressed ? Color(0xff80571d) : Colors.transparent,
+                        ),
                         child: Text(
                           "27",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: !button2Pressed? Color(0xff80571d): Color(0xfff8dbc1)
-                          ),
+                              color: !button2Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
                         ),
                       ),
                     ),
@@ -857,6 +863,8 @@ class _HomePageState extends State<HomePage> {
                           button5Pressed = false;
                           mantraCounter = 54;
                           pageManager.repeatMantraCount(54, res);
+                          pageManager.pause();
+                          pageManager.play();
                           // pageManager.add(res, "mantra");
                         });
                       },
@@ -864,16 +872,15 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
                         margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xff80571d)),
-                            borderRadius: BorderRadius.circular(10),
-                            color: button3Pressed? Color(0xff80571d): Colors.transparent,
+                          border: Border.all(color: Color(0xff80571d)),
+                          borderRadius: BorderRadius.circular(10),
+                          color: button3Pressed ? Color(0xff80571d) : Colors.transparent,
                         ),
                         child: Text(
                           "54",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: !button3Pressed? Color(0xff80571d): Color(0xfff8dbc1)
-                          ),
+                              color: !button3Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
                         ),
                       ),
                     ),
@@ -888,6 +895,8 @@ class _HomePageState extends State<HomePage> {
                           button5Pressed = false;
                           mantraCounter = 108;
                           pageManager.repeatMantraCount(108, res);
+                          pageManager.pause();
+                          pageManager.play();
                           // pageManager.add(res, "mantra");
                         });
                       },
@@ -895,16 +904,15 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
                         margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xff80571d)),
-                            borderRadius: BorderRadius.circular(10),
-                            color: button4Pressed? Color(0xff80571d): Colors.transparent,
+                          border: Border.all(color: Color(0xff80571d)),
+                          borderRadius: BorderRadius.circular(10),
+                          color: button4Pressed ? Color(0xff80571d) : Colors.transparent,
                         ),
                         child: Text(
                           "108",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: !button4Pressed? Color(0xff80571d): Color(0xfff8dbc1)
-                          ),
+                              color: !button4Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
                         ),
                       ),
                     ),
@@ -925,16 +933,15 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
                         margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xff80571d)),
-                            borderRadius: BorderRadius.circular(10),
-                            color: button5Pressed? Color(0xff80571d): Colors.transparent,
+                          border: Border.all(color: Color(0xff80571d)),
+                          borderRadius: BorderRadius.circular(10),
+                          color: button5Pressed ? Color(0xff80571d) : Colors.transparent,
                         ),
                         child: Text(
                           "Infinite",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              color: !button5Pressed? Color(0xff80571d): Color(0xfff8dbc1)
-                          ),
+                              color: !button5Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
                         ),
                       ),
                     ),
@@ -994,7 +1001,7 @@ class _HomePageState extends State<HomePage> {
               flex: 20,
               child: Container(
                 padding: const EdgeInsets.all(10),
-                height: MediaQuery.of(context).size.height/2 + 100,
+                height: MediaQuery.of(context).size.height / 2 + 100,
                 child: Scrollbar(
                   // interactive: false,
                   // thickness: 1.5,
@@ -1007,16 +1014,11 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         const Text(
                           "Mantra:",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500
-                          ),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            padding: EdgeInsets.only(left: 10),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                               Text(
                                 "${res2.mantraEnglish}",
                                 overflow: TextOverflow.visible,
@@ -1032,17 +1034,12 @@ class _HomePageState extends State<HomePage> {
                                   fontSize: 18,
                                 ),
                               ),
-                            ]
-                          )
-                        ),
+                            ])),
                         // Spacer(),
                         const SizedBox(height: 10),
                         const Text(
                           "Procedure: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500
-                          ),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),
@@ -1056,10 +1053,7 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 10),
                         const Text(
                           "Benefit: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500
-                          ),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0),

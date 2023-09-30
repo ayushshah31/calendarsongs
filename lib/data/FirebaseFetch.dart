@@ -5,9 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 import '../model/tithiData.dart';
 
-
-class FirebaseFetch{
-
+class FirebaseFetch {
   final firebaseDatabase = FirebaseDatabase.instance.ref();
 
   Future<List> getMantra() async {
@@ -20,6 +18,13 @@ class FirebaseFetch{
     print("Mantra: $mantra");
     return mantra;
   }
+
+  Future fetchShareMsg() async {
+    dynamic res = (await firebaseDatabase.child("share").once()).snapshot.value;
+    print("Share data: $res");
+    return res;
+  }
+
   Future<List> getMantraData() async {
     var result = (await firebaseDatabase.child("mantraData").once()).snapshot.value as List;
     List mantraData = [];
@@ -33,6 +38,7 @@ class FirebaseFetch{
     print("MantraData: $mantraData");
     return mantraData;
   }
+
   Future<List<MantraModel>> getMantraDataPro() async {
     var result = (await firebaseDatabase.child("mantraData").once()).snapshot.value as List;
     List<MantraModel> mantraData = [];
@@ -40,16 +46,16 @@ class FirebaseFetch{
       // print(child);
       MantraModel mantra = MantraModel();
       mantra
-        ..noOfRep=child["Number of Repetitions"]
+        ..noOfRep = child["Number of Repetitions"]
         ..introLink = child["introLink"]
         ..introSoundFile = child["Intro Sound File"]
         ..benefits = child["Benefit"]
         ..tithi = child["Tithi"]
         ..mantraSoundFile = child["Mantra Sound file"]
         ..mantraLink = child["mantraLink"]
-        ..mantraEnglish=child["Mantra English"]
-        ..mantraHindi=child["Mantra Hindi"]
-        ..procedure=child["Procedure"];
+        ..mantraEnglish = child["Mantra English"]
+        ..mantraHindi = child["Mantra Hindi"]
+        ..procedure = child["Procedure"];
       mantraData.add(mantra);
     }
     // print("MantraData: $mantraData");
@@ -63,7 +69,7 @@ class FirebaseFetch{
     //   // print(child);
     //   tithi.add(child);
     // }
-    print("Tithi: $result");
+    // print("Tithi: $result");
     return result;
   }
 
@@ -78,7 +84,7 @@ class FirebaseFetch{
   //   }
   // }
 
-  Future<bool> saveFeedback(String body) async{
+  Future<bool> saveFeedback(String body, String name, String phone, String vol) async {
     try {
       // final dataFound = (await firebaseDatabase.child("feedbacks").once()).snapshot.value;
       // print(dataFound);
@@ -88,16 +94,18 @@ class FirebaseFetch{
       //       .set();
       // }
       final newData = {
-        // "email": user.email,
-        // "subject": subject,
-        "body": body
+        // "email": email,
+        "name": name,
+        "phone": phone,
+        "volunteer": vol,
+        "body": body,
+        "time": DateTime.now().toString()
       };
       firebaseDatabase.child("userFeedbacks").push().set(newData);
       return true;
-    } catch(e){
+    } catch (e) {
       print("feedback error: $e");
       return false;
     }
   }
-
 }

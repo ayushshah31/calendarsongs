@@ -49,7 +49,9 @@ class PageManager {
       title: playlist['title'] ?? '',
       extras: {'url': playlist['url']},
     );
+    clearQueue(-1);
     isIntroPlaying = true;
+
     // _audioHandler.addQueueItems(mediaItems);
     _audioHandler.addQueueItem(mediaItems);
   }
@@ -78,11 +80,10 @@ class PageManager {
       } else if (!isPlaying) {
         print("Paused");
         playButtonNotifier.value = ButtonState.paused;
-      } else if(processingState == AudioProcessingState.completed){
+      } else if (processingState == AudioProcessingState.completed) {
         print("Completed");
         playButtonNotifier.value = ButtonState.finished;
-        if(isIntroPlaying){
-        }
+        if (isIntroPlaying) {}
         // _audioHandler.seek(Duration.zero);
         // _audioHandler.pause();
       } else if (isPlaying) {
@@ -131,7 +132,7 @@ class PageManager {
   void _listenToChangesInSong() {
     _audioHandler.mediaItem.listen((mediaItem) {
       currentSongTitleNotifier.value = mediaItem?.title ?? '';
-      if(repeatCounterNotifier.value>0) {
+      if (repeatCounterNotifier.value > 0) {
         repeatCounterNotifier.value -= 1;
       }
       // _updateSkipButtons();
@@ -150,11 +151,11 @@ class PageManager {
     }
   }
 
-  void repeatMantraCount(int count,int tithiNo) async{
+  void repeatMantraCount(int count, int tithiNo) async {
     final songRepository = getIt<PlaylistRepository>();
     final song;
     final String type = "mantra";
-    if(type == "mantra") {
+    if (type == "mantra") {
       isIntroPlaying = false;
       song = await songRepository.fetchMantraSong(tithiNo);
     } else {
@@ -169,7 +170,7 @@ class PageManager {
       extras: {'url': song['url']},
     );
     List<MediaItem> genList = [];
-    for(int i=0; i<count; i++){
+    for (int i = 0; i < count; i++) {
       genList.add(mediaItem);
     }
     for (int i = 0; i < 108; i++) {
@@ -179,7 +180,7 @@ class PageManager {
     print("Queue length: ${_audioHandler.queue.length}");
     await _audioHandler.addQueueItems(genList);
     print("queue value length: ${_audioHandler.queue.value.length}");
-    repeatCounterNotifier.value = count+1;
+    repeatCounterNotifier.value = count + 1;
   }
 
   void play() => _audioHandler.play();
@@ -193,9 +194,9 @@ class PageManager {
 
   void previous() => _audioHandler.skipToPrevious();
   void next() => _audioHandler.skipToNext();
-  void next5(Duration position) => _audioHandler.seek(Duration(seconds: position.inSeconds+5));
-  void prev5(Duration position){
-    if(position.inSeconds-5>0) {
+  void next5(Duration position) => _audioHandler.seek(Duration(seconds: position.inSeconds + 5));
+  void prev5(Duration position) {
+    if (position.inSeconds - 5 > 0) {
       _audioHandler.seek(Duration(seconds: position.inSeconds - 5));
     } else {
       _audioHandler.seek(Duration.zero);
@@ -207,12 +208,12 @@ class PageManager {
     //   seek(Duration.zero);
     //   play();
     //   print("Audio shld play");
-      // repeat();
-      // print("Audio played");
-      // print("_repeatCount: ${repeatCounterNotifier.value}");
-      // repeatCounterNotifier.value -=1;
-      // repeat();
-      // seek(Duration.zero);
+    // repeat();
+    // print("Audio played");
+    // print("_repeatCount: ${repeatCounterNotifier.value}");
+    // repeatCounterNotifier.value -=1;
+    // repeat();
+    // seek(Duration.zero);
     // }
     _audioHandler.play();
     _audioHandler.playbackState.listen((playbackState) {
@@ -220,20 +221,20 @@ class PageManager {
       final processingState = playbackState.processingState;
       if (processingState == AudioProcessingState.loading ||
           processingState == AudioProcessingState.buffering) {
-          print("Loading");
-          playButtonNotifier.value = ButtonState.loading;
+        print("Loading");
+        playButtonNotifier.value = ButtonState.loading;
       } else if (!isPlaying) {
-          print("Paused");
-          playButtonNotifier.value = ButtonState.paused;
-      } else if(processingState == AudioProcessingState.completed){
-          print("Completed-new");
-          decrease();
-          playButtonNotifier.value = ButtonState.finished;
-          if(repeatCounterNotifier.value > 0) {
-            _audioHandler.seek(Duration.zero);
-            _audioHandler.pause();
-            _audioHandler.play();
-          }
+        print("Paused");
+        playButtonNotifier.value = ButtonState.paused;
+      } else if (processingState == AudioProcessingState.completed) {
+        print("Completed-new");
+        decrease();
+        playButtonNotifier.value = ButtonState.finished;
+        if (repeatCounterNotifier.value > 0) {
+          _audioHandler.seek(Duration.zero);
+          _audioHandler.pause();
+          _audioHandler.play();
+        }
       } else if (isPlaying) {
         print("Playing");
         playButtonNotifier.value = ButtonState.playing;
@@ -251,7 +252,7 @@ class PageManager {
         _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
         break;
       case RepeatState.repeatSong:
-        if(isIntroPlaying){
+        if (isIntroPlaying) {
           _audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
         } else {
           // onRepeatPlay();
@@ -277,7 +278,7 @@ class PageManager {
   Future<void> add(int tithiNo, String type) async {
     final songRepository = getIt<PlaylistRepository>();
     final song;
-    if(type == "mantra") {
+    if (type == "mantra") {
       isIntroPlaying = false;
       song = await songRepository.fetchMantraSong(tithiNo);
     } else {
@@ -290,13 +291,13 @@ class PageManager {
       title: song['title'] ?? '',
       extras: {'url': song['url']},
     );
-    _audioHandler.addQueueItem(mediaItem);
+    await _audioHandler.addQueueItem(mediaItem);
     duration();
     // mantraDuration = _audioHandler.queue.value.first.duration;
     // print("Mantra durr add: ${mantraDuration!.inMilliseconds}");
   }
 
-  Future<void> addCount(int res,int count) async{
+  Future<void> addCount(int res, int count) async {
     // removeAll();
     // await clearQueue();
     final songRepository = getIt<PlaylistRepository>();
@@ -315,9 +316,9 @@ class PageManager {
     _audioHandler.addQueueItems(List.generate(count, (index) => mediaItem));
   }
 
-  Future<void> clearQueue(int res) async{
-    stop();
-    seek(Duration.zero);
+  Future<void> clearQueue(int res) async {
+    // stop();
+    // seek(Duration.zero);
     // final songRepository = getIt<PlaylistRepository>();
     // final song = await songRepository.fetchMantraSong(res);
     // final mediaItem = MediaItem(
@@ -336,8 +337,8 @@ class PageManager {
     for (int i = 0; i < 108; i++) {
       remove();
     }
-    repeatCounterNotifier.value = 0;
-    add(res,"intro");
+    repeatCounterNotifier.value = -1;
+    // add(res, "intro");
     // try {
     //   for (int i = 0; i < 108; i++) {
     //     _audioHandler.removeQueueItemAt(i);
