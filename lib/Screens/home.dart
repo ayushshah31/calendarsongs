@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
 
   bool loadSliderMax = false;
   double sliderMax = 1;
+  int repeatMantraMode = 1;
 
   Color button1Text = Color(0xff80571d);
   Color button2Text = Color(0xff80571d);
@@ -177,6 +178,9 @@ class _HomePageState extends State<HomePage> {
     return ans;
   }
 
+  List repeatList = [1, 27, 54, 108, 'Infinite'];
+  int? _selected = 0;
+
   List weekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   List months = [
@@ -256,137 +260,13 @@ class _HomePageState extends State<HomePage> {
       });
     }
 
-    // void setSelectedDay(DateTime selectedDayNew) async {
-    //   // await pageManager.clearQueue();
-    //   setState(() {
-    //     selectedDay = selectedDayNew;
-    //     // pageManager.removeAll();
-    //   });
-    // }
-
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        // title: const Text("Mantra Therapy"),
-        // automaticallyImplyLeading: false,
-        // actions: [
-        // PopupMenuButton(
-        // icon: Image.asset(
-        //   "lib/assets/images/more.png",
-        //   color: Colors.white,
-        // ),
-        // position: PopupMenuPosition.under,
-        // onSelected: (value) {
-        //   switch (value) {
-        // case 0:
-        //   Navigator.pushNamed(context, playlists);
-        //   break;
-        // case 1:
-        //   const snackBar = SnackBar(
-        //     content: Text("Feature not available in your location"),
-        //     duration: Duration(seconds: 3),
-        //   );
-        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        //   break;
-        // case 2:
-        //   Navigator.pushNamed(context, feedback);
-        //   break;
-        // case 3:
-        //   Share.share(shareTxt, subject: shareMsg);
-        //   break;
-        // case 4 :
-        //   signOutDialogBox();
-        //   break;
-        // }
-        // },
-        // itemBuilder: (context) => [
-        // const PopupMenuItem(
-        //   value: 0,
-        //   padding: EdgeInsets.symmetric(horizontal: 10),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Text("Playlists"),
-        //       SizedBox(width:10),
-        //       Icon(Icons.playlist_add,color: Colors.black,)
-        //     ],
-        //   ),
-        //   // onTap: ,
-        // ),
-        // const PopupMenuItem(
-        //   value: 1,
-        //   padding: EdgeInsets.symmetric(horizontal: 10),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Text("Get Pro"),
-        //       SizedBox(width: 10),
-        //       Icon(
-        //         Icons.paid_rounded,
-        //         color: Colors.black,
-        //       )
-        //     ],
-        //   ),
-        // ),
-        // const PopupMenuItem(
-        //   value: 2,
-        //   padding: EdgeInsets.symmetric(horizontal: 10),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Text("Feedback"),
-        //       SizedBox(width: 10),
-        //       Icon(
-        //         Icons.mail,
-        //         color: Colors.black,
-        //       )
-        //     ],
-        //   ),
-        // ),
-        // const PopupMenuItem(
-        //     value: 3,
-        //     padding: EdgeInsets.symmetric(horizontal: 10),
-        //     child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        //       Text("Share"),
-        //       SizedBox(width: 10),
-        //       Icon(
-        //         Icons.ios_share_outlined,
-        //         color: Colors.black,
-        //       ),
-        //     ])),
-        // const PopupMenuItem(
-        //   value: 4,
-        //   padding: EdgeInsets.symmetric(horizontal: 10),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Text("SignOut"),
-        //       SizedBox(width:10),
-        //       Icon(Icons.person,color: Colors.black,)
-        //     ],
-        //   ),
-        // ),
-        //             ])
-        //   ],
-        // ),
         backgroundColor: const Color(0xfff8dbc1),
         body: Container(
           padding: const EdgeInsets.all(10),
           height: MediaQuery.of(context).size.height,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            // HomeCalendarState(
-            //     setPageController: setPageController,
-            //     pageController: pageController,
-            //     selectedDay: selectedDay,
-            //     setSelectedDay: setSelectedDay,
-            //     focusedDay: focusedDay,
-            //     setFocusedDay: setFocusedDay,
-            //     mantraCounter: mantraCounter,
-            //     setMantraCounter: setMantraCount,
-            //     // pageController: pageControllerCal,
-            //     // getTithiDate: getTithiDate,
-            //     // setAudioPlayer: setAudioPlayer
-            // ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -399,16 +279,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      // border: Border(
-                      //   left: BorderSide(
-                      //     color: Colors.black,
-                      //   ),
-                      //   right: BorderSide(color: Colors.black),
-                      //   top: BorderSide(color: Colors.black),
-                      //   bottom: BorderSide(color: Colors.black)
-                      // ),
                       border: Border.all(color: Color(0xff80571d), width: 2),
-                      // color: Color(0xFFf3ae85)
                     ),
                     child: Column(children: [
                       Text(
@@ -464,28 +335,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Wrap(
                           spacing: 10,
-                          // alignment: WrapAlignment.spaceEvenly,
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OutlinedButton(
                                 onPressed: () {
-                                  // DateTime? newDay = selectedDay;
-                                  // var tithiNew = res2.tithi;
-                                  // while(tithiNew == res2.tithi) {
-                                  //   newDay = newDay!.subtract(const Duration(days: 1));
-                                  //   print(newDay);
-                                  //   // var tithiNew = res2.tithi;
-                                  //   var resNew = getTithiDate(newDay, tithiData);
-                                  //   MantraModel resNew2 = getTithiMantraData(resNew);
-                                  //   tithiNew = resNew2.tithi;
-                                  // }
-                                  // setSelectedDay(newDay!);
-                                  // setFocusedDay(newDay);
-                                  // print("Tapped");
-                                  // print("curr $currTithi");
                                   currTithi = currTithi - 1;
-                                  // print("Tapped");
-                                  // print("curr $currTithi");
                                   if (currTithi <= 15 && currTithi >= 1) {
                                     setState(() {
                                       res = currTithi;
@@ -514,23 +367,7 @@ class _HomePageState extends State<HomePage> {
                                     backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
                                     foregroundColor: MaterialStateProperty.all(Colors.white)),
                                 onPressed: () {
-                                  // DateTime? newDay = selectedDay;
-                                  // var tithiNew = res2.tithi;
-                                  // while(tithiNew == res2.tithi) {
-                                  //   newDay = newDay!.add(const Duration(days: 1));
-                                  //   print(newDay);
-                                  //   // var tithiNew = res2.tithi;
-                                  //   var resNew = getTithiDate(newDay, tithiData);
-                                  //   MantraModel resNew2 = getTithiMantraData(resNew);
-                                  //   tithiNew = resNew2.tithi;
-                                  // }
-                                  // setSelectedDay(newDay!);
-                                  // setFocusedDay(newDay);
-                                  // print("Tapped +");
-                                  // print("curr $currTithi");
                                   currTithi += 1;
-                                  // print("Tapped +");
-                                  // print("curr $currTithi");
                                   if (currTithi <= 15 && currTithi >= 1) {
                                     setState(() {
                                       res = currTithi;
@@ -570,17 +407,7 @@ class _HomePageState extends State<HomePage> {
                 child: ValueListenableBuilder<ProgressBarState>(
                   valueListenable: pageManager.progressNotifier,
                   builder: (_, value, __) {
-                    // print("value.curr: ${value.current}");
-                    // print("tot val: ${value.total}");
                     current = value.current;
-                    // sliderMax = pageManager.mantraDuration!.inMilliseconds.toDouble() ?? Duration.zero.inMilliseconds.toDouble();
-                    // if (!introPlaying && !maxSet) {
-                    //   // sliderMax = value.total.inMilliseconds.toDouble();
-                    //   sliderMax = pageManager.progressNotifier.value.total.inMilliseconds.toDouble();
-                    //   print("SliderMax: $sliderMax");
-                    //   maxSet = true;
-                    // }
-                    // print("SliderMaxxxx: $sliderMax");
                     return Row(
                       children: [
                         Text("00:${value.current.inSeconds % 60}"),
@@ -604,38 +431,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 10),
-            // ValueListenableBuilder<int>(
-            //   valueListenable: pageManager.repeatCounterNotifier,
-            //   builder: (context, value, _) {
-            //    return !(mantraCounter>110)?Text("Repeat: $mantraCounter",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),)
-            //        :Text("Repeat: ∞",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,),);
-            //   },
-            // ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-              // Expanded(
-              //   flex: 2,
-              //   child: Container(
-              //     margin: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              //     child: ValueListenableBuilder<int>(
-              //       valueListenable: pageManager.repeatCounterNotifier,
-              //       builder: (context, value, _) {
-              //         return !(mantraCounter > 110)
-              //             ? Text(
-              //                 "Repeat: $value",
-              //                 style: TextStyle(
-              //                   fontSize: MediaQuery.of(context).size.width * 0.04,
-              //                 ),
-              //               )
-              //             : Text(
-              //                 "Repeat: ∞",
-              //                 style: TextStyle(
-              //                   fontSize: MediaQuery.of(context).size.width * 0.045,
-              //                 ),
-              //               );
-              //       },
-              //     ),
-              //   ),
-              // ),
               Expanded(
                 flex: 5,
                 child: Row(
@@ -663,21 +459,6 @@ class _HomePageState extends State<HomePage> {
                             }
                             icon = const Icon(Icons.repeat_one);
                             break;
-
-                          // case RepeatState.repeatCount:
-                          //   // if(mantraCounter>0){
-                          //   //   // print("MantraCounter $mantraCounter");
-                          //   //   // pageManager.remove();
-                          //   //   // pageManager.add(res,"mantra");
-                          //   //   // introPlaying = false;
-                          //   //   // mantraCounter-=1;
-                          //   //   // print("MantraCounter $mantraCounter");
-                          //   //   // pageManager.play;
-                          //   //   // pageManager.repeat();
-                          //   //   // pageManager.
-                          //   // }
-                          //   icon = const Icon(Icons.add_a_photo);
-                          //   break;
                         }
                         return IconButton(
                           icon: icon,
@@ -685,9 +466,6 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-
-                    // PreviousSongButton(),
-                    //No Previous button
 
                     // PlayButton(),
                     ValueListenableBuilder<ButtonState>(
@@ -737,24 +515,15 @@ class _HomePageState extends State<HomePage> {
                               loadSliderMax = true;
                               // pageManager.duration();
                             }
-                            // if (mantraCounter > 0 && mantraCounter < 110) {
-                            //   print("MantraCounter $mantraCounter");
-                            //   sliderMax = pageManager.progressNotifier.value.total.inMilliseconds.toDouble();
-                            //   // pageManager.remove();
-                            //   // pageManager.add(res,"mantra");
-                            //   // introPlaying = false;
-                            //   mantraCounter -= 1;
-                            //   // print("MantraCounter $mantraCounter");
-                            //   // // pageManager.stop();
-                            //   // pageManager.play();
-                            //   // // pageManager.pause();
-                            // }
                             return IconButton(
-                              icon: const Icon(Icons.play_arrow),
+                              icon: const Icon(Icons.replay),
                               iconSize: 32.0,
                               onPressed: () {
                                 print("finis");
-                                pageManager.seek(Duration.zero);
+                                // pageManager.seek(Duration.zero);
+                                pageManager.repeatMantraCount(repeatMantraMode, res);
+                                pageManager.pause();
+                                pageManager.play();
                               },
                             );
                         }
@@ -763,253 +532,239 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                         onPressed: () => pageManager.next5(current),
                         icon: const Icon(Icons.forward_5))
-                    // NextSongButton(),
-                    // ShuffleButton(),
                   ],
                 ),
               ),
             ]),
             const SizedBox(height: 10),
+            // Expanded(
+            //     flex: 2,
+            //     child: Wrap(
+            //       alignment: WrapAlignment.spaceBetween,
+            //       // direction: Axis.vertical,
+            //       // mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //       children: [
+            //         Padding(
+            //           padding: const EdgeInsets.all(8.0),
+            //           child: Text(
+            //             "Repeat Mantra:",
+            //             style: TextStyle(fontSize: 18),
+            //           ),
+            //         ),
+            //         GestureDetector(
+            //           onTap: () {
+            //             setState(() {
+            //               button1Pressed = true;
+            //               button2Pressed = false;
+            //               button3Pressed = false;
+            //               button4Pressed = false;
+            //               button5Pressed = false;
+            //               mantraCounter = 1;
+            //               pageManager.repeatMantraCount(1, res);
+            //             });
+            //           },
+            //           child: Container(
+            //             padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+            //             margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+            //             decoration: BoxDecoration(
+            //               border: Border.all(color: Color(0xff80571d)),
+            //               borderRadius: BorderRadius.circular(10),
+            //               color: button1Pressed ? Color(0xff80571d) : Colors.transparent,
+            //             ),
+            //             child: Text(
+            //               "1",
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(
+            //                   color: !button1Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
+            //             ),
+            //           ),
+            //         ),
+            //         // const Spacer(flex: 1),
+            //         GestureDetector(
+            //           onTap: () {
+            //             setState(() {
+            //               button2Pressed = true;
+            //               button1Pressed = false;
+            //               button3Pressed = false;
+            //               button4Pressed = false;
+            //               button5Pressed = false;
+            //               mantraCounter = 27;
+            //               pageManager.repeatMantraCount(27, res);
+            //               pageManager.pause();
+            //               pageManager.play();
+            //               // pageManager.add(res, "mantra");
+            //             });
+            //           },
+            //           child: Container(
+            //             padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
+            //             margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+            //             decoration: BoxDecoration(
+            //               border: Border.all(color: Color(0xff80571d)),
+            //               borderRadius: BorderRadius.circular(10),
+            //               color: button2Pressed ? Color(0xff80571d) : Colors.transparent,
+            //             ),
+            //             child: Text(
+            //               "27",
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(
+            //                   color: !button2Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
+            //             ),
+            //           ),
+            //         ),
+            //         // const Spacer(flex: 1),
+            //         GestureDetector(
+            //           onTap: () {
+            //             setState(() {
+            //               button3Pressed = true;
+            //               button2Pressed = false;
+            //               button1Pressed = false;
+            //               button4Pressed = false;
+            //               button5Pressed = false;
+            //               mantraCounter = 54;
+            //               pageManager.repeatMantraCount(54, res);
+            //               pageManager.pause();
+            //               pageManager.play();
+            //               // pageManager.add(res, "mantra");
+            //             });
+            //           },
+            //           child: Container(
+            //             padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
+            //             margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+            //             decoration: BoxDecoration(
+            //               border: Border.all(color: Color(0xff80571d)),
+            //               borderRadius: BorderRadius.circular(10),
+            //               color: button3Pressed ? Color(0xff80571d) : Colors.transparent,
+            //             ),
+            //             child: Text(
+            //               "54",
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(
+            //                   color: !button3Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
+            //             ),
+            //           ),
+            //         ),
+            //         // const Spacer(flex: 1),
+            //         GestureDetector(
+            //           onTap: () {
+            //             setState(() {
+            //               button4Pressed = true;
+            //               button2Pressed = false;
+            //               button3Pressed = false;
+            //               button1Pressed = false;
+            //               button5Pressed = false;
+            //               mantraCounter = 108;
+            //               pageManager.repeatMantraCount(108, res);
+            //               pageManager.pause();
+            //               pageManager.play();
+            //               // pageManager.add(res, "mantra");
+            //             });
+            //           },
+            //           child: Container(
+            //             padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+            //             margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+            //             decoration: BoxDecoration(
+            //               border: Border.all(color: Color(0xff80571d)),
+            //               borderRadius: BorderRadius.circular(10),
+            //               color: button4Pressed ? Color(0xff80571d) : Colors.transparent,
+            //             ),
+            //             child: Text(
+            //               "108",
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(
+            //                   color: !button4Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
+            //             ),
+            //           ),
+            //         ),
+            //         // const Spacer(flex: 1),
+            //         GestureDetector(
+            //           onTap: () {
+            //             setState(() {
+            //               button5Pressed = true;
+            //               button2Pressed = false;
+            //               button3Pressed = false;
+            //               button4Pressed = false;
+            //               button1Pressed = false;
+            //               mantraCounter = 99999999;
+            //               pageManager.repeat();
+            //             });
+            //           },
+            //           child: Container(
+            //             padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
+            //             margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
+            //             decoration: BoxDecoration(
+            //               border: Border.all(color: Color(0xff80571d)),
+            //               borderRadius: BorderRadius.circular(10),
+            //               color: button5Pressed ? Color(0xff80571d) : Colors.transparent,
+            //             ),
+            //             child: Text(
+            //               "Infinite",
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(
+            //                   color: !button5Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     )),
             Expanded(
-                flex: 2,
-                child: Wrap(
+              flex: 2,
+              child: Wrap(
                   alignment: WrapAlignment.spaceBetween,
-                  // direction: Axis.vertical,
-                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  runAlignment: WrapAlignment.spaceBetween,
+                  spacing: 1,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         "Repeat Mantra:",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    // OutlinedButton(
-                    //   style: ButtonStyle(
-                    //   ),
-                    //     onPressed: (){
-                    //       setState((){
-                    //         mantraCounter = 1;
-                    //       });
-                    //     },
-                    //     child: const Text("1")
-                    // ),
-                    // const Spacer(flex: 1),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          button1Pressed = true;
-                          button2Pressed = false;
-                          button3Pressed = false;
-                          button4Pressed = false;
-                          button5Pressed = false;
-                          mantraCounter = 1;
-                          pageManager.repeatMantraCount(1, res);
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
-                        margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff80571d)),
-                          borderRadius: BorderRadius.circular(10),
-                          color: button1Pressed ? Color(0xff80571d) : Colors.transparent,
+                    ...List<Widget>.generate(5, (int index) {
+                      return ChoiceChip(
+                        label: Text("${repeatList[index]}"),
+                        labelPadding: EdgeInsets.all(0),
+                        // padding: EdgeInsets.symmetric(horizontal: 8),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        selectedColor: Color(0xff80571d),
+                        backgroundColor: Color(0xfff8dbc1),
+                        labelStyle: TextStyle(
+                          color: _selected == index ? Color(0xfff8dbc1) : Color(0xff80571d),
                         ),
-                        child: Text(
-                          "1",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: !button1Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
-                        ),
-                      ),
-                    ),
-                    // const Spacer(flex: 1),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          button2Pressed = true;
-                          button1Pressed = false;
-                          button3Pressed = false;
-                          button4Pressed = false;
-                          button5Pressed = false;
-                          mantraCounter = 27;
-                          pageManager.repeatMantraCount(27, res);
-                          pageManager.pause();
-                          pageManager.play();
-                          // pageManager.add(res, "mantra");
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
-                        margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff80571d)),
-                          borderRadius: BorderRadius.circular(10),
-                          color: button2Pressed ? Color(0xff80571d) : Colors.transparent,
-                        ),
-                        child: Text(
-                          "27",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: !button2Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
-                        ),
-                      ),
-                    ),
-                    // const Spacer(flex: 1),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          button3Pressed = true;
-                          button2Pressed = false;
-                          button1Pressed = false;
-                          button4Pressed = false;
-                          button5Pressed = false;
-                          mantraCounter = 54;
-                          pageManager.repeatMantraCount(54, res);
-                          pageManager.pause();
-                          pageManager.play();
-                          // pageManager.add(res, "mantra");
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(4, 10, 4, 10),
-                        margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff80571d)),
-                          borderRadius: BorderRadius.circular(10),
-                          color: button3Pressed ? Color(0xff80571d) : Colors.transparent,
-                        ),
-                        child: Text(
-                          "54",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: !button3Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
-                        ),
-                      ),
-                    ),
-                    // const Spacer(flex: 1),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          button4Pressed = true;
-                          button2Pressed = false;
-                          button3Pressed = false;
-                          button1Pressed = false;
-                          button5Pressed = false;
-                          mantraCounter = 108;
-                          pageManager.repeatMantraCount(108, res);
-                          pageManager.pause();
-                          pageManager.play();
-                          // pageManager.add(res, "mantra");
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
-                        margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff80571d)),
-                          borderRadius: BorderRadius.circular(10),
-                          color: button4Pressed ? Color(0xff80571d) : Colors.transparent,
-                        ),
-                        child: Text(
-                          "108",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: !button4Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
-                        ),
-                      ),
-                    ),
-                    // const Spacer(flex: 1),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          button5Pressed = true;
-                          button2Pressed = false;
-                          button3Pressed = false;
-                          button4Pressed = false;
-                          button1Pressed = false;
-                          mantraCounter = 99999999;
-                          pageManager.repeat();
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(3, 10, 3, 10),
-                        margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff80571d)),
-                          borderRadius: BorderRadius.circular(10),
-                          color: button5Pressed ? Color(0xff80571d) : Colors.transparent,
-                        ),
-                        child: Text(
-                          "Infinite",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: !button5Pressed ? Color(0xff80571d) : Color(0xfff8dbc1)),
-                        ),
-                      ),
-                    ),
-
-                    // const Spacer(flex: 1),
-                    // OutlinedButton(
-                    //     onPressed: () async{
-                    //       setState((){
-                    //         mantraCounter = 27;
-                    //       });
-                    //     },
-                    //     child: const Text("27")
-                    // ),
-                    // // const Spacer(flex: 1),
-                    // OutlinedButton(
-                    //     onPressed: ()async{
-                    //       setState((){
-                    //         mantraCounter = 54;
-                    //       });
-                    //     },
-                    //     child: const Text("54")
-                    // ),
-                    // // const Spacer(flex: 1),
-                    // OutlinedButton(
-                    //     onPressed: () async{
-                    //       setState((){
-                    //         mantraCounter = 108;
-                    //       });
-                    //     },
-                    //     child: const Text("108")
-                    // ),
-                    // // const Spacer(flex: 1),
-                    // OutlinedButton(
-                    //     onPressed: () {
-                    //       setState(() {
-                    //         mantraCounter = 999;
-                    //       });
-                    //     },
-                    //     child: const Text("Infinite")
-                    // ),
-                  ],
-                )),
-            // TextButton(
-            //   onPressed: (){
-            //     pageManager.repeatMantraCount(10, res);
-            //   },
-            //   child: Text("Press"),
-            // ),
-            // TextButton(
-            //   onPressed: (){
-            //     pageManager.clearQueue(res);
-            //   },
-            //   child: Text("clean"),
-            // ),
-            // const SizedBox(height: 10),
+                        side: BorderSide(color: Color(0xff80571d)),
+                        selected: _selected == index,
+                        showCheckmark: false,
+                        onSelected: (sel) {
+                          setState(() {
+                            _selected = sel ? index : 0;
+                            var med = repeatList[_selected!];
+                            med = (med == 'Infinite') ? 999 : med;
+                            if (med > 108) {
+                              pageManager.repeat();
+                            } else {
+                              pageManager.repeatButtonNotifier.value = RepeatState.repeatSong;
+                              pageManager.repeat();
+                              mantraCounter = med;
+                              setState(() {
+                                repeatMantraMode = med;
+                              });
+                              pageManager.repeatMantraCount(med, res);
+                              pageManager.pause();
+                              // pageManager.play();
+                            }
+                          });
+                        },
+                      );
+                    }).toList()
+                  ]),
+            ),
             Expanded(
               flex: 20,
               child: Container(
                 padding: const EdgeInsets.all(10),
                 height: MediaQuery.of(context).size.height / 2 + 100,
                 child: Scrollbar(
-                  // interactive: false,
-                  // thickness: 1.5,
-                  // thumbVisibility: true,
-                  // trackVisibility: true,
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -1074,258 +829,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            // Expanded(
-            //   flex: 15,
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(10.0),
-            //     child: SingleChildScrollView(
-            //       child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Column(
-            //             children: [
-            //               Table(
-            //                 columnWidths: const {
-            //                   0: IntrinsicColumnWidth(flex: 2),
-            //                   1: FlexColumnWidth(5)
-            //                 },
-            //                 children: [
-            //                   // TableRow(
-            //                   //     children: [
-            //                   //
-            //                   //     ]
-            //                   // ),
-            //                   // TableRow(
-            //                   //     children: [
-            //                   //       // Container(),
-            //                   //
-            //                   //     ]
-            //                   // ),
-            //                   TableRow(children: [Container(height: 10), Container()]),
-            //                   TableRow(children: [
-            //                     const Text(
-            //                       "Mantra:",
-            //                       style: TextStyle(
-            //                         fontSize: 18,
-            //                       ),
-            //                     ),
-            //                     Column(
-            //                       crossAxisAlignment: CrossAxisAlignment.start,
-            //                       children: [
-            //                         Text(
-            //                           "${res2.mantraEnglish}",
-            //                           overflow: TextOverflow.visible,
-            //                           style: TextStyle(
-            //                             fontSize: 18,
-            //                           ),
-            //                         ),
-            //                         SizedBox(height: 10),
-            //                         Text(
-            //                           "${res2.mantraHindi}",
-            //                           overflow: TextOverflow.visible,
-            //                           style: TextStyle(
-            //                             fontSize: 18,
-            //                           ),
-            //                         ),
-            //                       ],
-            //                     ),
-            //                   ]),
-            //                   TableRow(children: [Container(height: 15), Container()]),
-            //                   TableRow(children: [
-            //                     Container(),
-            //                     Text(
-            //                       res2.noOfRep,
-            //                       style: TextStyle(
-            //                         fontSize: 18,
-            //                       ),
-            //                     )
-            //                   ]),
-            //                   TableRow(children: [Container(height: 15), Container()]),
-            //                   TableRow(children: [
-            //                     const Text(
-            //                       "Procedure: ",
-            //                       style: TextStyle(
-            //                         fontSize: 18,
-            //                       ),
-            //                     ),
-            //                     Text(
-            //                       res2.procedure,
-            //                       style: TextStyle(
-            //                         fontSize: 18,
-            //                       ),
-            //                     )
-            //                   ]),
-            //                   TableRow(children: [Container(height: 15), Container()]),
-            //                   TableRow(children: [
-            //                     const Text(
-            //                       "Benefit: ",
-            //                       style: TextStyle(
-            //                         fontSize: 18,
-            //                       ),
-            //                     ),
-            //                     Text(
-            //                       res2.benefits,
-            //                       style: TextStyle(
-            //                         fontSize: 18,
-            //                       ),
-            //                     )
-            //                   ]),
-            //                   TableRow(children: [Container(height: 15), Container()]),
-            //                 ],
-            //               ),
-            //             ],
-            //           ),
-            //           const SizedBox(height: 10),
-            //           // const Text("Repeat Mantra: ",style: TextStyle(fontSize: 18,),),
-            //           // Row(
-            //           //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //           //   children: [
-            //           //     OutlinedButton(
-            //           //         onPressed: (){
-            //           //           setState((){
-            //           //             mantraCounter = 1;
-            //           //           });
-            //           //         },
-            //           //         child: const Text("1")
-            //           //     ),
-            //           //     const Spacer(flex: 1),
-            //           //     OutlinedButton(
-            //           //         onPressed: () async{
-            //           //           setState((){
-            //           //             mantraCounter = 27;
-            //           //           });
-            //           //         },
-            //           //         child: const Text("27")
-            //           //     ),
-            //           //     const Spacer(flex: 1),
-            //           //     OutlinedButton(
-            //           //         onPressed: ()async{
-            //           //           setState((){
-            //           //             mantraCounter = 54;
-            //           //           });
-            //           //         },
-            //           //         child: const Text("54")
-            //           //     ),
-            //           //     const Spacer(flex: 1),
-            //           //     OutlinedButton(
-            //           //         onPressed: () async{
-            //           //           setState((){
-            //           //             mantraCounter = 108;
-            //           //           });
-            //           //         },
-            //           //         child: const Text("108")
-            //           //     ),
-            //           //     const Spacer(flex: 1),
-            //           //     OutlinedButton(
-            //           //         onPressed: () {
-            //           //           setState(() {
-            //           //             mantraCounter = 999;
-            //           //           });
-            //           //         },
-            //           //         child: const Text("Infinite")
-            //           //     ),
-            //           //   ],
-            //           // ),
-            //           // OutlinedButton(
-            //           //     onPressed: (){
-            //           //       setState(() {
-            //           //         mantraCounter=0;
-            //           //       });
-            //           //     }, child: const Text("Reset")
-            //           // ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // OutlinedButton(
-            //     onPressed: () {
-            //       // pageManager.removeAll();
-            //       setState(() {
-            //         mantraCounter = 5;
-            //         // for(int i=0;i<5;i++){
-            //         //   pageManager.add(res, "mantra");
-            //         // }
-            //         // pageManager.repeat();
-            //       });
-            //     },
-            //     child: const Text("5")
-            // ),
           ]),
         ),
       ),
     );
   }
 }
-
-// class RepeatButton extends StatelessWidget {
-//   const RepeatButton({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     final pageManager = getIt<PageManager>();
-//     return ;
-//   }
-// }
-
-// class PreviousSongButton extends StatelessWidget {
-//   const PreviousSongButton({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     final pageManager = getIt<PageManager>();
-//     return ValueListenableBuilder<bool>(
-//       valueListenable: pageManager.isFirstSongNotifier,
-//       builder: (_, isFirst, __) {
-//         return IconButton(
-//           icon: const Icon(Icons.skip_previous),
-//           onPressed: (isFirst) ? null : pageManager.previous,
-//         );
-//       },
-//     );
-//   }
-// }
-
-// class PlayButton extends StatelessWidget {
-//   const PlayButton({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     final pageManager = getIt<PageManager>();
-//     return ;
-//   }
-// }
-
-// class NextSongButton extends StatelessWidget {
-//   const NextSongButton({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     final pageManager = getIt<PageManager>();
-//     return ValueListenableBuilder<bool>(
-//       valueListenable: pageManager.isLastSongNotifier,
-//       builder: (_, isLast, __) {
-//         return IconButton(
-//           icon: const Icon(Icons.skip_next),
-//           onPressed: (isLast) ? null : pageManager.next,
-//         );
-//       },
-//     );
-//   }
-// }
-//
-// class ShuffleButton extends StatelessWidget {
-//   const ShuffleButton({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     final pageManager = getIt<PageManager>();
-//     return ValueListenableBuilder<bool>(
-//       valueListenable: pageManager.isShuffleModeEnabledNotifier,
-//       builder: (context, isEnabled, child) {
-//         return IconButton(
-//           icon: (isEnabled)
-//               ? const Icon(Icons.shuffle)
-//               : const Icon(Icons.shuffle, color: Colors.grey),
-//           onPressed: pageManager.shuffle,
-//         );
-//       },
-//     );
-//   }
-// }
-

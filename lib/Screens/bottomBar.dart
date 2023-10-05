@@ -78,14 +78,14 @@ class _BottomBarControllerState extends State<BottomBarController> {
           BottomBarItem(
             icon: Icon(Icons.feedback),
             title: Text("Feedback"),
-            selectedColor: Colors.deepOrange,
-            selectedIcon: Icon(Icons.home, color: Colors.deepOrange),
+            selectedColor: Colors.redAccent,
+            selectedIcon: Icon(Icons.home, color: Colors.redAccent),
           ),
           BottomBarItem(
             icon: Icon(Icons.home),
             title: Text("Home"),
-            selectedColor: Colors.deepOrange,
-            selectedIcon: Icon(Icons.home, color: Colors.deepOrange),
+            selectedColor: Colors.redAccent,
+            selectedIcon: Icon(Icons.home, color: Colors.redAccent),
           ),
         ],
         elevation: 1,
@@ -100,13 +100,16 @@ class _BottomBarControllerState extends State<BottomBarController> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        elevation: 10,
+        backgroundColor: Color(0xfff8dbc1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
+          side: BorderSide(color: Color(0xff80571d)),
         ),
         onPressed: () {
           Share.share(shareTxt, subject: shareMsg);
         },
-        child: Icon(Icons.share),
+        child: Icon(Icons.share, color: Color(0xff80571d)),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       // bottomNavigationBar: BottomNavigationBar(

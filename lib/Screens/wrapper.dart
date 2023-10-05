@@ -284,15 +284,18 @@ class _WrapperState extends State<Wrapper> {
                   flex: 5,
                   child: Center(
                     child: versionNumber < 29
-                        ? Text(
-                            "The Mantra Therapy app downloads Hindu calendar and mantra files from the server. "
-                            "In order for you to use this app, please provide STORAGE permissions to this App"
-                            "\n1. Click on 'Open Settings' button below"
-                            "\n2. Scroll and click on PERMISSIONS "
-                            "\n3. Click on STORAGE and select ALLOW"
-                            "\n4. And then come back to this Application (by hitting BACK button couple of times)",
-                            style: TextStyle(fontSize: 22),
-                            textAlign: TextAlign.start,
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "The Mantra Therapy app downloads Hindu calendar and mantra files from the server. "
+                              "In order for you to use this app, please provide STORAGE permissions to this App"
+                              "\n1. Click on 'Open Settings' button below"
+                              "\n2. Scroll and click on PERMISSIONS "
+                              "\n3. Click on STORAGE and select ALLOW"
+                              "\n4. And then come back to this Application (by hitting BACK button couple of times)",
+                              style: TextStyle(fontSize: 22),
+                              textAlign: TextAlign.start,
+                            ),
                           )
                         : Text(
                             "We Download Mantra Data from the server so you will have to give download permission to this app.",
