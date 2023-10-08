@@ -211,6 +211,7 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
+    double fontSize = MediaQuery.of(context).size.height * 0.028;
     if (!_permissionReady) {
       checkPermission().then((value) {
         _permissionReady = value;
@@ -278,36 +279,35 @@ class _WrapperState extends State<Wrapper> {
               child: Visibility(
             visible: _permissionReady,
             replacement: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment:
+                  versionNumber < 29 ? MainAxisAlignment.start : MainAxisAlignment.center,
               children: [
-                Expanded(
-                  flex: 5,
-                  child: Center(
-                    child: versionNumber < 29
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "The Mantra Therapy app downloads Hindu calendar and mantra files from the server. "
-                              "In order for you to use this app, please provide STORAGE permissions to this App"
-                              "\n1. Click on 'Open Settings' button below"
-                              "\n2. Scroll and click on PERMISSIONS "
-                              "\n3. Click on STORAGE and select ALLOW"
-                              "\n4. And then come back to this Application (by hitting BACK button couple of times)",
-                              style: TextStyle(fontSize: 22),
-                              textAlign: TextAlign.start,
-                            ),
-                          )
-                        : Text(
-                            "We Download Mantra Data from the server so you will have to give download permission to this app.",
-                            style: TextStyle(fontSize: 22),
-                            textAlign: TextAlign.center,
-                          ),
-                  ),
-                ),
+                versionNumber < 29
+                    ? Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                        child: Text(
+                          "The Mantra Therapy app downloads Hindu calendar and mantra files from the server. "
+                          "In order for you to use this app, please provide STORAGE permissions to this App"
+                          "\n1. Click on 'Open Settings' button below"
+                          "\n2. Scroll and click on PERMISSIONS "
+                          "\n3. Click on STORAGE and select ALLOW"
+                          "\n4. And then come back to this Application (by hitting BACK button couple of times)",
+                          style: TextStyle(fontSize: fontSize),
+                          textAlign: TextAlign.start,
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+                        child: Text(
+                          "We Download Mantra Data from the server so you will have to give download permission to this app.",
+                          style: TextStyle(fontSize: fontSize),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                 // const SizedBox(height: 20),
-                const Spacer(),
-                Expanded(
-                  flex: 1,
+                // const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                   child: ElevatedButton(
                     onPressed: () {
                       AppSettings.openAppSettings();
@@ -315,7 +315,23 @@ class _WrapperState extends State<Wrapper> {
                     child: const Text("Open Settings"),
                   ),
                 ),
-                const Spacer()
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                  child: Text(
+                    "Once you have above permission, click below button to Reload",
+                    style: TextStyle(fontSize: fontSize),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    child: const Text("Reload"),
+                  ),
+                ),
               ],
             ),
             child: Column(

@@ -1,15 +1,10 @@
-// ignore_for_file: unused_local_variable
-
 import 'package:calendarsong/Screens/feedback.dart';
 import 'package:calendarsong/Screens/playlists.dart';
-import 'package:calendarsong/Screens/login.dart';
-import 'package:calendarsong/Screens/signUp.dart';
 import 'package:calendarsong/Screens/wrapper.dart';
-import 'package:calendarsong/auth/auth.dart';
 import 'package:calendarsong/constants/common.dart';
 import 'package:calendarsong/model/mantraData.dart';
+import 'package:calendarsong/providers/userRepeatData.dart';
 import 'package:calendarsong/services/service_locator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +29,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => MantraViewModel()),
         ChangeNotifierProvider(create: (_) => TithiViewModel()),
+        ChangeNotifierProvider(create: (_) => UserRepeatViewModel()),
       ],
       child: const MyApp(),
     ),
