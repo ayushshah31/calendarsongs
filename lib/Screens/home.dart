@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:calendarsong/model/mantraData.dart';
 import 'package:calendarsong/providers/mantraDataProvider.dart';
 import 'package:calendarsong/providers/tithiDataProvider.dart';
 import 'package:calendarsong/providers/userRepeatData.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +18,6 @@ import '../page_manager.dart';
 import '../services/service_locator.dart';
 
 import 'package:advanced_in_app_review/advanced_in_app_review.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,47 +36,18 @@ class _HomePageState extends State<HomePage> {
   bool introPlaying = true;
   dynamic tithiData = {};
 
-  late Future<DataRequiredForBuild> _dataRequiredForBuild;
-  Future<DataRequiredForBuild> _fetchData() async {
-    print("Mantra rec: $mantraData");
-    shareMsg =
-        (await _databaseRef.child("share").child("message").once()).snapshot.value.toString();
-    if (Platform.isAndroid) {
-      shareTxt = (await _databaseRef.child("share").child("text").once()).snapshot.value.toString();
-    } else if (Platform.isIOS) {
-      shareTxt =
-          (await _databaseRef.child("share").child("textIOS").once()).snapshot.value.toString();
-    }
-    return DataRequiredForBuild(mantraData: mantraData, tithiData: tithiData);
-  }
-
   String _platformVersion = 'Unknown';
 
   bool loadSliderMax = false;
   double sliderMax = 1;
   int repeatMantraMode = 1;
-  int sharedtry = 1;
-
-  Color button1Text = Color(0xff80571d);
-  Color button2Text = Color(0xff80571d);
-  Color button3Text = Color(0xff80571d);
-  Color button4Text = Color(0xff80571d);
-  Color button5Text = Color(0xff80571d);
-
-  bool button1Pressed = false;
-  bool button2Pressed = false;
-  bool button3Pressed = false;
-  bool button4Pressed = false;
-  bool button5Pressed = false;
 
   @override
   void initState() {
     print("In INIT");
     super.initState();
-    _dataRequiredForBuild = _fetchData();
     getIt<PageManager>().init();
     initPlatformState();
-    // _getSharedPref();
     AdvancedInAppReview()
         .setMinDaysBeforeRemind(10)
         .setMinDaysAfterInstall(2)
@@ -87,18 +55,6 @@ class _HomePageState extends State<HomePage> {
         .setMinSecondsBeforeShowDialog(30)
         .monitor();
   }
-
-  // _getSharedPref() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     sharedtry = prefs.getInt("repeatMantraMode") ?? 1;
-  //   });
-  // }
-
-  // _saveSharedPref() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setInt("repeatMantraMode", sharedtry);
-  // }
 
   Future<void> initPlatformState() async {
     String platformVersion;
@@ -124,38 +80,14 @@ class _HomePageState extends State<HomePage> {
     currTithi = tithiData[temp]["Tithi"];
   }
 
-  DateTime focusedDay = DateTime.now();
-  DateTime selectedDay = DateTime.now();
-  int mantraCounter = 0;
-
   late TargetPlatform? platform;
   bool isMantraDown = false;
 
   List<MantraModel> mantraData = [];
-  DatabaseReference _databaseRef = FirebaseDatabase.instance.ref();
-  String shareTxt = "", shareMsg = "";
 
   int res = -1;
   MantraModel res2 = MantraModel();
   late int currTithi;
-
-  void setFocusedDay(DateTime focusedDayNew) {
-    setState(() {
-      focusedDay = focusedDayNew;
-    });
-  }
-
-  void setMantraCount(int newCount) {
-    setState(() {
-      mantraCounter = newCount;
-    });
-  }
-
-  // late PageController pageController = PageController();
-
-  // void setPageController(PageController controller) {
-  //   pageController = controller;
-  // }
 
   MantraModel getTithiMantraData(int currTithi1) {
     MantraModel ans = MantraModel();
@@ -188,6 +120,7 @@ class _HomePageState extends State<HomePage> {
     "Nov",
     "Dec"
   ];
+
   String selsup(int dateNow) {
     String th = "\u1d57\u02b0";
     String rd = "\u02b3\u1d48";
@@ -213,16 +146,16 @@ class _HomePageState extends State<HomePage> {
     return "${day}${supText} ${months[month - 1]} $year";
   }
 
-  int? trialMantraMode = 1;
+  int? globalMantraMode = 1;
   final ScrollController _scrollController = ScrollController();
 
   int setSelected() {
-    if (trialMantraMode == null) {
+    if (globalMantraMode == null) {
       return 0;
-    } else if (trialMantraMode == 999) {
+    } else if (globalMantraMode == 999) {
       return 4;
     } else {
-      return repeatList.indexOf(trialMantraMode);
+      return repeatList.indexOf(globalMantraMode);
     }
   }
 
@@ -232,15 +165,13 @@ class _HomePageState extends State<HomePage> {
     Duration current = const Duration();
     mantraData = Provider.of<MantraViewModel>(context).mantraModel;
     tithiData = Provider.of<TithiViewModel>(context).tithiModel;
-    trialMantraMode = Provider.of<UserRepeatViewModel>(context).mantraRepeatMode;
+    globalMantraMode = Provider.of<UserRepeatViewModel>(context).mantraRepeatMode;
 
-    if (trialMantraMode != null && trialMantraMode != repeatMantraMode) {
-      repeatMantraMode = trialMantraMode!;
+    if (globalMantraMode != null && globalMantraMode != repeatMantraMode) {
+      repeatMantraMode = globalMantraMode!;
     }
     _selected = setSelected();
 
-    // double sliderMax = 1;
-    bool maxSet = false;
     if (res == -1) {
       setData();
     }
@@ -263,9 +194,7 @@ class _HomePageState extends State<HomePage> {
         pageManager.repeatButtonNotifier.value = RepeatState.repeatSong;
         pageManager.repeatCounterNotifier.value = 0;
         pageManager.repeat();
-        mantraCounter = 0;
-        button1Pressed = button2Pressed = button3Pressed = button4Pressed = button5Pressed = false;
-        maxSet = false;
+        // mantraCounter = 0;
         loadSliderMax = false;
         sliderMax = 1;
       });
@@ -508,7 +437,6 @@ class _HomePageState extends State<HomePage> {
                                       .progressNotifier.value.total.inMilliseconds
                                       .toDouble();
                                   print("SliderMax: $sliderMax");
-                                  maxSet = true;
                                   loadSliderMax = false;
                                 }
                                 return IconButton(
@@ -521,9 +449,9 @@ class _HomePageState extends State<HomePage> {
                                   print("Intro finish");
                                   // pageManager.remove();
                                   // pageManager.add(res, "mantra");
-                                  print("Trial counter: $trialMantraMode");
-                                  print("counter intro: $repeatMantraMode");
-                                  print("Trial counter: $trialMantraMode");
+                                  // print("Trial counter: $globalMantraMode");
+                                  // print("counter intro: $repeatMantraMode");
+                                  // print("Trial counter: $globalMantraMode");
                                   if (repeatMantraMode > 108) {
                                     pageManager.add(res, "mantra");
                                     pageManager.repeat();
@@ -601,7 +529,7 @@ class _HomePageState extends State<HomePage> {
                                 } else {
                                   pageManager.repeatButtonNotifier.value = RepeatState.repeatSong;
                                   pageManager.repeat();
-                                  mantraCounter = med;
+                                  // mantraCounter = med;
                                   setState(() {
                                     repeatMantraMode = med;
                                   });
@@ -611,8 +539,8 @@ class _HomePageState extends State<HomePage> {
                                 }
                                 Provider.of<UserRepeatViewModel>(context, listen: false)
                                     .changeMode(med);
-                                print("Trial change: $trialMantraMode");
-                                print("counter change: $repeatMantraMode");
+                                // print("Trial change: $globalMantraMode");
+                                // print("counter change: $repeatMantraMode");
                               });
                             },
                           );

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
@@ -26,7 +25,6 @@ class _BottomBarControllerState extends State<BottomBarController> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchShareMsg();
   }

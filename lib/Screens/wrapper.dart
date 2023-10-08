@@ -1,13 +1,9 @@
 import 'dart:io';
 
 import 'package:calendarsong/Screens/bottomBar.dart';
-import 'package:calendarsong/Screens/customCalendar.dart';
-import 'package:calendarsong/Screens/home.dart';
-import 'package:calendarsong/Screens/signUp.dart';
 import 'package:calendarsong/providers/mantraDataProvider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -142,7 +138,6 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     internetChecker();
     versionChecker();
@@ -204,7 +199,6 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     listener.cancel();
   }

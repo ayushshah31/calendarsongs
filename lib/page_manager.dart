@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:rxdart/rxdart.dart';
 import 'notifiers/play_button_notifier.dart';
 import 'notifiers/progress_notifier.dart';
 import 'notifiers/repeat_button_notifier.dart';
@@ -24,7 +23,7 @@ class PageManager {
 
   final _audioHandler = getIt<AudioHandler>();
 
-  final DateTime _selectedDay = DateTime.now();
+  // final DateTime _selectedDay = DateTime.now();
 
   Duration? mantraDuration = Duration.zero;
 

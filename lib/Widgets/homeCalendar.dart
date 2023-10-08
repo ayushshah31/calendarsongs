@@ -1,17 +1,20 @@
-import 'package:calendarsong/providers/tithiDataProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../constants/common.dart';
 import 'calendarHeader.dart';
 
-
 class HomeCalendarState extends StatelessWidget {
-  HomeCalendarState({super.key, required this.selectedDay, required this.setSelectedDay, required this.focusedDay,
-    required this.setFocusedDay,required this.mantraCounter,  required this.setMantraCounter, required this.pageController,
-    required this.setPageController});
+  HomeCalendarState(
+      {super.key,
+      required this.selectedDay,
+      required this.setSelectedDay,
+      required this.focusedDay,
+      required this.setFocusedDay,
+      required this.mantraCounter,
+      required this.setMantraCounter,
+      required this.pageController,
+      required this.setPageController});
   // DateTime kToday = DateTime.now();
-  DateTime kFirstDay = DateTime(2023,7,15);
+  DateTime kFirstDay = DateTime(2023, 7, 15);
   DateTime kLastDay = DateTime(2023, 12, 3);
   final CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime selectedDay;
@@ -41,7 +44,7 @@ class HomeCalendarState extends StatelessWidget {
                 setSelectedDay(DateTime.now());
                 // focusedDay = DateTime.now();
                 // selectedDay = DateTime.now();
-               // TODO: call setstate in home from here
+                // TODO: call setstate in home from here
               },
               onLeftArrowTap: () {
                 print(pageController);
@@ -75,20 +78,17 @@ class HomeCalendarState extends StatelessWidget {
               canMarkersOverflow: false,
               isTodayHighlighted: true,
               cellAlignment: Alignment.center,
-              selectedDecoration: BoxDecoration(
-                color: Colors.deepOrangeAccent,
-                shape: BoxShape.circle
-                // borderRadius: BorderRadius.circular(20),
-                // shape: BoxShape.rectangle
-              ),
-              todayDecoration: BoxDecoration(
-                  color: const Color(0xFFf3ae85),
-                shape: BoxShape.circle
-                // borderRadius: BorderRadius.circular(20)
-              ),
+              selectedDecoration:
+                  BoxDecoration(color: Colors.deepOrangeAccent, shape: BoxShape.circle
+                      // borderRadius: BorderRadius.circular(20),
+                      // shape: BoxShape.rectangle
+                      ),
+              todayDecoration: BoxDecoration(color: const Color(0xFFf3ae85), shape: BoxShape.circle
+                  // borderRadius: BorderRadius.circular(20)
+                  ),
               // cellPadding: EdgeInsets.all(10),
             ),
-            onCalendarCreated: (controller){
+            onCalendarCreated: (controller) {
               print("Calendar created");
               print(controller);
               // setPageController(controller);
@@ -127,8 +127,7 @@ class HomeCalendarState extends StatelessWidget {
             // },
             onPageChanged: (focusedDayNow) {
               focusedDay = focusedDayNow;
-            }
-        ),
+            }),
       ],
     );
   }

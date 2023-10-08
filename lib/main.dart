@@ -2,7 +2,7 @@ import 'package:calendarsong/Screens/feedback.dart';
 import 'package:calendarsong/Screens/playlists.dart';
 import 'package:calendarsong/Screens/wrapper.dart';
 import 'package:calendarsong/constants/common.dart';
-import 'package:calendarsong/model/mantraData.dart';
+// import 'package:calendarsong/model/mantraData.dart';
 import 'package:calendarsong/providers/userRepeatData.dart';
 import 'package:calendarsong/services/service_locator.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     checkPermission();
-    List<MantraModel> mantraData = Provider.of<MantraViewModel>(context).mantraModel;
-    dynamic tithiData = Provider.of<TithiViewModel>(context).tithiModel;
+    // List<MantraModel> mantraData = Provider.of<MantraViewModel>(context).mantraModel;
+    // dynamic tithiData = Provider.of<TithiViewModel>(context).tithiModel;
     // print("In main $mantraData");
     return MaterialApp(
       // builder: (context,child){

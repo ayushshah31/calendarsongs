@@ -1,9 +1,6 @@
 import 'dart:collection';
 import 'package:calendarsong/model/mantraData.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-
-import '../model/tithiData.dart';
 
 class FirebaseFetch {
   final firebaseDatabase = FirebaseDatabase.instance.ref();
@@ -64,7 +61,6 @@ class FirebaseFetch {
 
   Future<dynamic> getTithiData() async {
     var result = (await firebaseDatabase.child("dateToTithi").once()).snapshot.value;
-    dynamic tithi;
     // for (LinkedHashMap child in result) {
     //   // print(child);
     //   tithi.add(child);

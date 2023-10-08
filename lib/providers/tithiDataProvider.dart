@@ -1,6 +1,4 @@
 import 'package:calendarsong/data/FirebaseFetch.dart';
-import 'package:calendarsong/model/mantraData.dart';
-import 'package:calendarsong/model/tithiData.dart';
 import 'package:flutter/material.dart';
 
 class TithiViewModel extends ChangeNotifier {

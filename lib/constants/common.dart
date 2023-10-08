@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
 
-import '../model/mantraData.dart';
-
 Future<bool> checkPermission() async {
   TargetPlatform platform;
   if (Platform.isAndroid) {

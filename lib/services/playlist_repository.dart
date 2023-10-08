@@ -1,13 +1,6 @@
 import 'package:calendarsong/model/mantraData.dart';
-import 'package:calendarsong/providers/mantraDataProvider.dart';
-import 'package:calendarsong/providers/tithiDataProvider.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-
 import '../constants/common.dart';
-import '../model/tithiData.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'dart:io';
 import 'package:calendarsong/data/FirebaseFetch.dart';
 
@@ -82,7 +75,6 @@ class MusicPlay extends PlaylistRepository {
       return i;
       // i = _playlistNo(selectedDay);
     }
-    return i;
   }
 
   Future<int> _playlistDate(DateTime selectedDate) async {
@@ -112,7 +104,6 @@ class MusicPlay extends PlaylistRepository {
       return i;
       // i = _playlistNo(selectedDay);
     }
-    return i;
   }
 
   @override
@@ -140,6 +131,6 @@ class MusicPlay extends PlaylistRepository {
     };
     print("Initial sent: $retFile");
     return retFile;
-    throw UnimplementedError();
+    // throw UnimplementedError();
   }
 }
