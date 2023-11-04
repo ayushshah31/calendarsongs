@@ -41,7 +41,7 @@ class PageManager {
   Future<void> _loadPlaylist() async {
     final songRepository = getIt<PlaylistRepository>();
     final playlist = await songRepository.fetchIntroPlaylist(-1);
-    print("Initial: $playlist");
+    print("InitialLoad: $playlist");
     final mediaItems = MediaItem(
       id: playlist['id'] ?? '',
       album: playlist['album'] ?? '',
@@ -161,7 +161,7 @@ class PageManager {
       isIntroPlaying = true;
       song = await songRepository.fetchIntroPlaylist(tithiNo);
     }
-    mantraDuration = _audioHandler.queue.value.first.duration;
+    // mantraDuration = _audioHandler.queue.value.first.duration;
     final mediaItem = MediaItem(
       id: song['id'] ?? '',
       album: song['album'] ?? '',

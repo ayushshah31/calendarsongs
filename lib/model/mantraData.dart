@@ -1,5 +1,13 @@
-class MantraModel{
-  late String _benefits,  _introSoundFile,  _introLink,  _mantraEnglish,  _mantraHindi,  _mantraSoundFile, _mantraLink, _procedure, _noOfRep;
+class MantraModel {
+  late String _benefits,
+      _introSoundFile,
+      _introLink,
+      _mantraEnglish,
+      _mantraHindi,
+      _mantraSoundFile,
+      _mantraLink,
+      _procedure,
+      _noOfRep;
   late int _tithi;
 
   MantraModel();
@@ -45,16 +53,19 @@ class MantraModel{
   set mantraLink(value) {
     _mantraLink = value;
   }
+
   get procedure => _procedure;
 
   set procedure(value) {
     _procedure = value;
   }
+
   get noOfRep => _noOfRep;
 
   set noOfRep(value) {
     _noOfRep = value;
   }
+
   get tithi => _tithi;
 
   set tithi(value) {

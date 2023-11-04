@@ -1,11 +1,14 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:calendarsong/model/mantraData.dart';
 import 'package:calendarsong/providers/mantraDataProvider.dart';
 import 'package:calendarsong/providers/tithiDataProvider.dart';
 import 'package:calendarsong/providers/userRepeatData.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:vs_scrollbar/vs_scrollbar.dart';
@@ -20,7 +23,9 @@ import '../services/service_locator.dart';
 import 'package:advanced_in_app_review/advanced_in_app_review.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -37,10 +42,17 @@ class _HomePageState extends State<HomePage> {
   dynamic tithiData = {};
 
   String _platformVersion = 'Unknown';
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   bool loadSliderMax = false;
   double sliderMax = 1;
   int repeatMantraMode = 1;
+
+  Future<String?> _findLocalPath(String path) async {
+    var directory = await getApplicationDocumentsDirectory();
+    print("${directory.path}${Platform.pathSeparator}download/$path");
+    return '${directory.path}${Platform.pathSeparator}download/$path';
+  }
 
   @override
   void initState() {
@@ -54,6 +66,7 @@ class _HomePageState extends State<HomePage> {
         .setMinLaunchTimes(2)
         .setMinSecondsBeforeShowDialog(30)
         .monitor();
+    print("Local path: ${_findLocalPath("mantra")}");
   }
 
   Future<void> initPlatformState() async {
@@ -72,7 +85,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> setData() async {
-    print("SET DATA BUILT");
+    print("SET DATA BUILT + $tithiData");
     res = getTithiDate(DateTime.now(), tithiData);
     res2 = getTithiMantraData(res);
     DateFormat formatter = DateFormat("yyyy-MM-dd");
@@ -172,7 +185,7 @@ class _HomePageState extends State<HomePage> {
     }
     _selected = setSelected();
 
-    if (res == -1) {
+    if (res == -1 && tithiData != {}) {
       setData();
     }
     void changeMantra() {
@@ -267,7 +280,7 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   res == 15 || res == 30
                                       ? res2.introSoundFile.toString().split(" ")[0]
-                                      : res2.introSoundFile.toString().split(" ")[1],
+                                      : res2.introSoundFile.toString().split(" ")[1] ?? "reload",
                                   // textAlign: TextAlign.start,
                                   style: TextStyle(
                                       fontSize: MediaQuery.of(context).size.width * 0.057,
@@ -447,7 +460,7 @@ class _HomePageState extends State<HomePage> {
                               case ButtonState.finished:
                                 if (introPlaying) {
                                   print("Intro finish");
-                                  // pageManager.remove();
+                                  pageManager.remove();
                                   // pageManager.add(res, "mantra");
                                   // print("Trial counter: $globalMantraMode");
                                   // print("counter intro: $repeatMantraMode");
@@ -457,8 +470,13 @@ class _HomePageState extends State<HomePage> {
                                     pageManager.repeat();
                                     pageManager.pause();
                                     // pageManager.play();
+                                  } else if (repeatMantraMode == 1) {
+                                    pageManager.add(res, "mantra");
+                                    pageManager.pause();
                                   } else {
+                                    print("counter val: ${repeatMantraMode} in playing");
                                     pageManager.repeatMantraCount(repeatMantraMode, res);
+                                    pageManager.pause();
                                   }
                                   print("Load mantra");
                                   print(
@@ -475,10 +493,25 @@ class _HomePageState extends State<HomePage> {
                                   onPressed: () {
                                     print("finis");
                                     // pageManager.seek(Duration.zero);
+                                    pageManager.remove();
+                                    pageManager.add(res, "mantra");
                                     print("counter val: ${repeatMantraMode}");
-                                    pageManager.repeatMantraCount(repeatMantraMode, res);
-                                    pageManager.pause();
+                                    // pageManager.repeatMantraCount(repeatMantraMode, res);
+                                    // pageManager.pause();
+                                    print("counter val: ${repeatMantraMode} before playing");
+                                    if (!introPlaying) {
+                                      if (repeatMantraMode != 1) {
+                                        pageManager.repeatMantraCount(repeatMantraMode, res);
+                                      }
+                                      print("Here");
+                                    }
                                     pageManager.play();
+                                    analytics.logEvent(
+                                      name: 'mantra_repeat',
+                                      parameters: <String, dynamic>{
+                                        'description': 'User repeating a mantra',
+                                      },
+                                    ).then((value) => print("Analytics logged, mantra heard"));
                                   },
                                 );
                             }

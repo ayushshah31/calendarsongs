@@ -1,7 +1,7 @@
 import 'package:calendarsong/Screens/feedback.dart';
-import 'package:calendarsong/Screens/playlists.dart';
 import 'package:calendarsong/Screens/wrapper.dart';
 import 'package:calendarsong/constants/common.dart';
+import 'package:calendarsong/model/mantraData.dart';
 // import 'package:calendarsong/model/mantraData.dart';
 import 'package:calendarsong/providers/userRepeatData.dart';
 import 'package:calendarsong/services/service_locator.dart';
@@ -13,13 +13,13 @@ import 'constants/routes.dart';
 import 'providers/mantraDataProvider.dart';
 import 'providers/tithiDataProvider.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await checkPermission();
   // await initAudioService();
-  await setupServiceLocator();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -39,16 +39,21 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
     checkPermission();
-    // List<MantraModel> mantraData = Provider.of<MantraViewModel>(context).mantraModel;
-    // dynamic tithiData = Provider.of<TithiViewModel>(context).tithiModel;
-    // print("In main $mantraData");
+    List<MantraModel> mantraData = Provider.of<MantraViewModel>(context).mantraModel;
+    dynamic tithiData = Provider.of<TithiViewModel>(context).tithiModel;
+    print("In main $mantraData");
+    print("In main $tithiData");
     return MaterialApp(
       // builder: (context,child){
       //   return MantraPlay();
       // },
+      navigatorObservers: <NavigatorObserver>[observer],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xffF4B651),
@@ -73,13 +78,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: wrapperRoute,
       routes: {
-        wrapperRoute: (context) => Wrapper(),
-        // signupRoute: (context) => const SignUp(),
-        playlists: (context) => const Playlists(),
-        // customCalendar: (context) => CustomCalendar(),
-        // loginRoute: (contect) => const LoginPage(),
+        wrapperRoute: (context) => Wrapper(analytics: analytics, observer: observer),
         feedback: (context) => const FeedbackPage(),
-        home: (context) => const HomePage(),
+        home: (context) => HomePage(),
       },
     );
   }

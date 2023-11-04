@@ -27,23 +27,26 @@ class _FeedbackPageState extends State<FeedbackPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(title: const Text("Feedback")),
+        appBar: AppBar(
+          title: const Text("Mantra Therapy"),
+          centerTitle: true,
+        ),
         backgroundColor: const Color(0xfff8dbc1),
         body: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height,
+            // height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "Feel free to give suggestions to enhance this app or any issues you are facing.",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023),
                 ),
                 SizedBox(height: 10),
                 Text(
                   "If you wish to be contacted then you can enter your name, email or phone",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023),
                 ),
                 SizedBox(height: 10),
                 Form(
@@ -104,30 +107,6 @@ class _FeedbackPageState extends State<FeedbackPage> {
                           },
                         ),
                       ),
-                      // Spacer(),
-                      // Container(
-                      //   padding: EdgeInsets.all(10),
-                      //   decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(8),
-                      //       border: Border.all(color: Colors.black)),
-                      //   child: TextFormField(
-                      //     decoration: InputDecoration(
-                      //         labelText: "Phone(Optional)",
-                      //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                      //         hintText: "",
-                      //         disabledBorder: InputBorder.none,
-                      //         enabledBorder: InputBorder.none,
-                      //         focusedBorder: InputBorder.none,
-                      //         contentPadding: EdgeInsets.only(left: 10),
-                      //         hintStyle: const TextStyle(fontSize: 16)),
-                      //     keyboardType: TextInputType.phone,
-                      //     textInputAction: TextInputAction.done,
-                      //     style: const TextStyle(fontSize: 14),
-                      //     onChanged: (value) {
-                      //       phone = value;
-                      //     },
-                      //   ),
-                      // ),
                       SizedBox(height: 10),
                       Container(
                         // padding: EdgeInsets.all(10),
@@ -160,10 +139,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
                           ],
                         ),
                       ),
-                      // const Text("Enter Body"),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Text(
                         "I wish to volunteer to promote/enhacne/test this App",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.022),
                       ),
                       Row(
                         children: [
@@ -176,7 +157,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                   radioVal = RadioVal.Yes;
                                 });
                               }),
-                          const Text("Yes"),
+                          Text(
+                            "Yes",
+                            style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.022),
+                          ),
                           Radio(
                               value: RadioVal.No,
                               groupValue: radioVal,
@@ -185,10 +169,19 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                   radioVal = RadioVal.No;
                                 });
                               }),
-                          const Text("No"),
+                          Text(
+                            "No",
+                            style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.022),
+                          ),
                         ],
                       ),
-                      Text(errorMsg, style: const TextStyle(color: Colors.red)),
+                      errorMsg == ""
+                          ? Container()
+                          : Text(errorMsg,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: MediaQuery.of(context).size.height * 0.018,
+                              )),
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -208,7 +201,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                               focusedBorder: InputBorder.none,
                               contentPadding: const EdgeInsets.only(left: 10),
                               hintStyle: const TextStyle(fontSize: 16)),
-                          keyboardType: TextInputType.multiline,
+                          keyboardType: TextInputType.text,
                           // textInputAction: TextInputAction.done,
                           style: const TextStyle(fontSize: 16),
                           autocorrect: true,
@@ -245,8 +238,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
                               print(DateTime.now());
                               if (res) {
                                 const snackBar = SnackBar(
-                                  content: Text('Feedback Saved'),
-                                  duration: Duration(seconds: 2),
+                                  content: Text(
+                                    'Thank You! Your Feedback has been saved',
+                                    style: TextStyle(color: Colors.white, fontSize: 22),
+                                  ),
+                                  padding: EdgeInsets.all(10),
+                                  backgroundColor: Color(0xff80571d),
+                                  duration: Duration(seconds: 3),
                                 );
                                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               } else {
@@ -263,6 +261,9 @@ class _FeedbackPageState extends State<FeedbackPage> {
                                 phoneController.text = "";
                                 radioVal = RadioVal.NotSelected;
                                 errorMsg = "";
+                                name = "";
+                                phone = "";
+                                body = "";
                               });
                               // Future.delayed(const Duration(seconds: 2),(){
                               //   Navigator.of(context).pop();

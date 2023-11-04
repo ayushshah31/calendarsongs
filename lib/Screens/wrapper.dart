@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:calendarsong/Screens/bottomBar.dart';
 import 'package:calendarsong/providers/mantraDataProvider.dart';
+import 'package:calendarsong/providers/tithiDataProvider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -14,9 +16,12 @@ import 'package:app_settings/app_settings.dart';
 
 import '../constants/common.dart';
 import '../model/mantraData.dart';
+import '../services/service_locator.dart';
 
 class Wrapper extends StatefulWidget {
-  Wrapper({Key? key}) : super(key: key);
+  Wrapper({Key? key, required this.analytics, required this.observer}) : super(key: key);
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
   @override
   State<Wrapper> createState() => _WrapperState();
@@ -29,6 +34,7 @@ class _WrapperState extends State<Wrapper> {
   bool _permissionReady = false;
   bool _downloading = true;
   List<MantraModel> mantraData = [];
+  dynamic tithiData = {};
   bool fileDownloaded = false;
 
   // @override
@@ -73,6 +79,7 @@ class _WrapperState extends State<Wrapper> {
           fileDownloaded = true;
           downloadCounter = 100;
         });
+        await setupServiceLocator();
       } else {
         await download();
       }
@@ -116,9 +123,9 @@ class _WrapperState extends State<Wrapper> {
       String check2 = "$_localPath${Platform.pathSeparator}${mantraData[15].introSoundFile}";
       final filePath2 = File(check2);
       // print("FilePathDownCheck: ${filePath2.exists()},$filePath2");
-      // if(await filePath2.exists() && await filePath1.exists()){
-      //   return;
-      // }
+      if(await filePath2.exists() && await filePath1.exists()){
+        await setupServiceLocator();
+      }
       setState(() {
         _downloading = false;
       });
@@ -141,6 +148,14 @@ class _WrapperState extends State<Wrapper> {
     super.initState();
     internetChecker();
     versionChecker();
+    widget.analytics.setAnalyticsCollectionEnabled(true);
+    widget.analytics.logEvent(
+      name: 'app_open',
+      parameters: <String, dynamic>{
+        'description': 'User opened the app',
+      },
+    ).then((value) => print("Analytics logged"));
+    print("Event should be logged");
   }
 
   void initDownload() async {
@@ -216,6 +231,7 @@ class _WrapperState extends State<Wrapper> {
       });
     }
     mantraData = Provider.of<MantraViewModel>(context).mantraModel;
+    tithiData = Provider.of<TithiViewModel>(context).tithiModel;
     // if(user == null) {
     //   return const SignUp();
     // }
@@ -223,6 +239,26 @@ class _WrapperState extends State<Wrapper> {
       print("start");
       request = true;
       initDownload();
+    }
+    if (!mantraData.isNotEmpty || tithiData == {}) {
+      return Scaffold(
+        backgroundColor: const Color(0xfff8dbc1),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SpinKitFoldingCube(
+                color: Colors.orange,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "Gathering Data $downloadCounter",
+                style: TextStyle(fontSize: 20),
+              )
+            ],
+          ),
+        ),
+      );
     }
 
     if (!internet) {
@@ -345,7 +381,7 @@ class _WrapperState extends State<Wrapper> {
         ),
       );
     } else {
-      return BottomBarController();
+      return BottomBarController(analytics: widget.analytics, observer: widget.observer);
     }
   }
 }
