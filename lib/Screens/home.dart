@@ -469,7 +469,6 @@ class _HomePageState extends State<HomePage> {
                                     pageManager.add(res, "mantra");
                                     pageManager.repeat();
                                     pageManager.pause();
-                                    // pageManager.play();
                                   } else if (repeatMantraMode == 1) {
                                     pageManager.add(res, "mantra");
                                     pageManager.pause();
@@ -483,7 +482,7 @@ class _HomePageState extends State<HomePage> {
                                       "Total load: ${pageManager.progressNotifier.value.total.inMilliseconds}");
                                   introPlaying = false;
                                   pageManager.pause();
-                                  // pageManager.play();
+                                  pageManager.play();
                                   loadSliderMax = true;
                                   // pageManager.duration();
                                 }
@@ -653,14 +652,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            // const SizedBox(height: 100),
-                            // Text("RepeatModeState: $trialMantraMode"),
-                            // OutlinedButton(
-                            //     onPressed: () {
-                            //       Provider.of<UserRepeatViewModel>(context, listen: false)
-                            //           .changeMode(trialMantraMode + 5);
-                            //     },
-                            //     child: Text("Change Count to +5"))
                           ],
                         ),
                       ),
